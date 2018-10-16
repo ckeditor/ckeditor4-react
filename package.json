@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "description": "Official React component for CKEditor 4 – the best browser-based rich text editor.",
   "main": "dist/ckeditor.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cksource/ckeditor4-react.git"
@@ -18,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/cksource/ckeditor4-react/issues"
   },
-  "homepage": "https://github.com/cksource/ckeditor4-react#readme"
+  "homepage": "https://github.com/cksource/ckeditor4-react#readme",
+  "dependencies": {
+    "ckeditor": "^4.10.1",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
+  }
 }
