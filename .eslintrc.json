@@ -1,0 +1,6 @@
+{
+	"extends": [
+		"eslint-config-ckeditor5",
+		"plugin:react/recommended"
+	]
+}
