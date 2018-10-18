@@ -24,6 +24,10 @@
     "url": "https://github.com/cksource/ckeditor4-react/issues"
   },
   "homepage": "https://github.com/cksource/ckeditor4-react#readme",
+  "peerDependencies": {
+    "react": "^16.0.0",
+	"ckeditor": "^4.10.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",

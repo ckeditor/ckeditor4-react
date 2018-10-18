@@ -22,6 +22,13 @@ module.exports = {
 			commonjs2: 'react',
 			commonjs: 'react',
 			amd: 'react'
+		},
+
+		ckeditor: {
+			root: 'CKEDITOR',
+			commonjs2: 'ckeditor',
+			commonjs: 'ckeditor',
+			amd: 'ckeditor'
 		}
 	},
 
