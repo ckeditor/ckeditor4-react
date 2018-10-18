@@ -8,8 +8,8 @@
     "build": "webpack --mode production",
     "develop": "webpack --mode development --watch",
     "lint": "eslint src/**/*.jsx",
-	"pretest": "npm run lint",
-	"test": "karma start"
+    "pretest": "npm run lint",
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -24,17 +24,13 @@
     "url": "https://github.com/cksource/ckeditor4-react/issues"
   },
   "homepage": "https://github.com/cksource/ckeditor4-react#readme",
-  "dependencies": {
-    "ckeditor": "^4.10.1",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2"
-  },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
+    "ckeditor": "^4.10.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "eslint": "^5.7.0",
@@ -52,6 +48,8 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "sinon": "^7.0.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.20.2",
