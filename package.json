@@ -7,7 +7,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "develop": "webpack --mode development --watch",
-    "lint": "eslint src/**/*.jsx",
+    "lint": "eslint src/**/*.jsx tests/**/*.jsx",
     "pretest": "npm run lint",
     "test": "karma start"
   },
