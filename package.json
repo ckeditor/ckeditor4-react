@@ -26,7 +26,7 @@
   "homepage": "https://github.com/cksource/ckeditor4-react#readme",
   "peerDependencies": {
     "react": "^16.0.0",
-	"ckeditor": "^4.10.0"
+    "ckeditor": "^4.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -55,6 +55,7 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "sinon": "^7.0.0",
+    "sinon-chai": "^3.2.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2"
