@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CKEditor 4 – React Component – development sample</title>
+	<style>
+		body {
+			max-width: 800px;
+			margin: 20px auto;
+		}
+	</style>
+</head>
+<body>
+<h1>CKEditor 4 – React Component – development sample</h1>
+<div id="root"></div>
+
+<script src="https://cdn.ckeditor.com/4.10.1/standard-all/ckeditor.js"></script>
+<script src="../node_modules/react/umd/react.production.min.js"></script>
+<script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
+<script src="../dist/ckeditor.js"></script>
+<script>
+	ReactDOM.render(
+		React.createElement( CKEditor ),
+		document.getElementById( 'root' )
+	);
+</script>
+</body>
+</html>
