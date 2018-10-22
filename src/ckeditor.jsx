@@ -24,14 +24,25 @@ class CKEditor extends React.Component {
 		this._destroyEditor();
 	}
 
+	componentDidUpdate( prevProps ) {
+		if ( this.editor && prevProps.data !== this.props.data && this.editor.getData() !== this.props.data ) {
+			this.editor.setData( this.props.data );
+		}
+	}
+
 	render() {
 		return <div ref={ ref => ( this.element = ref ) }></div>;
 	}
 
 	_initEditor() {
 		const constructor = getConstructorType( this.props.type );
+		const editor = CKEDITOR[ constructor ]( this.element );
 
-		return CKEDITOR[ constructor ]( this.element );
+		if ( this.props.data ) {
+			editor.setData( this.props.data );
+		}
+
+		return editor;
 	}
 
 	_destroyEditor() {
@@ -46,11 +57,13 @@ CKEditor.propTypes = {
 	type: PropTypes.oneOf( [
 		'classic',
 		'inline'
-	] )
+	] ),
+	data: PropTypes.string
 };
 
 CKEditor.defaultProps = {
-	type: 'classic'
+	type: 'classic',
+	data: ''
 };
 
 function getConstructorType( prop ) {

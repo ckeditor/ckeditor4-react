@@ -124,6 +124,57 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 	} );
+
+	describe( '#data', () => {
+		it( 'sets the initial data', () => {
+			const data = '<p>Whatever, whenever.</p>';
+			component = mount( <CKEditor data={data} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				expect( editor.getData().trim() ).to.equal( data );
+			} ).catch( err => {
+				expect.fail( err.message );
+			} );
+		} );
+
+		it( 'changes are reflected in editor\'s data', () => {
+			const initialData = '<p>Initial data</p>';
+			const changedData = '<p>Changed data</p>';
+			component = mount( <CKEditor data={initialData} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				sandbox.spy( editor, 'setData' );
+
+				component.setProps( {
+					data: changedData
+				} );
+
+				expect( editor.setData ).to.be.calledTwice;
+				expect( editor.getData().trim() ).to.equal( changedData );
+			} );
+		} );
+
+		it( 'does not change data if props did not change', () => {
+			const data = '<p>Initial data</p>';
+			component = mount( <CKEditor data={data} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				sandbox.spy( editor, 'setData' );
+
+				component.setProps( {
+					data
+				} );
+
+				expect( editor.setData ).not.to.be.called;
+			} );
+		} );
+	} );
 } );
 
 function waitForEditor() {
