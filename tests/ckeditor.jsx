@@ -175,6 +175,23 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 	} );
+
+	describe( '#config', () => {
+		it( 'is passed to editor', () => {
+			const config = {
+				width: 1618,
+				height: 1618
+			};
+			component = mount( <CKEditor config={config} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( ( { config: { width, height } } ) => {
+				expect( width ).to.equal( config.width );
+				expect( height ).to.equal( config.height );
+			} );
+		} );
+	} );
 } );
 
 function waitForEditor() {

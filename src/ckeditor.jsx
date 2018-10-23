@@ -36,7 +36,7 @@ class CKEditor extends React.Component {
 
 	_initEditor() {
 		const constructor = getConstructorType( this.props.type );
-		const editor = CKEDITOR[ constructor ]( this.element );
+		const editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
 		if ( this.props.data ) {
 			editor.setData( this.props.data );
@@ -58,12 +58,14 @@ CKEditor.propTypes = {
 		'classic',
 		'inline'
 	] ),
-	data: PropTypes.string
+	data: PropTypes.string,
+	config: PropTypes.object
 };
 
 CKEditor.defaultProps = {
 	type: 'classic',
-	data: ''
+	data: '',
+	config: {}
 };
 
 function getConstructorType( prop ) {
