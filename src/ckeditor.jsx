@@ -36,6 +36,22 @@ class CKEditor extends React.Component {
 
 	_initEditor() {
 		const constructor = getConstructorType( this.props.type );
+		const config = this.props.config;
+
+		Object.keys( this.props ).forEach( propName => {
+			if ( propName.indexOf( 'on' ) !== 0 ) {
+				return;
+			}
+
+			const evtName = `${ propName[ 2 ].toLowerCase() }${ propName.substr( 3 ) }`;
+
+			if ( !config.on ) {
+				config.on = {};
+			}
+
+			config.on[ evtName ] = this.props[ propName ];
+		} );
+
 		const editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
 		if ( this.props.data ) {

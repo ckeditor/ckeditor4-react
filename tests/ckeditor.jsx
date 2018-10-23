@@ -192,6 +192,40 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 	} );
+
+	describe( 'event handlers', () => {
+		it( 'are bound to appropriate events', () => {
+			const spy = sandbox.spy();
+			component = mount( <CKEditor onCustomEvent={spy} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				editor.fireOnce( 'customEvent' );
+
+				expect( spy ).to.be.calledOnce;
+			} );
+		} );
+
+		it( 'receive data and editor', () => {
+			const spy = sandbox.spy();
+			component = mount( <CKEditor onCustomEvent={spy} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				const data = {
+					test: true
+				};
+
+				editor.fireOnce( 'customEvent', data, editor );
+
+				const evt = spy.args[ 0 ][ 0 ];
+				expect( evt.editor ).to.equal( editor );
+				expect( evt.data ).to.equal( data );
+			} );
+		} );
+	} );
 } );
 
 function waitForEditor() {
