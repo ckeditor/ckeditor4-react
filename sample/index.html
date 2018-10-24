@@ -12,7 +12,10 @@
 </head>
 <body>
 <h1>CKEditor 4 – React Component – development sample</h1>
-<div id="root"></div>
+<h2>Classic example</h2>
+<div id="classic"></div>
+<h2>Inline example</h2>
+<div id="inline"></div>
 
 <script src="https://cdn.ckeditor.com/4.10.1/standard-all/ckeditor.js"></script>
 <script src="../node_modules/react/umd/react.production.min.js"></script>
@@ -20,8 +23,17 @@
 <script src="../dist/ckeditor.js"></script>
 <script>
 	ReactDOM.render(
-		React.createElement( CKEditor ),
-		document.getElementById( 'root' )
+		React.createElement( CKEditor, {
+			data: '<p>Hi, I\'m CKEditor 4 instance!</p>'
+		} ),
+		document.getElementById( 'classic' )
+	);
+	ReactDOM.render(
+		React.createElement( CKEditor, {
+			type: 'inline',
+			data: '<p>Hi, I\'m CKEditor 4 instance!</p>'
+		} ),
+		document.getElementById( 'inline' )
 	);
 </script>
 </body>
