@@ -227,6 +227,42 @@ describe( 'CKEditor Component', () => {
 				expect( evt.data ).to.equal( data );
 			} );
 		} );
+
+		it( 'can be dynamically added', () => {
+			const spy = sandbox.spy();
+			component = mount( <CKEditor />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				component.setProps( {
+					onCustomEvent: spy
+				} );
+
+				editor.fireOnce( 'customEvent' );
+
+				expect( spy ).to.be.calledOnce;
+			} );
+		} );
+
+		it( 'can be dynamically modified', () => {
+			const spy1 = sandbox.spy();
+			const spy2 = sandbox.spy();
+			component = mount( <CKEditor onCustomEvent={spy1} />, {
+				attachTo: container
+			} );
+
+			return waitForEditor().then( editor => {
+				component.setProps( {
+					onCustomEvent: spy2
+				} );
+
+				editor.fireOnce( 'customEvent' );
+
+				expect( spy1 ).not.to.be.called;
+				expect( spy2 ).to.be.calledOnce;
+			} );
+		} );
 	} );
 } );
 

@@ -17,7 +17,7 @@ class CKEditor extends React.Component {
 	}
 
 	componentDidMount() {
-		this.editor = this._initEditor();
+		this._initEditor();
 	}
 
 	componentWillUnmount() {
@@ -28,6 +28,8 @@ class CKEditor extends React.Component {
 		if ( this.editor && prevProps.data !== this.props.data && this.editor.getData() !== this.props.data ) {
 			this.editor.setData( this.props.data );
 		}
+
+		this._attachEventHandlers( prevProps );
 	}
 
 	render() {
@@ -36,29 +38,37 @@ class CKEditor extends React.Component {
 
 	_initEditor() {
 		const constructor = getConstructorType( this.props.type );
-		const config = this.props.config;
+		const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
-		Object.keys( this.props ).forEach( propName => {
-			if ( propName.indexOf( 'on' ) !== 0 ) {
-				return;
-			}
-
-			const evtName = `${ propName[ 2 ].toLowerCase() }${ propName.substr( 3 ) }`;
-
-			if ( !config.on ) {
-				config.on = {};
-			}
-
-			config.on[ evtName ] = this.props[ propName ];
-		} );
-
-		const editor = CKEDITOR[ constructor ]( this.element, this.props.config );
+		this._attachEventHandlers();
 
 		if ( this.props.data ) {
 			editor.setData( this.props.data );
 		}
 
 		return editor;
+	}
+
+	_attachEventHandlers( prevProps = {} ) {
+		const props = this.props;
+
+		Object.keys( this.props ).forEach( propName => {
+			if ( propName.indexOf( 'on' ) !== 0 || prevProps[ propName ] === props[ propName ] ) {
+				return;
+			}
+
+			this._attachEventHandler( propName, prevProps[ propName ] );
+		} );
+	}
+
+	_attachEventHandler( propName, prevHandler ) {
+		const evtName = `${ propName[ 2 ].toLowerCase() }${ propName.substr( 3 ) }`;
+
+		if ( prevHandler ) {
+			this.editor.removeListener( evtName, prevHandler );
+		}
+
+		this.editor.on( evtName, this.props[ propName ] );
 	}
 
 	_destroyEditor() {
