@@ -153,6 +153,8 @@ describe( 'CKEditor Component', () => {
 					data: changedData
 				} );
 
+				return waitForData( editor );
+			} ).then( editor => {
 				expect( editor.setData ).to.be.calledTwice;
 				expect( editor.getData().trim() ).to.equal( changedData );
 			} );
@@ -231,6 +233,14 @@ describe( 'CKEditor Component', () => {
 function waitForEditor() {
 	return new Promise( resolve => {
 		CKEDITOR.once( 'instanceReady', ( { editor } ) => {
+			resolve( editor );
+		} );
+	} );
+}
+
+function waitForData( editor ) {
+	return new Promise( resolve => {
+		editor.once( 'dataReady', () => {
 			resolve( editor );
 		} );
 	} );
