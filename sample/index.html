@@ -8,33 +8,33 @@
 			max-width: 800px;
 			margin: 20px auto;
 		}
+		nav a {
+			display: inline-block;
+			padding: 5px;
+			border: 1px #000 solid;
+			margin-bottom: 1.5em;
+		}
+		nav a + a {
+			margin-left: 5px;
+		}
 	</style>
 </head>
 <body>
-<h1>CKEditor 4 – React Component – development sample</h1>
-<h2>Classic example</h2>
-<div id="classic"></div>
-<h2>Inline example</h2>
-<div id="inline"></div>
+	<div id="app"></div>
 
-<script src="https://cdn.ckeditor.com/4.10.1/standard-all/ckeditor.js"></script>
-<script src="../node_modules/react/umd/react.production.min.js"></script>
-<script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
-<script src="../dist/ckeditor.js"></script>
-<script>
+	<script src="https://cdn.ckeditor.com/4.10.1/standard-all/ckeditor.js"></script>
+	<script src="../node_modules/react/umd/react.production.min.js"></script>
+	<script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
+	<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+	<script src="../dist/ckeditor.js"></script>
+	<script src="components.js"></script>
+	<script>
 	ReactDOM.render(
-		React.createElement( CKEditor, {
-			data: '<p>Hi, I\'m CKEditor 4 instance!</p>'
-		} ),
-		document.getElementById( 'classic' )
+		React.createElement( ReactRouterDOM.HashRouter, {},
+			React.createElement( App )
+		),
+		document.getElementById( 'app' )
 	);
-	ReactDOM.render(
-		React.createElement( CKEditor, {
-			type: 'inline',
-			data: '<p>Hi, I\'m CKEditor 4 instance!</p>'
-		} ),
-		document.getElementById( 'inline' )
-	);
-</script>
+	</script>
 </body>
 </html>
