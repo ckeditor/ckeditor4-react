@@ -33,7 +33,7 @@ class CKEditor extends React.Component {
 	}
 
 	render() {
-		return <div ref={ ref => ( this.element = ref ) }></div>;
+		return <div contentEditable="true" ref={ ref => ( this.element = ref ) }></div>;
 	}
 
 	_initEditor() {
