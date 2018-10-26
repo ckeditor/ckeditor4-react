@@ -171,6 +171,19 @@ describe( 'CKEditor Component', () => {
 				expect( editor.setData ).not.to.be.called;
 			} );
 		} );
+
+		it( 'does not throw when props are changed after unmounting component', () => {
+			const component = createEditor();
+
+			return waitForEditor( component ).then( () => {
+				component.unmount();
+
+				component.setProps( {
+					onCustomEvent() {},
+					readOnly: true
+				} );
+			} );
+		} );
 	} );
 
 	describe( '#config', () => {
@@ -271,6 +284,48 @@ describe( 'CKEditor Component', () => {
 			] ).then( ( [ { readOnly: classicReadOnly }, { readOnly: inlineReadOnly } ] ) => {
 				expect( classicReadOnly ).to.equal( false );
 				expect( inlineReadOnly ).to.equal( false );
+			} );
+		} );
+
+		it( 'creates readonly editors if prop is set to true', () => {
+			const classicComponent = createEditor( {
+				readOnly: true
+			} );
+			const inlineComponent = createEditor( {
+				type: 'inline',
+				readOnly: true
+			} );
+
+			return waitForEditors( [
+				classicComponent,
+				inlineComponent
+			] ).then( ( [ { readOnly: classicReadOnly }, { readOnly: inlineReadOnly } ] ) => {
+				expect( classicReadOnly ).to.equal( true );
+				expect( inlineReadOnly ).to.equal( true );
+			} );
+		} );
+
+		it( 'has higher priority than config.readOnly', () => {
+			const component = createEditor( {
+				readOnly: true,
+				config: {
+					readOnly: false
+				}
+			} );
+
+			return waitForEditor( component ).then( ( { readOnly } ) => {
+				expect( readOnly ).to.equal( true );
+			} );
+		} );
+
+		it( 'can be dynamically modified', () => {
+			const component = createEditor();
+
+			return waitForEditor( component ).then( editor => {
+				component.setProps( {
+					readOnly: true
+				} );
+				expect( editor.readOnly ).to.equal( true );
 			} );
 		} );
 	} );

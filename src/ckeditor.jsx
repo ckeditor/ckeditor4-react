@@ -25,8 +25,16 @@ class CKEditor extends React.Component {
 	}
 
 	componentDidUpdate( prevProps ) {
-		if ( this.editor && prevProps.data !== this.props.data && this.editor.getData() !== this.props.data ) {
+		if ( !this.editor ) {
+			return;
+		}
+
+		if ( prevProps.data !== this.props.data && this.editor.getData() !== this.props.data ) {
 			this.editor.setData( this.props.data );
+		}
+
+		if ( prevProps.readOnly !== this.props.readOnly ) {
+			this.editor.setReadOnly( this.props.readOnly );
 		}
 
 		this._attachEventHandlers( prevProps );
@@ -38,6 +46,7 @@ class CKEditor extends React.Component {
 
 	_initEditor() {
 		const constructor = getConstructorType( this.props.type );
+		this.props.config.readOnly = this.props.readOnly;
 		const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
 		this._attachEventHandlers();
@@ -85,13 +94,15 @@ CKEditor.propTypes = {
 		'inline'
 	] ),
 	data: PropTypes.string,
-	config: PropTypes.object
+	config: PropTypes.object,
+	readOnly: PropTypes.bool
 };
 
 CKEditor.defaultProps = {
 	type: 'classic',
 	data: '',
-	config: {}
+	config: {},
+	readOnly: false
 };
 
 function getConstructorType( prop ) {
