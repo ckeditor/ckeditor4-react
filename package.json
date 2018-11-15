@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "description": "Official React component for CKEditor 4 – the best browser-based rich text editor.",
+  "license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
   "main": "dist/ckeditor.js",
   "scripts": {
     "build": "webpack --mode production",
