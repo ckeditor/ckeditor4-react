@@ -3,10 +3,13 @@
  * For licensing, see LICENSE.md.
  */
 
-/* globals CKEDITOR */
+/* globals window */
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import loadScript from 'load-script';
+
+const CKEDITOR_CDN_URL = 'https://cdn.ckeditor.com/4.11.1/standard-all/ckeditor.js';
 
 class CKEditor extends React.Component {
 	constructor( props ) {
@@ -45,17 +48,37 @@ class CKEditor extends React.Component {
 	}
 
 	_initEditor() {
-		const constructor = getConstructorType( this.props.type );
 		this.props.config.readOnly = this.props.readOnly;
-		const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
-		this._attachEventHandlers();
+		this._getEditorNamespace().then( CKEDITOR => {
+			const constructor = getConstructorType( this.props.type );
 
-		if ( this.props.data ) {
-			editor.setData( this.props.data );
+			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
+
+			this._attachEventHandlers();
+
+			if ( this.props.data ) {
+				editor.setData( this.props.data );
+			}
+		} ).catch( window.console.error );
+	}
+
+	_getEditorNamespace() {
+		if ( 'CKEDITOR' in window ) {
+			return Promise.resolve( window.CKEDITOR );
+		} else if ( '_namespaceFetchPromise' in CKEditor == false ) {
+			CKEditor._namespaceFetchPromise = new Promise( ( scriptResolve, scriptReject ) => {
+				loadScript( window.CKEDITOR_CUSTOM_URL || CKEditor.customUrl || CKEDITOR_CDN_URL, err => {
+					if ( err ) {
+						scriptReject( err );
+					} else {
+						scriptResolve( window.CKEDITOR );
+					}
+				} );
+			} );
 		}
 
-		return editor;
+		return CKEditor._namespaceFetchPromise;
 	}
 
 	_attachEventHandlers( prevProps = {} ) {
