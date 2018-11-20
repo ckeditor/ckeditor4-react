@@ -13,9 +13,7 @@ npm install
 ### Executing tests
 
 ```bash
-npm run tests
-# or
-npm t
+npm run test
 ```
 
 If you are going to change the source (`src/ckeditor.jsx`) file, remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
