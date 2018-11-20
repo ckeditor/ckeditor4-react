@@ -74,7 +74,7 @@ class CKEditor extends React.Component {
 			return Promise.resolve( window.CKEDITOR );
 		} else if ( '_namespaceFetchPromise' in CKEditor == false ) {
 			CKEditor._namespaceFetchPromise = new Promise( ( scriptResolve, scriptReject ) => {
-				loadScript( window.CKEDITOR_CUSTOM_URL || CKEditor.customUrl || CKEDITOR_CDN_URL, err => {
+				loadScript( CKEditor.customUrl || CKEDITOR_CDN_URL, err => {
 					if ( err ) {
 						scriptReject( err );
 					} else {

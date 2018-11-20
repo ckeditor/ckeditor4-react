@@ -6,9 +6,7 @@ Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) rich text editor compone
 
 ### Customizing editor version / `ckeditor.js` URL
 
-By default CKEditor integration will use the latest CKEditor version in standard-all preset available on CDN. Naturally you are not limited to CDN and can link your custom CKEditor 4 URL.
-
-You can customize preset, version using `CKEditor.customLink` or `window.CKEDITOR_CUSTOM_URL` variables.
+By default CKEditor integration will use the latest CKEditor version in standard-all preset available on CDN. Naturally you are not limited to CDN and can link your custom CKEditor 4 URL. You can customize preset, version using `CKEditor.customLink` variable:
 
 ```javascript
 import CKEditor from 'ckeditor4-react';
