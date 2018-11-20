@@ -32,9 +32,9 @@ class Samples extends Component {
 				<main>
 					<h1>CKEditor 4 – React Component – development sample</h1>
 					<nav>
-						<Link to="/">Home page</Link>
+						<Link to="/">Home Page</Link>
 						<Link to="/subpage">Sample Subpage</Link>
-						<Link to="/livefeed">Live feed</Link>
+						<Link to="/livefeed">Live Feed</Link>
 					</nav>
 					<Switch>
 						<Route exact path="/" component={Home} />
