@@ -44,7 +44,7 @@ class CKEditor extends React.Component {
 	}
 
 	render() {
-		return <div contentEditable="true" ref={ ref => ( this.element = ref ) }></div>;
+		return <div contentEditable="true" style={ this.props.style } ref={ ref => ( this.element = ref ) }></div>;
 	}
 
 	_initEditor() {
@@ -56,6 +56,12 @@ class CKEditor extends React.Component {
 			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
 			this._attachEventHandlers();
+
+			if ( this.props.style && this.props.type != 'inline' ) {
+				editor.on( 'loaded', () => {
+					editor.container.setStyles( this.props.style );
+				} );
+			}
 
 			if ( this.props.data ) {
 				editor.setData( this.props.data );
@@ -118,6 +124,7 @@ CKEditor.propTypes = {
 	] ),
 	data: PropTypes.string,
 	config: PropTypes.object,
+	style: PropTypes.object,
 	readOnly: PropTypes.bool
 };
 
