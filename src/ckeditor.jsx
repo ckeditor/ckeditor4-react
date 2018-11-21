@@ -9,8 +9,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import loadScript from 'load-script';
 
-const CKEDITOR_CDN_URL = 'https://cdn.ckeditor.com/4.11.1/standard-all/ckeditor.js';
-
 class CKEditor extends React.Component {
 	constructor( props ) {
 		super( props );
@@ -117,6 +115,8 @@ CKEditor.defaultProps = {
 	readOnly: false
 };
 
+CKEditor.editorURL = 'https://cdn.ckeditor.com/4.11.1/standard-all/ckeditor.js';
+
 function getConstructorType( prop ) {
 	if ( prop === 'inline' ) {
 		return 'inline';
@@ -130,7 +130,7 @@ function getEditorNamespace() {
 		return Promise.resolve( window.CKEDITOR );
 	} else if ( !getEditorNamespace.promise ) {
 		getEditorNamespace.promise = new Promise( ( scriptResolve, scriptReject ) => {
-			loadScript( CKEditor.customUrl || CKEDITOR_CDN_URL, err => {
+			loadScript( CKEditor.editorURL, err => {
 				if ( err ) {
 					scriptReject( err );
 				} else {
