@@ -26,16 +26,22 @@ class CKEditor extends React.Component {
 	}
 
 	componentDidUpdate( prevProps ) {
-		if ( !this.editor ) {
+		const { props, editor } = this;
+
+		if ( !editor ) {
 			return;
 		}
 
-		if ( prevProps.data !== this.props.data && this.editor.getData() !== this.props.data ) {
-			this.editor.setData( this.props.data );
+		if ( prevProps.data !== props.data && editor.getData() !== props.data ) {
+			editor.setData( props.data );
 		}
 
-		if ( prevProps.readOnly !== this.props.readOnly ) {
-			this.editor.setReadOnly( this.props.readOnly );
+		if ( prevProps.readOnly !== props.readOnly ) {
+			editor.setReadOnly( props.readOnly );
+		}
+
+		if ( prevProps.style !== props.style ) {
+			editor.container.setStyles( props.style );
 		}
 
 		this._attachEventHandlers( prevProps );
