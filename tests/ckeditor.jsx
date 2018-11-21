@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* globals CKEDITOR, chai, document */
+/* globals CKEDITOR, chai, document, setTimeout */
 
 import sinonChai from 'sinon-chai';
 import React from 'react';
@@ -358,12 +358,20 @@ function waitForEditors( components ) {
 }
 
 function waitForEditor( component ) {
-	const editor = component.instance().editor;
-
 	return new Promise( resolve => {
-		editor.once( 'instanceReady', ( { editor } ) => {
-			resolve( editor );
-		} );
+		tick();
+
+		function tick() {
+			const editor = component.instance().editor;
+
+			if ( !editor ) {
+				return setTimeout( tick );
+			}
+
+			editor.once( 'instanceReady', ( { editor } ) => {
+				resolve( editor );
+			} );
+		}
 	} );
 }
 
