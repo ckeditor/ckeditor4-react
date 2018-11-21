@@ -50,7 +50,7 @@ class CKEditor extends React.Component {
 	_initEditor() {
 		this.props.config.readOnly = this.props.readOnly;
 
-		this._getEditorNamespace().then( CKEDITOR => {
+		getEditorNamespace().then( CKEDITOR => {
 			const constructor = getConstructorType( this.props.type );
 
 			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
@@ -67,24 +67,6 @@ class CKEditor extends React.Component {
 				editor.setData( this.props.data );
 			}
 		} ).catch( window.console.error );
-	}
-
-	_getEditorNamespace() {
-		if ( 'CKEDITOR' in window ) {
-			return Promise.resolve( window.CKEDITOR );
-		} else if ( '_namespaceFetchPromise' in CKEditor == false ) {
-			CKEditor._namespaceFetchPromise = new Promise( ( scriptResolve, scriptReject ) => {
-				loadScript( CKEditor.customUrl || CKEDITOR_CDN_URL, err => {
-					if ( err ) {
-						scriptReject( err );
-					} else {
-						scriptResolve( window.CKEDITOR );
-					}
-				} );
-			} );
-		}
-
-		return CKEditor._namespaceFetchPromise;
 	}
 
 	_attachEventHandlers( prevProps = {} ) {
@@ -141,6 +123,25 @@ function getConstructorType( prop ) {
 	}
 
 	return 'replace';
+}
+
+function getEditorNamespace() {
+	if ( 'CKEDITOR' in window ) {
+		return Promise.resolve( window.CKEDITOR );
+	} else if ( !getEditorNamespace.promise ) {
+		getEditorNamespace.promise = new Promise( ( scriptResolve, scriptReject ) => {
+			loadScript( CKEditor.customUrl || CKEDITOR_CDN_URL, err => {
+				if ( err ) {
+					scriptReject( err );
+				} else {
+					scriptResolve( window.CKEDITOR );
+					getEditorNamespace.promise = undefined;
+				}
+			} );
+		} );
+	}
+
+	return getEditorNamespace.promise;
 }
 
 export default CKEditor;
