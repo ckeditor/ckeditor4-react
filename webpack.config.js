@@ -11,11 +11,13 @@ const path = require( 'path' );
 const webpack = require( 'webpack' );
 const UglifyJsWebpackPlugin = require( 'uglifyjs-webpack-plugin' );
 
-module.exports = {
+module.exports = [ {
 	context: __dirname,
 
 	devtool: 'source-map',
-	performance: { hints: false },
+	performance: {
+		hints: false
+	},
 	externals: {
 		react: {
 			root: 'React',
@@ -69,16 +71,75 @@ module.exports = {
 	],
 
 	module: {
-		rules: [
-			{
-				test: /\.jsx$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/,
-				query: {
-					compact: false,
-					presets: [ '@babel/preset-env', '@babel/preset-react' ]
-				}
+		rules: [ {
+			test: /\.jsx$/,
+			loader: 'babel-loader',
+			exclude: /node_modules/,
+			query: {
+				compact: false,
+				presets: [ '@babel/preset-env', '@babel/preset-react' ]
 			}
+		} ]
+	},
+}, {
+	context: __dirname,
+
+	devtool: 'source-map',
+	performance: {
+		hints: false
+	},
+	externals: {
+		ckeditor: {
+			root: 'CKEDITOR',
+			commonjs2: 'ckeditor',
+			commonjs: 'ckeditor',
+			amd: 'ckeditor'
+		}
+	},
+
+	entry: path.join( __dirname, 'sample', 'Samples.jsx' ),
+
+	output: {
+		path: path.join( __dirname, 'sample/dist' ),
+		filename: '[name].js',
+		libraryTarget: 'umd',
+		libraryExport: 'default',
+
+	},
+
+	optimization: {
+		minimizer: [
+			new UglifyJsWebpackPlugin( {
+				sourceMap: true,
+				uglifyOptions: {
+					output: {
+						// Preserve license comments.
+						comments: /^!/
+					}
+				}
+			} )
 		]
 	},
-};
+
+	plugins: [
+		new webpack.BannerPlugin( {
+			banner: `/**
+			 * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+			 * For licensing, see LICENSE.md.
+			 */`,
+			raw: true
+		} ),
+	],
+
+	module: {
+		rules: [ {
+			test: /\.jsx$/,
+			loader: 'babel-loader',
+			exclude: /node_modules/,
+			query: {
+				compact: false,
+				presets: [ '@babel/preset-env', '@babel/preset-react' ]
+			}
+		} ]
+	},
+} ];
