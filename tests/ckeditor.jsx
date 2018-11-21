@@ -329,6 +329,34 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 	} );
+
+	describe( '#styles', () => {
+		it( 'apply styles to editor container', () => {
+			const component = createEditor( {
+				style: {
+					'margin-top': '200px'
+				}
+			} );
+
+			return waitForEditor( component ).then( ( { container } ) => {
+				expect( container.getStyle( 'margin-top' ) ).to.equal( '200px' );
+			} );
+		} );
+
+		it( 'can be dynamically modified', () => {
+			const component = createEditor();
+
+			return waitForEditor( component ).then( ( { container } ) => {
+				component.setProps( {
+					style: {
+						'margin-top': '200px'
+					}
+				} );
+
+				expect( container.getStyle( 'margin-top' ) ).to.equal( '200px' );
+			} );
+		} );
+	} );
 } );
 
 function createEditor( props = {} ) {

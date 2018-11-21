@@ -61,7 +61,7 @@ class CKEditor extends React.Component {
 
 			this._attachEventHandlers();
 
-			if ( this.props.style && this.props.type != 'inline' ) {
+			if ( this.props.style && this.props.type !== 'inline' ) {
 				editor.on( 'loaded', () => {
 					editor.container.setStyles( this.props.style );
 				} );
