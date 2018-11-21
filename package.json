@@ -9,7 +9,8 @@
     "develop": "webpack --mode development --watch",
     "lint": "eslint src/**/*.jsx tests/**/*.jsx",
     "pretest": "npm run lint",
-    "test": "karma start"
+    "test": "karma start",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
