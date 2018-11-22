@@ -72,12 +72,26 @@ module.exports = [ {
 
 	module: {
 		rules: [ {
-			test: /\.jsx$/,
+			test: /\.jsx?$/,
 			loader: 'babel-loader',
 			exclude: /node_modules/,
 			query: {
 				compact: false,
-				presets: [ '@babel/preset-env', '@babel/preset-react' ]
+				presets: [
+					[
+						'@babel/preset-env',
+						{
+							useBuiltIns: 'usage',
+							targets: {
+								browsers: [
+									'last 2 versions',
+									'ie 11'
+								]
+							}
+						}
+					],
+					'@babel/preset-react'
+				]
 			}
 		} ]
 	},
@@ -133,12 +147,26 @@ module.exports = [ {
 
 	module: {
 		rules: [ {
-			test: /\.jsx$/,
+			test: /\.jsx?$/,
 			loader: 'babel-loader',
 			exclude: /node_modules/,
 			query: {
 				compact: false,
-				presets: [ '@babel/preset-env', '@babel/preset-react' ]
+				presets: [
+					[
+						'@babel/preset-env',
+						{
+							useBuiltIns: 'usage',
+							targets: {
+								browsers: [
+									'last 2 versions',
+									'ie 11'
+								]
+							}
+						}
+					],
+					'@babel/preset-react'
+				]
 			}
 		} ]
 	},
