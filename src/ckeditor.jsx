@@ -7,7 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import loadScript from 'load-script';
+import getEditorNamespace from './getEditorNamespace.js';
 
 class CKEditor extends React.Component {
 	constructor( props ) {
@@ -54,7 +54,7 @@ class CKEditor extends React.Component {
 	_initEditor() {
 		this.props.config.readOnly = this.props.readOnly;
 
-		getEditorNamespace().then( CKEDITOR => {
+		getEditorNamespace( CKEditor.editorURL ).then( CKEDITOR => {
 			const constructor = getConstructorType( this.props.type );
 
 			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
@@ -129,25 +129,6 @@ function getConstructorType( prop ) {
 	}
 
 	return 'replace';
-}
-
-function getEditorNamespace() {
-	if ( 'CKEDITOR' in window ) {
-		return Promise.resolve( window.CKEDITOR );
-	} else if ( !getEditorNamespace.promise ) {
-		getEditorNamespace.promise = new Promise( ( scriptResolve, scriptReject ) => {
-			loadScript( CKEditor.editorURL, err => {
-				if ( err ) {
-					scriptReject( err );
-				} else {
-					scriptResolve( window.CKEDITOR );
-					getEditorNamespace.promise = undefined;
-				}
-			} );
-		} );
-	}
-
-	return getEditorNamespace.promise;
 }
 
 export default CKEditor;
