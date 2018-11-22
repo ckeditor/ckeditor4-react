@@ -406,6 +406,18 @@ describe( 'getEditorNamespace', () => {
 		} );
 	} );
 
+	it( 'returns the same promise', () => {
+		const promise1 = getEditorNamespace( fakeScript );
+		const promise2 = getEditorNamespace( fakeScript );
+
+		return Promise.all( [
+			promise1,
+			promise2
+		] ).then( () => {
+			expect( promise1 ).to.equal( promise2 );
+		} );
+	} );
+
 	it( 'rejects with error when script cannot be loaded', () => {
 		return getEditorNamespace( 'non-existent.js' ).catch( err => {
 			expect( err ).to.be.instanceOf( Error );
