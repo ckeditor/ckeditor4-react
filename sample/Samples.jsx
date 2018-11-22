@@ -9,7 +9,7 @@ import LiveFeed from './LiveFeed.jsx';
 class Subpage extends Component {
 	render() {
 		return (
-			<CKEditor data="<p>Hi, I\'m CKEditor 4 instance on subpage!</p>" />
+			<CKEditor data="<p>Hi, I'm CKEditor 4 instance on subpage!</p>" />
 		);
 	}
 }
