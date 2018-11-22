@@ -28,6 +28,7 @@ class CKEditor extends React.Component {
 	componentDidUpdate( prevProps ) {
 		const { props, editor } = this;
 
+		/* istanbul ignore next */
 		if ( !editor ) {
 			return;
 		}
