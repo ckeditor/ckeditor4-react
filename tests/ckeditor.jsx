@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* globals CKEDITOR, chai, document, setTimeout */
+/* globals CKEDITOR, chai, document, setTimeout, window */
 
 import sinonChai from 'sinon-chai';
 import React from 'react';
@@ -11,6 +11,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import CKEditor from '../src/ckeditor.jsx';
+import getEditorNamespace from '../src/getEditorNamespace.js';
 
 const { expect, use } = chai;
 use( sinonChai );
@@ -355,6 +356,59 @@ describe( 'CKEditor Component', () => {
 
 				expect( container.getStyle( 'margin-top' ) ).to.equal( '200px' );
 			} );
+		} );
+	} );
+} );
+
+describe( 'getEditorNamespace', () => {
+	// Don't need any files – Data URLs FTW!
+	const fakeScript = 'data:text/javascript;base64,d2luZG93LkNLRURJVE9SID0ge307';
+
+	beforeEach( () => {
+		delete window.CKEDITOR;
+	} );
+
+	it( 'is a function', () => {
+		expect( getEditorNamespace ).to.be.a( 'function' );
+	} );
+
+	it( 'requires non-empty string as parameter', () => {
+		const invalid = [
+			1,
+			{},
+			[],
+			null,
+			undefined,
+			''
+		];
+
+		invalid.forEach( param => {
+			expect( () => {
+				getEditorNamespace( param );
+			} ).to.throw( TypeError, 'CKEditor URL must be a non-empty string.' );
+		} );
+	} );
+
+	it( 'returns promise even if namespace is present', () => {
+		window.CKEDITOR = {};
+
+		const namespacePromise = getEditorNamespace( 'test' );
+		expect( namespacePromise ).to.be.an.instanceOf( Promise );
+
+		return namespacePromise.then( namespace => {
+			expect( namespace ).to.equal( window.CKEDITOR );
+		} );
+	} );
+
+	it( 'load script and resolves with loaded namespace', () => {
+		return getEditorNamespace( fakeScript ).then( namespace => {
+			expect( namespace ).to.equal( window.CKEDITOR );
+		} );
+	} );
+
+	it( 'rejects with error when script cannot be loaded', () => {
+		return getEditorNamespace( 'non-existent.js' ).catch( err => {
+			expect( err ).to.be.instanceOf( Error );
 		} );
 	} );
 } );
