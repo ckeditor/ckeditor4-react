@@ -9,7 +9,7 @@
 
 const path = require( 'path' );
 const webpack = require( 'webpack' );
-const UglifyJsWebpackPlugin = require( 'uglifyjs-webpack-plugin' );
+const TerserWebpackPlugin = require( 'terser-webpack-plugin' );
 
 module.exports = [ {
 	context: __dirname,
@@ -48,9 +48,9 @@ module.exports = [ {
 
 	optimization: {
 		minimizer: [
-			new UglifyJsWebpackPlugin( {
+			new TerserWebpackPlugin( {
 				sourceMap: true,
-				uglifyOptions: {
+				terserOptions: {
 					output: {
 						// Preserve CKEditor 5 license comments.
 						comments: /^!/
@@ -109,9 +109,9 @@ module.exports = [ {
 
 	optimization: {
 		minimizer: [
-			new UglifyJsWebpackPlugin( {
+			new TerserWebpackPlugin( {
 				sourceMap: true,
-				uglifyOptions: {
+				terserOptions: {
 					output: {
 						// Preserve license comments.
 						comments: /^!/
