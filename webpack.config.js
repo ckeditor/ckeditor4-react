@@ -62,10 +62,10 @@ module.exports = [ {
 
 	plugins: [
 		new webpack.BannerPlugin( {
-			banner: `/**
-			 * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
-			 * For licensing, see LICENSE.md.
-			 */`,
+			banner: `/*!*
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+*/`,
 			raw: true
 		} ),
 	],
@@ -123,10 +123,10 @@ module.exports = [ {
 
 	plugins: [
 		new webpack.BannerPlugin( {
-			banner: `/**
-			 * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
-			 * For licensing, see LICENSE.md.
-			 */`,
+			banner: `/*!*
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+*/`,
 			raw: true
 		} ),
 	],
