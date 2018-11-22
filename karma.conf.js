@@ -34,7 +34,7 @@ module.exports = function( config ) {
 					},
 
 					{
-						test: /\.jsx$/,
+						test: /\.jsx?$/,
 						loader: 'istanbul-instrumenter-loader',
 						include: /src/,
 						exclude: [
@@ -62,7 +62,7 @@ module.exports = function( config ) {
 			reporters: [
 				// Prints a table after tests result.
 				{
-					type: 'text-summary'
+					type: 'text'
 				},
 				// Generates HTML tables with the results.
 				{
