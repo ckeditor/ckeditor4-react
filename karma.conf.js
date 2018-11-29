@@ -1,4 +1,9 @@
-const { join: joinPath } = require( 'path' );
+/**
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+ const { join: joinPath } = require( 'path' );
 
 const basePath = process.cwd();
 const coverageDir = joinPath( basePath, 'coverage' );
