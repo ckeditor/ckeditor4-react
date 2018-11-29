@@ -335,7 +335,7 @@ describe( 'CKEditor Component', () => {
 		it( 'apply styles to editor container', () => {
 			const component = createEditor( {
 				style: {
-					'margin-top': '200px'
+					marginTop: '200px'
 				}
 			} );
 
@@ -350,7 +350,7 @@ describe( 'CKEditor Component', () => {
 			return waitForEditor( component ).then( ( { container } ) => {
 				component.setProps( {
 					style: {
-						'margin-top': '200px'
+						marginTop: '200px'
 					}
 				} );
 
