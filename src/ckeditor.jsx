@@ -56,7 +56,7 @@ class CKEditor extends React.Component {
 		this.props.config.readOnly = this.props.readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl ).then( CKEDITOR => {
-			const constructor = getConstructorType( this.props.type );
+			const constructor = this.props.type === 'inline' ? 'inline' : 'replace';
 
 			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
@@ -123,13 +123,5 @@ CKEditor.defaultProps = {
 };
 
 CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.11.1/standard-all/ckeditor.js';
-
-function getConstructorType( prop ) {
-	if ( prop === 'inline' ) {
-		return 'inline';
-	}
-
-	return 'replace';
-}
 
 export default CKEditor;
