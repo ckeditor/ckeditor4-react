@@ -5,8 +5,8 @@
   "license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
   "main": "dist/ckeditor.js",
   "files": [
-	  "dist/",
-	  "sample/"
+    "dist/",
+    "sample/"
   ],
   "scripts": {
     "build": "webpack --mode production",
