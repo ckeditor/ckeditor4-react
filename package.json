@@ -21,8 +21,17 @@
     "url": "git+https://github.com/cksource/ckeditor4-react.git"
   },
   "keywords": [
+    "wysiwyg",
+    "rich text",
+    "editor",
+    "html",
+    "contentEditable",
+    "editing",
+    "react",
+    "react-component",
+    "ckeditor",
     "ckeditor4",
-    "react"
+    "ckeditor 4"
   ],
   "author": "CKSource (http://cksource.com/)",
   "bugs": {
