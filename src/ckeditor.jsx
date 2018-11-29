@@ -78,7 +78,7 @@ class CKEditor extends React.Component {
 		const props = this.props;
 
 		Object.keys( this.props ).forEach( propName => {
-			if ( propName.indexOf( 'on' ) !== 0 || prevProps[ propName ] === props[ propName ] ) {
+			if ( !propName.startsWith( 'on' ) || prevProps[ propName ] === props[ propName ] ) {
 				return;
 			}
 
