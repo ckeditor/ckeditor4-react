@@ -2,19 +2,21 @@
 
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) rich text editor component for React.
 
+![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
+
 ## Usage
 
-### Customizing editor version / `ckeditor.js` URL
-
-By default CKEditor integration will use the latest CKEditor version in standard-all preset available on CDN. Naturally you are not limited to CDN and can link your custom CKEditor 4 URL. You can customize preset, version using `CKEditor.editorUrl` variable:
-
-```javascript
+```jsx
 import CKEditor from 'ckeditor4-react';
 
-CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.11.1/basic/ckeditor.js';
+<CKEditor data="<p>This is an example CKEditor 4 instance.</p>" />
 ```
 
-Note that variable has to be assigned **before first component is initialized**.
+## Documentation and samples
+
+See the [React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
+
+You can also consult [React samples](http://sdk.ckeditor.com/samples/react.html) in the [CKEditor 4 SDK](https://sdk.ckeditor.com).
 
 ## Contributing
 
@@ -30,7 +32,7 @@ npm install
 npm run test
 ```
 
-If you are going to change the source (`src/ckeditor.jsx`) file, remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
+If you are going to change the source files (ones located in `src/` directory), remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
 
 ### Building the package
 
