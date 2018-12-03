@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cksource/ckeditor4-react.git"
+    "url": "git+https://github.com/ckeditor/ckeditor4-react.git"
   },
   "keywords": [
     "wysiwyg",
@@ -35,9 +35,9 @@
   ],
   "author": "CKSource (http://cksource.com/)",
   "bugs": {
-    "url": "https://github.com/cksource/ckeditor4-react/issues"
+    "url": "https://github.com/ckeditor/ckeditor4-react/issues"
   },
-  "homepage": "https://github.com/cksource/ckeditor4-react#readme",
+  "homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
   "peerDependencies": {
     "react": "^16.0.0",
     "ckeditor": "^4.10.0"
