@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
- const { join: joinPath } = require( 'path' );
+const { join: joinPath } = require( 'path' );
 
 const basePath = process.cwd();
 const coverageDir = joinPath( basePath, 'coverage' );
