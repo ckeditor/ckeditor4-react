@@ -16,7 +16,7 @@ import CKEditor from 'ckeditor4-react';
 
 See the [React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
 
-You can also consult [React samples](http://sdk.ckeditor.com/samples/react.html) in the [CKEditor 4 SDK](https://sdk.ckeditor.com).
+You can also consult [React example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in the [CKEditor 4 Example](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
 ## Contributing
 
