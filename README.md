@@ -12,11 +12,11 @@ import CKEditor from 'ckeditor4-react';
 <CKEditor data="<p>This is an example CKEditor 4 instance.</p>" />
 ```
 
-## Documentation and samples
+## Documentation and examples
 
 See the [React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
 
-You can also consult [React example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in the [CKEditor 4 Example](https://ckeditor.com/docs/ckeditor4/latest/examples/).
+You can also check out [React example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in the [CKEditor 4 Example](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
 ## Contributing
 
