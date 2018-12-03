@@ -1,0 +1,16 @@
+{
+	"extends": [
+		"eslint-config-ckeditor5",
+		"plugin:react/recommended"
+	],
+
+	"settings": {
+		"react": {
+			"version": "16.x"
+		}
+	},
+
+	"env": {
+		"browser": true
+	}
+}
