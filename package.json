@@ -40,7 +40,7 @@
   "homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
   "peerDependencies": {
     "react": "^16.0.0",
-    "ckeditor": "^4.10.0"
+    "ckeditor": "^4.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -48,7 +48,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
-    "ckeditor": "^4.10.1",
+    "ckeditor": "^4.11.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "eslint": "^5.7.0",
