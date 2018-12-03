@@ -8,5 +8,9 @@
 		"react": {
 			"version": "16.x"
 		}
+	},
+
+	"env": {
+		"browser": true
 	}
 }

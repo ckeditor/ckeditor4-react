@@ -11,7 +11,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "develop": "webpack --mode development --watch",
-    "lint": "eslint src/**/*.jsx tests/**/*.jsx",
+    "lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
     "pretest": "npm run lint",
     "test": "karma start",
     "prepublishOnly": "npm run build"
