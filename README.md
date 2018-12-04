@@ -1,5 +1,11 @@
 # CKEditor 4 rich text editor component for React
 
+[![npm version](https://badge.fury.io/js/ckeditor4-react.svg)](https://www.npmjs.com/package/ckeditor4-react)
+[![Build Status](https://travis-ci.org/ckeditor/ckeditor4-react.svg?branch=master)](https://travis-ci.org/ckeditor/ckeditor4-react)
+<br>
+[![Dependency Status](https://david-dm.org/ckeditor/ckeditor4-react/status.svg)](https://david-dm.org/ckeditor/ckeditor4-react)
+[![devDependency Status](https://david-dm.org/ckeditor/ckeditor4-react/dev-status.svg)](https://david-dm.org/ckeditor/ckeditor4-react?type=dev)
+
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) rich text editor component for React.
 
 ![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
