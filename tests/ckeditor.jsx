@@ -27,19 +27,32 @@ describe( 'CKEditor Component', () => {
 	} );
 
 	afterEach( () => {
+		const destroyPromises = [];
+
 		components.forEach( component => {
 			// Already unmounted components throw error on another unmount.
 			try {
+				const editor = component.instance().editor;
+
+				if ( editor ) {
+					const promise = new Promise( resolve => {
+						editor.once( 'destroy', resolve );
+					} );
+					destroyPromises.push( promise );
+				}
+
 				component.unmount();
 			} catch ( e ) {} // eslint-disable-line no-empty
 		} );
-		components = [];
 
-		sandbox.restore();
+		return Promise.all( destroyPromises ).then( () => {
+			components = [];
+			sandbox.restore();
 
-		const containers = document.querySelectorAll( 'div' );
-		containers.forEach( container => {
-			document.body.removeChild( container );
+			const containers = document.querySelectorAll( 'div' );
+			containers.forEach( container => {
+				document.body.removeChild( container );
+			} );
 		} );
 	} );
 
