@@ -101,7 +101,7 @@ class CKEditor extends React.Component {
 	}
 
 	_destroyEditor() {
-		this.editor.destroy();
+		this.editor && this.editor.destroy();
 
 		this.editor = null;
 		this.element = null;
