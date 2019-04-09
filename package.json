@@ -40,7 +40,7 @@
   "homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
   "peerDependencies": {
     "react": "^16.0.0",
-    "ckeditor": "^4.11.1"
+    "ckeditor": "^4.11.4"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
