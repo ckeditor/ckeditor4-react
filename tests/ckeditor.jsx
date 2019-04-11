@@ -189,11 +189,6 @@ describe( 'CKEditor Component', () => {
 		} );
 
 		it( 'does not throw when props are changed after unmounting component', () => {
-			// This test in Edge causes fail in afterEach hook.
-			if ( CKEDITOR.env.edge ) {
-				return;
-			}
-
 			const component = createEditor();
 
 			return waitForEditor( component ).then( () => {
