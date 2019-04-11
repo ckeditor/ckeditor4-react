@@ -41,7 +41,9 @@ describe( 'CKEditor Component', () => {
 					destroyPromises.push( promise );
 				}
 
-				component.unmount();
+				setTimeout( () => {
+					component.unmount();
+				} );
 			} catch ( e ) {} // eslint-disable-line no-empty
 		} );
 
