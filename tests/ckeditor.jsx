@@ -41,6 +41,7 @@ describe( 'CKEditor Component', () => {
 					destroyPromises.push( promise );
 				}
 
+				// Some tricky race causes failing tests delaying unmount fixes it (#21).
 				setTimeout( () => {
 					component.unmount();
 				} );
