@@ -41,7 +41,10 @@ describe( 'CKEditor Component', () => {
 					destroyPromises.push( promise );
 				}
 
-				component.unmount();
+				// Some tricky race causes failing tests delaying unmount fixes it (#21).
+				setTimeout( () => {
+					component.unmount();
+				} );
 			} catch ( e ) {} // eslint-disable-line no-empty
 		} );
 
@@ -187,11 +190,6 @@ describe( 'CKEditor Component', () => {
 		} );
 
 		it( 'does not throw when props are changed after unmounting component', () => {
-			// This test in Edge causes fail in afterEach hook.
-			if ( CKEDITOR.env.edge ) {
-				return;
-			}
-
 			const component = createEditor();
 
 			return waitForEditor( component ).then( () => {
