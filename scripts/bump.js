@@ -14,12 +14,19 @@ if ( !( args && args[ 2 ] && args[ 2 ].length > 2 ) ) {
 
 const version = args[ 2 ];
 
-// Update version in 'src/ckeditor.jsx' file.
-const filePath = './src/ckeditor.jsx';
-const fileData = fs.readFileSync( filePath, 'utf8' );
+// Update CDN link in 'src/ckeditor.jsx' file.
+const jsxFilePath = path.resolve( __dirname, '..', 'src', 'ckeditor.jsx' );
+const jsxFileData = fs.readFileSync( jsxFilePath, 'utf8' );
 
-fs.writeFileSync( filePath,
-	fileData.replace( /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
+fs.writeFileSync( jsxFilePath,
+	jsxFileData.replace( /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
+
+// Update CDN link in 'karma.conf.js' file.
+const karmaFilePath = path.resolve( __dirname, '..', 'karma.conf.js' );
+const karmaFileData = fs.readFileSync( karmaFilePath, 'utf8' );
+
+fs.writeFileSync( karmaFilePath,
+	karmaFileData.replace( /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
 
 // Update 'peerDependency' in 'package.json'.
 pkg.peerDependencies.ckeditor = `^${ version }`;
