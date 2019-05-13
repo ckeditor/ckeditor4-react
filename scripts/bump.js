@@ -15,18 +15,10 @@ if ( !( args && args[ 2 ] && args[ 2 ].length > 2 ) ) {
 const version = args[ 2 ];
 
 // Update CDN link in 'src/ckeditor.jsx' file.
-const jsxFilePath = path.resolve( __dirname, '..', 'src', 'ckeditor.jsx' );
-const jsxFileData = fs.readFileSync( jsxFilePath, 'utf8' );
-
-fs.writeFileSync( jsxFilePath,
-	jsxFileData.replace( /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
+updateCdnLink( path.resolve( __dirname, '..', 'src', 'ckeditor.jsx' ) );
 
 // Update CDN link in 'karma.conf.js' file.
-const karmaFilePath = path.resolve( __dirname, '..', 'karma.conf.js' );
-const karmaFileData = fs.readFileSync( karmaFilePath, 'utf8' );
-
-fs.writeFileSync( karmaFilePath,
-	karmaFileData.replace( /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
+updateCdnLink( path.resolve( __dirname, '..', 'karma.conf.js' ) );
 
 // Update 'peerDependency' in 'package.json'.
 pkg.peerDependencies.ckeditor = `^${ version }`;
@@ -34,3 +26,11 @@ fs.writeFileSync( path.resolve( __dirname, '..', 'package.json' ), JSON.stringif
 
 // Update 'devDependency' in 'package.json' file and entire 'package-lock.json' file.
 shell.exec( `npm install ckeditor@${ version } --save-dev` );
+
+function updateCdnLink( path ) {
+	const file = fs.readFileSync( path, 'utf8' );
+	const cdnLinkRegex = /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g;
+
+	fs.writeFileSync( path,
+		file.replace( cdnLinkRegex, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
+}
