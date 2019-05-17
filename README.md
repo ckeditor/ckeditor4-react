@@ -8,6 +8,8 @@
 
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) rich text editor component for React.
 
+This is beta version (`1.0.0-beta`) of the React integration. We are looking for feedback, you may report any issues, ideas or feature requests on the [integration issue page](https://github.com/ckeditor/ckeditor4-react/issues/new). 
+
 ![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
 
 ## Usage
