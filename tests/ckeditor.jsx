@@ -374,6 +374,32 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 	} );
+
+	// #18
+	describe( '#onBeforeLoad', () => {
+		it( 'receives CKEDITOR as a parameter', () => {
+			const onBeforeLoad = sandbox.spy();
+			const component = createEditor( { onBeforeLoad } );
+
+			return Promise.all( [
+				getEditorNamespace( CKEditor.editorUrl ),
+				waitForEditor( component )
+			] ).then( ( [ CKEDITOR ] ) => {
+				expect( onBeforeLoad ).to.be.calledOnceWithExactly( CKEDITOR );
+			} );
+		} );
+
+		it( 'is fired before creating editor instance', () => {
+			const onBeforeLoad = sandbox.spy();
+			const spy = sandbox.spy( CKEDITOR, 'replace' );
+			const component = createEditor( { onBeforeLoad } );
+
+			return waitForEditor( component ).then( () => {
+				expect( onBeforeLoad ).to.be.calledOnce;
+				expect( onBeforeLoad ).to.be.calledBefore( spy );
+			} );
+		} );
+	} );
 } );
 
 describe( 'getEditorNamespace', () => {
