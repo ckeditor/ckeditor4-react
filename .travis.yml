@@ -8,6 +8,9 @@ node_js:
 - 10
 cache:
 - node_modules
+before_install:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 install:
 - npm install
 script:
