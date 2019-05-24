@@ -89,24 +89,9 @@ module.exports = function( config ) {
 
 		logLevel: 'INFO',
 
-		browsers: [
-			'Chrome',
-			'Firefox'
-		],
+		browsers: getBrowsers(),
 
 		customLaunchers: {
-			BrowserStack_Chrome: {
-				base: 'BrowserStack',
-				os: 'Windows',
-				os_version: '10',
-				browser: 'chrome'
-			},
-			BrowserStack_Firefox: {
-				base: 'BrowserStack',
-				os: 'Windows',
-				os_version: '10',
-				browser: 'firefox'
-			},
 			BrowserStack_Edge: {
 				base: 'BrowserStack',
 				os: 'Windows',
@@ -155,4 +140,34 @@ function getBuildName() {
 	const date = new Date().getTime();
 
 	return `${ repositoryName } ${ date }`;
+}
+
+function getBrowsers() {
+	if ( shouldEnableBrowserStack() ) {
+		return [
+			'Chrome',
+			'Firefox',
+			'BrowserStack_Edge',
+			'BrowserStack_Safari'
+		];
+	}
+
+	return [
+		'Chrome',
+		'Firefox'
+	];
+}
+
+function shouldEnableBrowserStack() {
+	if ( !process.env.BROWSER_STACK_USERNAME ) {
+		return false;
+	}
+
+	if ( !process.env.BROWSER_STACK_ACCESS_KEY ) {
+		return false;
+	}
+
+	// If the repository slugs are different, the pull request comes from the community (forked repository).
+	// For such builds, BrowserStack will be disabled. Read more: https://github.com/ckeditor/ckeditor5-dev/issues/358.
+	return ( process.env.TRAVIS_EVENT_TYPE !== 'pull_request' || process.env.TRAVIS_PULL_REQUEST_SLUG === process.env.TRAVIS_REPO_SLUG );
 }
