@@ -159,11 +159,7 @@ function getBrowsers() {
 }
 
 function shouldEnableBrowserStack() {
-	if ( !process.env.BROWSER_STACK_USERNAME ) {
-		return false;
-	}
-
-	if ( !process.env.BROWSER_STACK_ACCESS_KEY ) {
+	if ( !process.env.BROWSER_STACK_USERNAME || !process.env.BROWSER_STACK_ACCESS_KEY ) {
 		return false;
 	}
 
