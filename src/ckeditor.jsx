@@ -123,5 +123,6 @@ CKEditor.defaultProps = {
 };
 
 CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.11.4/standard-all/ckeditor.js';
+CKEditor.displayName = 'CKEditor';
 
 export default CKEditor;

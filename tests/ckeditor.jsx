@@ -59,6 +59,11 @@ describe( 'CKEditor Component', () => {
 		} );
 	} );
 
+	// (#48)
+	it( 'has proper displayName property', () => {
+		expect( CKEditor.displayName ).to.equal( 'CKEditor' );
+	} );
+
 	describe( 'mounting and types', () => {
 		it( 'calls CKEDITOR.replace on mount', () => {
 			sandbox.spy( CKEDITOR, 'replace' );
