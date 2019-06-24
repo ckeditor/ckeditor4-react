@@ -7,11 +7,12 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { expect } from 'chai';
 
-import CKEditor from '../../src/ckeditor.jsx';
+import CKEditorDev from '../../src/ckeditor.jsx';
+import CKEditorBuilt from '../../dist/ckeditor-server.js';
 
 describe( 'CKEditor Component SSR', () => {
 	describe( 'basic rendering', () => {
-		it( 'returns appropriate HTML', () => {
+		createTest( 'returns appropriate HTML', CKEditor => {
 			const expected = '<div contenteditable="true" data-reactroot=""></div>';
 			const rendered = ReactDOMServer.renderToString( <CKEditor /> );
 
@@ -19,3 +20,13 @@ describe( 'CKEditor Component SSR', () => {
 		} );
 	} );
 } );
+
+function createTest( name, test ) {
+	it( `${ name } (dev)`, () => {
+		test( CKEditorDev );
+	} );
+
+	it( `${ name } (built)`, () => {
+		test( CKEditorBuilt );
+	} );
+}
