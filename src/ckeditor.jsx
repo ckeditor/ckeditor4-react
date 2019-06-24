@@ -3,8 +3,6 @@
  * For licensing, see LICENSE.md.
  */
 
-/* globals window */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import getEditorNamespace from './getEditorNamespace.js';
@@ -75,7 +73,7 @@ class CKEditor extends React.Component {
 			if ( this.props.data ) {
 				editor.setData( this.props.data );
 			}
-		} ).catch( window.console.error );
+		} ).catch( console.error );
 	}
 
 	_attachEventHandlers( prevProps = {} ) {
