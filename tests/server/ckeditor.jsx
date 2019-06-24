@@ -8,7 +8,7 @@ import ReactDOMServer from 'react-dom/server';
 import { expect } from 'chai';
 
 import CKEditorDev from '../../src/ckeditor.jsx';
-import CKEditorBuilt from '../../dist/ckeditor-server.js';
+import CKEditorBuilt from '../../dist/ckeditor.js';
 
 describe( 'CKEditor Component SSR', () => {
 	describe( 'basic rendering', () => {
