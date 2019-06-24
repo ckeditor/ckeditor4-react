@@ -8,6 +8,12 @@
     "dist/",
     "sample/"
   ],
+  "nyc": {
+    "include": [
+      "src/**/*.js",
+      "src/**/*.jsx"
+    ]
+  },
   "scripts": {
     "build": "webpack --mode production",
     "develop": "webpack --mode development --watch",
