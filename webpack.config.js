@@ -15,7 +15,7 @@ module.exports = [ createConfig(), createConfig( 'node', '-server' ) ];
 
 function createConfig( target = 'web', name = '' ) {
 	return {
-		target: target,
+		target,
 		context: __dirname,
 
 		devtool: 'source-map',
