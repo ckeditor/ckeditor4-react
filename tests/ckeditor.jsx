@@ -140,6 +140,14 @@ describe( 'CKEditor Component', () => {
 				expect.fail( err.message );
 			} );
 		} );
+
+		// #16
+		it( 'does not throw when destroy is attempted before the editor is created', () => {
+			expect( () => {
+				// Dirty hack to check only the destroy logic.
+				CKEditor.prototype._destroyEditor.call( {} );
+			} ).not.to.throw();
+		} );
 	} );
 
 	describe( '#data', () => {
