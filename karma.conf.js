@@ -60,11 +60,7 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: [
-			'mocha',
-			'BrowserStack',
-			'coverage',
-		],
+		reporters: getReporters(),
 
 		coverageReporter: {
 			reporters: [
@@ -157,6 +153,21 @@ function getBrowsers() {
 	return [
 		'Chrome',
 		'Firefox'
+	];
+}
+
+function getReporters() {
+	if ( shouldEnableBrowserStack() ) {
+		return [
+			'mocha',
+			'BrowserStack',
+			'coverage',
+		];
+	}
+
+	return [
+		'mocha',
+		'coverage',
 	];
 }
 
