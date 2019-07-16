@@ -12,13 +12,13 @@
     "build": "webpack --mode production",
     "develop": "webpack --mode development --watch",
     "lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
-    "test:browser": "karma start",
-    "pretest:ssr": "webpack --mode development",
-    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
     "pretest": "npm run lint",
     "test": "npm run test:browser && npm run test:ssr",
     "prepublishOnly": "npm run build",
-    "bump": "node ./scripts/bump.js"
+	"bump": "node ./scripts/bump.js",
+	"test:browser": "karma start",
+    "pretest:ssr": "webpack --mode development",
+    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js"
   },
   "repository": {
     "type": "git",
