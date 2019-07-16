@@ -7,6 +7,7 @@ require( '@babel/register' )( {
 			'@babel/preset-env',
 			{
 				useBuiltIns: 'usage',
+				corejs: 3,
 				targets: {
 					node: 10
 				}
