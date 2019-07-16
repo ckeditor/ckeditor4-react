@@ -3,4 +3,3 @@ coverage/
 .DS_Store
 dist/
 sample/dist/
-.nyc_output

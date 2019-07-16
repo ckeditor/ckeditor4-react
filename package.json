@@ -8,19 +8,13 @@
     "dist/",
     "sample/"
   ],
-  "nyc": {
-    "include": [
-      "src/**/*.js",
-      "src/**/*.jsx"
-    ]
-  },
   "scripts": {
     "build": "webpack --mode production",
     "develop": "webpack --mode development --watch",
     "lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
     "test:browser": "karma start",
     "pretest:ssr": "webpack --mode development",
-    "test:ssr": "nyc mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
+    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
     "pretest": "npm run lint",
     "test": "npm run test:browser && npm run test:ssr",
     "prepublishOnly": "npm run build",
@@ -78,7 +72,6 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "mocha": "^6.1.4",
-    "nyc": "^14.1.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-router-dom": "^5.0.0",
