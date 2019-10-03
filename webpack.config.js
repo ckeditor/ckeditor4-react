@@ -43,7 +43,7 @@ module.exports = {
 		filename: 'ckeditor.js',
 		libraryTarget: 'umd',
 		libraryExport: 'default',
-
+		globalObject: '(typeof self !== \'undefined\' ? self : this)'
 	},
 
 	optimization: {
@@ -82,11 +82,13 @@ module.exports = {
 						'@babel/preset-env',
 						{
 							useBuiltIns: 'usage',
+							corejs: 3,
 							targets: {
 								browsers: [
 									'last 2 versions',
 									'ie 11'
-								]
+								],
+								node: 10
 							}
 						}
 					],

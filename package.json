@@ -13,9 +13,12 @@
     "develop": "webpack --mode development --watch",
     "lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
     "pretest": "npm run lint",
-    "test": "karma start",
+    "test": "npm run test:browser && npm run test:ssr",
     "prepublishOnly": "npm run build",
-    "bump": "node ./scripts/bump.js"
+    "bump": "node ./scripts/bump.js",
+    "test:browser": "karma start",
+    "pretest:ssr": "webpack --mode development",
+    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js"
   },
   "repository": {
     "type": "git",
@@ -47,6 +50,7 @@
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
     "ckeditor": "^4.12.1",
