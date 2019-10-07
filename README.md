@@ -1,14 +1,18 @@
-# CKEditor 4 rich text editor component for React
+# CKEditor 4 rich text editor component for React [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20React%20integration&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fckeditor4-react)
 
 [![npm version](https://badge.fury.io/js/ckeditor4-react.svg)](https://www.npmjs.com/package/ckeditor4-react)
+[![GitHub tag](https://img.shields.io/github/tag/ckeditor/ckeditor4-react.svg)](https://github.com/ckeditor/ckeditor4-react)
+
 [![Build Status](https://travis-ci.org/ckeditor/ckeditor4-react.svg?branch=master)](https://travis-ci.org/ckeditor/ckeditor4-react)
-<br>
 [![Dependency Status](https://david-dm.org/ckeditor/ckeditor4-react/status.svg)](https://david-dm.org/ckeditor/ckeditor4-react)
 [![devDependency Status](https://david-dm.org/ckeditor/ckeditor4-react/dev-status.svg)](https://david-dm.org/ckeditor/ckeditor4-react?type=dev)
 
+[![Join newsletter](https://img.shields.io/badge/join-newsletter-00cc99.svg)](http://eepurl.com/c3zRPr)
+[![Follow Twitter](https://img.shields.io/badge/follow-twitter-00cc99.svg)](https://twitter.com/ckeditor)
+
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) rich text editor component for React.
 
-This is the beta version of the CKEditor 4 React integration. We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
+We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
 
 ![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
 
