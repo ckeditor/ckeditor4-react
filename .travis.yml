@@ -8,6 +8,15 @@ addons:
   chrome: stable
   firefox: latest
 
+branches:
+  only:
+  - master
+  - major
+  - stable
+  - latest
+  - /^\d+\.\d+(\.\d+)?(-\S*)?$/
+  - /^release\/\d+\.\d+\.x$/
+
 language: node_js
 node_js:
   - 10
