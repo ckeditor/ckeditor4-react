@@ -1,4 +1,4 @@
-# CKEditor 4 rich text editor component for React [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20React%20integration&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fckeditor4-react)
+# CKEditor 4 WYSIWYG editor component for React [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20React%20integration&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fckeditor4-react)
 
 [![npm version](https://badge.fury.io/js/ckeditor4-react.svg)](https://www.npmjs.com/package/ckeditor4-react)
 [![GitHub tag](https://img.shields.io/github/tag/ckeditor/ckeditor4-react.svg)](https://github.com/ckeditor/ckeditor4-react)
@@ -10,7 +10,7 @@
 [![Join newsletter](https://img.shields.io/badge/join-newsletter-00cc99.svg)](http://eepurl.com/c3zRPr)
 [![Follow Twitter](https://img.shields.io/badge/follow-twitter-00cc99.svg)](https://twitter.com/ckeditor)
 
-Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) rich text editor component for React.
+Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component for React.
 
 We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
 
@@ -21,36 +21,36 @@ We are looking forward to your feedback! You can report any issues, ideas or fea
 ```jsx
 import CKEditor from 'ckeditor4-react';
 
-<CKEditor data="<p>This is an example CKEditor 4 instance.</p>" />
+<CKEditor data="<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>" />
 ```
 
 ## Documentation and examples
 
-See the [React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
+See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
 
-You can also check out [React example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in the [CKEditor 4 Example](https://ckeditor.com/docs/ckeditor4/latest/examples/).
+You can also check out [CKEditor 4 WYSIWYG Editor React Integration example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in [CKEditor 4 Examples](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
 ## Contributing
 
 After cloning this repository, install necessary dependencies:
 
-```bash
+```
 npm install
 ```
 
 ### Executing tests
 
-```bash
+```
 npm run test
 ```
 
-If you are going to change the source files (ones located in `src/` directory), remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
+If you are going to change the source files (ones located in the `src/` directory), remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
 
 ### Building the package
 
 Build a minified version of the package that is ready to publish:
 
-```bash
+```
 npm run build
 ```
 

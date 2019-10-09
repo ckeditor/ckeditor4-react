@@ -14,17 +14,17 @@ if ( !( args && args[ 2 ] && args[ 2 ].length > 2 ) ) {
 
 const version = args[ 2 ];
 
-// Update CDN link in 'src/ckeditor.jsx' file.
+// Update the CDN link in the 'src/ckeditor.jsx' file.
 updateCdnLink( path.resolve( __dirname, '..', 'src', 'ckeditor.jsx' ) );
 
-// Update CDN link in 'karma.conf.js' file.
+// Update the CDN link in the 'karma.conf.js' file.
 updateCdnLink( path.resolve( __dirname, '..', 'karma.conf.js' ) );
 
 // Update 'peerDependency' in 'package.json'.
 pkg.peerDependencies.ckeditor4 = `^${ version }`;
 fs.writeFileSync( path.resolve( __dirname, '..', 'package.json' ), JSON.stringify( pkg, null, '  ' ) );
 
-// Update 'devDependency' in 'package.json' file and entire 'package-lock.json' file.
+// Update 'devDependency' in the 'package.json' file and the entire 'package-lock.json' file.
 shell.exec( `npm install ckeditor4@${ version } --save-dev` );
 
 function updateCdnLink( path ) {

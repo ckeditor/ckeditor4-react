@@ -1,7 +1,7 @@
 Software License Agreement
 ==========================
 
-**CKEditor 4 component for React** – https://github.com/ckeditor/ckeditor4-react <br>
+**CKEditor 4 WYSIWYG editor component for React** – https://github.com/ckeditor/ckeditor4-react <br>
 Copyright (c) 2003-2019, [CKSource](http://cksource.com) Frederico Knabben. All rights reserved.
 
 Licensed under the terms of any of the following licenses at your
@@ -21,7 +21,7 @@ Sources of Intellectual Property Included in CKEditor
 
 Where not otherwise indicated, all CKEditor content is authored by CKSource engineers and consists of CKSource-owned intellectual property. In some specific instances, CKEditor will incorporate work done by developers outside of CKSource with their express permission.
 
-The following libraries are included in CKEditor 4 component for React under the [MIT license](https://opensource.org/licenses/MIT):
+The following libraries are included in CKEditor 4 WYSIWYG editor component for React under the [MIT license](https://opensource.org/licenses/MIT):
 - load-script
 - prop-types (c) 2013-present, Facebook, Inc.
 
