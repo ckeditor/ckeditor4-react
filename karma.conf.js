@@ -17,7 +17,7 @@ module.exports = function( config ) {
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
 		files: [
-			'https://cdn.ckeditor.com/4.12.1/standard-all/ckeditor.js',
+			'https://cdn.ckeditor.com/4.13.0/standard-all/ckeditor.js',
 			'tests/browser/**/*.jsx'
 		],
 
