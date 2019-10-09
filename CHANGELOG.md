@@ -9,6 +9,14 @@ New Features:
 Fixed Issues:
 
 * [#46](https://github.com/ckeditor/ckeditor4-react/issues/46): Fixed: Integration tries to destroy non-existent editor instance in some cases. Thanks to [Oleg Kachmar](https://github.com/prokach)!
+* [#44](https://github.com/ckeditor/ckeditor4-react/issues/44): Fixed: Error thrown when quickly changing routes.
+* [#49](https://github.com/ckeditor/ckeditor4-react/issues/49): Fixed: The "Cannot read property 'getEditor' of null" error thrown when component is unmounted.
+* [#56](https://github.com/ckeditor/ckeditor4-react/issues/56): Fixed: CKEditor crashes when unmounting with "Cannot read property 'destroy' of null" error.
+
+
+Other Changes:
+
+* Updated default CDN CKEditor 4 dependency to [`4.13.0`](https://github.com/ckeditor/ckeditor4-react/commit/7b34d2c4f896ced08e66359faca28194ed7e8ef4).
 
 ## ckeditor4-react 1.0.0-beta.2
 
