@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CKEditor 4 – React Component – development sample</title>
+	<style>
+		body {
+			max-width: 800px;
+			margin: 20px auto;
+		}
+
+		.cke_editable_inline {
+			border: solid 1px black;
+		}
+
+		.highlight {
+			border-radius: 2px;
+			background: lightgray;
+			border: solid 1px darkgray;
+			padding-left: 4px;
+			padding-right: 4px;
+			color: darkred;
+		}
+
+		.route__list {
+			list-style-type: none;
+		}
+	</style>
+</head>
+<body>
+	<script src="../node_modules/react/umd/react.production.min.js"></script>
+	<script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+	<script src="../dist/ckeditor.js"></script>
+
+	<h2>CKEditor 4 – React.js Component – development sample</h2>
+	<div id="app">
+	</div>
+
+	<script type="text/babel" src="./main.js"></script>
+</body>
+</html>
