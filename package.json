@@ -54,6 +54,7 @@
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
     "ckeditor4": "^4.13.1",
+    "core-js": "^3.6.4",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "eslint": "^5.7.0",
