@@ -60,6 +60,13 @@ class CKEditor extends React.Component {
 				this.props.onBeforeLoad( CKEDITOR );
 			}
 
+			// We must force editability of inline editor to prevent
+			// element-conflict error. Can't to it via config due to
+			// upstream bug in CKE (#57, ckeditor/ckeditor4#3866).
+			if ( this.props.type === 'inline' && !this.props.readOnly ) {
+				this.element.contentEditable = true;
+			}
+
 			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
 
 			this._attachEventHandlers();
