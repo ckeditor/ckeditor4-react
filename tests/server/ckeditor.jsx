@@ -13,7 +13,7 @@ import CKEditorBuilt from '../../dist/ckeditor.js';
 describe( 'CKEditor Component SSR', () => {
 	describe( 'basic rendering', () => {
 		createTest( 'returns appropriate HTML', CKEditor => {
-			const expected = '<div contenteditable="true" data-reactroot=""></div>';
+			const expected = '<div data-reactroot=""></div>';
 			const rendered = ReactDOMServer.renderToString( <CKEditor /> );
 
 			expect( rendered ).to.equal( expected );
