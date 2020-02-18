@@ -118,6 +118,12 @@ module.exports = function( config ) {
 
 		mochaReporter: {
 			showDiff: true
+		},
+
+		client: {
+			mocha: {
+				timeout: 5000
+			}
 		}
 	} );
 };
