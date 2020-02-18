@@ -51,34 +51,35 @@ class CKEditor extends React.Component {
 	}
 
 	_initEditor() {
-		this.props.config.readOnly = this.props.readOnly;
+		const { config, readOnly, type, onBeforeLoad, style, data } = this.props;
+		config.readOnly = readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl ).then( CKEDITOR => {
-			const constructor = this.props.type === 'inline' ? 'inline' : 'replace';
+			const constructor = type === 'inline' ? 'inline' : 'replace';
 
-			if ( this.props.onBeforeLoad ) {
-				this.props.onBeforeLoad( CKEDITOR );
+			if ( onBeforeLoad ) {
+				onBeforeLoad( CKEDITOR );
 			}
 
 			// We must force editability of inline editor to prevent
 			// element-conflict error. Can't to it via config due to
 			// upstream bug in CKE (#57, ckeditor/ckeditor4#3866).
-			if ( this.props.type === 'inline' && !this.props.readOnly ) {
+			if ( type === 'inline' && !readOnly ) {
 				this.element.contentEditable = true;
 			}
 
-			const editor = this.editor = CKEDITOR[ constructor ]( this.element, this.props.config );
+			const editor = this.editor = CKEDITOR[ constructor ]( this.element, config );
 
 			this._attachEventHandlers();
 
-			if ( this.props.style && this.props.type !== 'inline' ) {
+			if ( style && type !== 'inline' ) {
 				editor.on( 'loaded', () => {
-					editor.container.setStyles( this.props.style );
+					editor.container.setStyles( style );
 				} );
 			}
 
-			if ( this.props.data ) {
-				editor.setData( this.props.data );
+			if ( data ) {
+				editor.setData( data );
 			}
 		} ).catch( console.error );
 	}
