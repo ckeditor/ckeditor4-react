@@ -61,16 +61,18 @@ class CKEditor extends React.Component {
 				onBeforeLoad( CKEDITOR );
 			}
 
+			const editor = this.editor = CKEDITOR[ constructor ]( this.element, config );
+
+			this._attachEventHandlers();
+
 			// We must force editability of inline editor to prevent
 			// element-conflict error. Can't to it via config due to
 			// upstream bug in CKE (#57, ckeditor/ckeditor4#3866).
 			if ( type === 'inline' && !readOnly ) {
-				this.element.contentEditable = true;
+				editor.on( 'instanceReady', () => {
+					editor.setReadOnly( false );
+				}, null, null, -1 );
 			}
-
-			const editor = this.editor = CKEDITOR[ constructor ]( this.element, config );
-
-			this._attachEventHandlers();
 
 			if ( style && type !== 'inline' ) {
 				editor.on( 'loaded', () => {
