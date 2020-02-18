@@ -47,7 +47,7 @@ class CKEditor extends React.Component {
 	}
 
 	render() {
-		return <div contentEditable="true" style={ this.props.style } ref={ ref => ( this.element = ref ) }></div>;
+		return <div style={ this.props.style } ref={ ref => ( this.element = ref ) }></div>;
 	}
 
 	_initEditor() {
