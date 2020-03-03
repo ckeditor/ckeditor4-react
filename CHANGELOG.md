@@ -1,5 +1,11 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 1.0.2
+
+Fixed Issues:
+
+* [#57](https://github.com/ckeditor/ckeditor4-react/issues/57): Fixed: CKEditor4 React integration gives [`editor-element-conflict` error](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_errors.html#editor-element-conflict).
+
 ## ckeditor4-react 1.0.1
 
 Other Changes:
