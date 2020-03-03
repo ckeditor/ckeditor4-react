@@ -17,7 +17,6 @@ module.exports = function( config ) {
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
 		files: [
-			'https://cdn.ckeditor.com/4.13.1/standard-all/ckeditor.js',
 			'tests/browser/**/*.jsx'
 		],
 
@@ -119,6 +118,12 @@ module.exports = function( config ) {
 
 		mochaReporter: {
 			showDiff: true
+		},
+
+		client: {
+			mocha: {
+				timeout: 5000
+			}
 		}
 	} );
 };

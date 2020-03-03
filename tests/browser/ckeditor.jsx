@@ -19,6 +19,8 @@ configure( { adapter: new Adapter() } );
 
 let components = [];
 
+CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.13.1/standard-all/ckeditor.js';
+
 describe( 'CKEditor Component', () => {
 	let sandbox;
 
@@ -65,6 +67,18 @@ describe( 'CKEditor Component', () => {
 	} );
 
 	describe( 'mounting and types', () => {
+		// This test must run as the first one, as it depends on resolving
+		// the CKEditor namespace (#57)!
+		it( 'does not raise element-conflict error', () => {
+			sandbox.spy( console, 'error' );
+
+			const component = createEditor();
+
+			return waitForEditor( component ).then( () => {
+				expect( console.error ).not.to.be.called;
+			} );
+		} );
+
 		it( 'calls CKEDITOR.replace on mount', () => {
 			sandbox.spy( CKEDITOR, 'replace' );
 
