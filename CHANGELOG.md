@@ -4,17 +4,17 @@
 
 Fixed Issues:
 
-* [#57](https://github.com/ckeditor/ckeditor4-react/issues/57): Fixed: CKEditor4 React integration gives [`editor-element-conflict` error](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_errors.html#editor-element-conflict).
+* [#57](https://github.com/ckeditor/ckeditor4-react/issues/57): Fixed: The CKEditor 4 WYSIWYG editor React integration gives an [`editor-element-conflict` error](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_errors.html#editor-element-conflict).
 
 Other Changes:
 
-* Updated default CDN CKEditor 4 dependency to [4.14.0](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-414).
+* Updated the default CKEditor 4 CDN dependency to [4.14.0](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-414).
 
 ## ckeditor4-react 1.0.1
 
 Other Changes:
 
-* Updated default CDN CKEditor 4 dependency to [4.13.1](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-4131).
+* Updated the default CKEditor 4 CDN dependency to [4.13.1](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-4131).
 
 ## ckeditor4-react 1.0.0
 
@@ -24,7 +24,7 @@ New Features:
 
 Fixed Issues:
 
-* [#46](https://github.com/ckeditor/ckeditor4-react/issues/46): Fixed: Integration tries to destroy a non-existent editor instance in some cases. Thanks to [Oleg Kachmar](https://github.com/prokach)!
+* [#46](https://github.com/ckeditor/ckeditor4-react/issues/46): Fixed: The React integration tries to destroy a non-existent editor instance in some cases. Thanks to [Oleg Kachmar](https://github.com/prokach)!
 * [#44](https://github.com/ckeditor/ckeditor4-react/issues/44): Fixed: An error thrown when changing routes quickly.
 * [#49](https://github.com/ckeditor/ckeditor4-react/issues/49): Fixed: A "Cannot read property 'getEditor' of null" error thrown when the component is unmounted.
 * [#56](https://github.com/ckeditor/ckeditor4-react/issues/56): Fixed: CKEditor crashes when unmounting with a "Cannot read property 'destroy' of null" error.
