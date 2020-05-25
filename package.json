@@ -18,7 +18,8 @@
     "bump": "node ./scripts/bump.js",
     "test:browser": "karma start",
     "pretest:ssr": "webpack --mode development",
-    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js"
+    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
+	"samples": "npm run develop & http-server -s -o samples/index.html"
   },
   "repository": {
     "type": "git",
@@ -60,6 +61,7 @@
     "eslint": "^5.7.0",
     "eslint-config-ckeditor5": "^1.0.8",
     "eslint-plugin-react": "^7.11.1",
+    "http-server": "^0.12.3",
     "istanbul-instrumenter-loader": "^3.0.1",
     "karma": "^4.1.0",
     "karma-browserstack-launcher": "^1.4.0",
