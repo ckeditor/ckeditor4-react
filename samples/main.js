@@ -135,7 +135,8 @@ function EventLog ( { stream } ) {
 }
 
 function EditorTwoWayDataBinding() {
-	var [ data, setData ] = useState( startingData );
+	var [ data, setData ] = useState( startingData ),
+		[ sourceEditorFocused, setSourceEditorFocus ] = useState( false );
 
 	return (
 		<div>
@@ -148,7 +149,12 @@ function EditorTwoWayDataBinding() {
 			</p>
 
 			<div>
-				<SourceEditor data={ data } handler={ ( { target: { value } } ) => setData( value ) } />
+				<SourceEditor
+					data={ data }
+					textHandler={ value => setData( value ) }
+					focused={ sourceEditorFocused }
+					setFocus={ setSourceEditorFocus }
+				/>
 
 				<CKEditor
 					data={ data }
@@ -161,14 +167,26 @@ function EditorTwoWayDataBinding() {
 	);
 }
 
-function SourceEditor( { data, handler } ) {
+function SourceEditor( { data, textHandler, focused, setFocus } ) {
+	var textareaValue = {},
+		// Updating editor on every keystroke may freeze a browser.
+		onChange = debounce( textHandler, 300 );
+
+	// Value should be only updated if source editor is not focused.
+	// Otherwise it will interrupt typing with new data set.
+	if ( !focused ) {
+		textareaValue.value = data;
+	}
+
 	return (
 		<div>
 			<p>
 				<textarea
 					className="binding-editor"
-					value={ data }
-					onChange={ handler }
+					{ ...textareaValue }
+					onChange={ ( { target: { value } } ) => onChange( value ) }
+					onFocus={ () => setFocus( true ) }
+					onBlur={ () => setFocus( false ) }
 				/>
 			</p>
 		</div>
@@ -182,4 +200,18 @@ function EditorPreview( { data } ) {
 			<div dangerouslySetInnerHTML={ { __html: data } }></div>
 		</div>
 	);
+}
+
+function debounce( fn, wait ) {
+	var timeout;
+
+	return function( ...args ) {
+		var context = this;
+
+		clearTimeout( timeout );
+
+		timeout = setTimeout( function() {
+			fn.apply( context, args );
+		}, wait );
+	};
 }
