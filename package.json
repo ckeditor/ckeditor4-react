@@ -1,92 +1,92 @@
 {
-  "name": "ckeditor4-react",
-  "version": "1.1.1",
-  "description": "Official React component for CKEditor 4 – the best browser-based rich text editor.",
-  "license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
-  "main": "dist/ckeditor.js",
-  "files": [
-    "dist/",
-    "sample/"
-  ],
-  "scripts": {
-    "build": "webpack --mode production",
-    "develop": "webpack --mode development --watch",
-    "lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
-    "pretest": "npm run lint",
-    "test": "npm run test:browser && npm run test:ssr",
-    "prepublishOnly": "npm run build",
-    "bump": "node ./scripts/bump.js",
-    "test:browser": "karma start",
-    "pretest:ssr": "webpack --mode development",
-    "test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
-	"samples": "npm run develop & http-server -s -o samples/index.html"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ckeditor/ckeditor4-react.git"
-  },
-  "keywords": [
-    "wysiwyg",
-    "rich text",
-    "editor",
-    "html",
-    "contentEditable",
-    "editing",
-    "react",
-    "react-component",
-    "ckeditor",
-    "ckeditor4",
-    "ckeditor 4"
-  ],
-  "author": "CKSource (http://cksource.com/)",
-  "bugs": {
-    "url": "https://github.com/ckeditor/ckeditor4-react/issues"
-  },
-  "homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
-  "peerDependencies": {
-    "react": "^16.0.0",
-    "ckeditor4": "^4.14.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.4.4",
-    "babel-loader": "^8.0.4",
-    "chai": "^4.2.0",
-    "ckeditor4": "^4.14.0",
-    "core-js": "^3.6.4",
-    "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.6.0",
-    "eslint": "^5.7.0",
-    "eslint-config-ckeditor5": "^1.0.8",
-    "eslint-plugin-react": "^7.11.1",
-    "http-server": "^0.12.3",
-    "istanbul-instrumenter-loader": "^3.0.1",
-    "karma": "^4.1.0",
-    "karma-browserstack-launcher": "^1.4.0",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-coverage": "^1.1.2",
-    "karma-firefox-launcher": "^1.1.0",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.5",
-    "karma-sinon": "^1.0.5",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^3.0.5",
-    "mocha": "^6.1.4",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-router-dom": "^5.0.0",
-    "shelljs": "^0.8.3",
-    "sinon": "^7.3.2",
-    "sinon-chai": "^3.2.0",
-    "terser-webpack-plugin": "^1.1.0",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2"
-  },
-  "dependencies": {
-    "load-script": "^1.0.0",
-    "prop-types": "^15.6.2"
-  }
+	"name": "ckeditor4-react",
+	"version": "1.1.1",
+	"description": "Official React component for CKEditor 4 – the best browser-based rich text editor.",
+	"license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
+	"main": "dist/ckeditor.js",
+	"files": [
+		"dist/",
+		"sample/"
+	],
+	"scripts": {
+		"build": "webpack --mode production",
+		"develop": "webpack --mode development --watch",
+		"lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
+		"pretest": "npm run lint",
+		"test": "npm run test:browser && npm run test:ssr",
+		"prepublishOnly": "npm run build",
+		"bump": "node ./scripts/bump.js",
+		"test:browser": "karma start",
+		"pretest:ssr": "webpack --mode development",
+		"test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
+		"samples": "npm run develop & http-server -s -o samples/index.html"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ckeditor/ckeditor4-react.git"
+	},
+	"keywords": [
+		"wysiwyg",
+		"rich text",
+		"editor",
+		"html",
+		"contentEditable",
+		"editing",
+		"react",
+		"react-component",
+		"ckeditor",
+		"ckeditor4",
+		"ckeditor 4"
+	],
+	"author": "CKSource (http://cksource.com/)",
+	"bugs": {
+		"url": "https://github.com/ckeditor/ckeditor4-react/issues"
+	},
+	"homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
+	"peerDependencies": {
+		"react": "^16.0.0",
+		"ckeditor4": "^4.14.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.1.2",
+		"@babel/preset-env": "^7.1.0",
+		"@babel/preset-react": "^7.0.0",
+		"@babel/register": "^7.4.4",
+		"babel-loader": "^8.0.4",
+		"chai": "^4.2.0",
+		"ckeditor4": "^4.14.0",
+		"core-js": "^3.6.4",
+		"enzyme": "^3.7.0",
+		"enzyme-adapter-react-16": "^1.6.0",
+		"eslint": "^5.7.0",
+		"eslint-config-ckeditor5": "^1.0.8",
+		"eslint-plugin-react": "^7.11.1",
+		"http-server": "^0.12.3",
+		"istanbul-instrumenter-loader": "^3.0.1",
+		"karma": "^4.1.0",
+		"karma-browserstack-launcher": "^1.4.0",
+		"karma-chai": "^0.1.0",
+		"karma-chrome-launcher": "^2.2.0",
+		"karma-coverage": "^1.1.2",
+		"karma-firefox-launcher": "^1.1.0",
+		"karma-mocha": "^1.3.0",
+		"karma-mocha-reporter": "^2.2.5",
+		"karma-sinon": "^1.0.5",
+		"karma-sourcemap-loader": "^0.3.7",
+		"karma-webpack": "^3.0.5",
+		"mocha": "^6.1.4",
+		"react": "^16.5.2",
+		"react-dom": "^16.5.2",
+		"react-router-dom": "^5.0.0",
+		"shelljs": "^0.8.3",
+		"sinon": "^7.3.2",
+		"sinon-chai": "^3.2.0",
+		"terser-webpack-plugin": "^1.1.0",
+		"webpack": "^4.20.2",
+		"webpack-cli": "^3.1.2"
+	},
+	"dependencies": {
+		"load-script": "^1.0.0",
+		"prop-types": "^15.6.2"
+	}
 }
