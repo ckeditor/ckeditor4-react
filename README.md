@@ -46,6 +46,16 @@ npm run test
 
 If you are going to change the source files (ones located in the `src/` directory), remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
 
+### Running samples
+
+Samples uses development built version to simplify component testing. Run below command to open sample page in your default system browser:
+
+```
+npm run samples
+```
+
+Any component changes will be automatically rebuild.
+
 ### Building the package
 
 Build a minified version of the package that is ready to publish:
