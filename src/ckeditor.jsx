@@ -13,6 +13,7 @@ class CKEditor extends React.Component {
 
 		this.element = null;
 		this.editor = null;
+		this.isDestroyed = false;
 	}
 
 	componentDidMount() {
@@ -55,6 +56,9 @@ class CKEditor extends React.Component {
 		config.readOnly = readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl ).then( CKEDITOR => {
+			if( this.isDestroyed ) {
+				return;
+			}
 			const constructor = type === 'inline' ? 'inline' : 'replace';
 
 			if ( onBeforeLoad ) {
@@ -108,6 +112,7 @@ class CKEditor extends React.Component {
 	}
 
 	_destroyEditor() {
+		this.isDestroyed = true;
 		if ( this.editor ) {
 			this.editor.destroy();
 		}
