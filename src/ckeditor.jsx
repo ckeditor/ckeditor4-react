@@ -56,7 +56,7 @@ class CKEditor extends React.Component {
 		config.readOnly = readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl ).then( CKEDITOR => {
-			if( this.isDestroyed ) {
+			if ( this.isDestroyed ) {
 				return;
 			}
 			const constructor = type === 'inline' ? 'inline' : 'replace';
