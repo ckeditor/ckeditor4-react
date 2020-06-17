@@ -19,7 +19,10 @@
 		"test:browser": "karma start",
 		"pretest:ssr": "webpack --mode development",
 		"test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
-		"samples": "npm run develop & http-server -s -o samples/index.html"
+		"samples": "npm run develop & http-server -s -o samples/index.html",
+		"preversion": "npm test",
+		"version": "npm run build && git add -f dist/",
+		"postversion": "git rm -r --cached dist/ && git commit -m \"Clean after release [ci skip]\" && git push origin && git push origin --tags"
 	},
 	"repository": {
 		"type": "git",
