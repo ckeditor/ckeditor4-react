@@ -125,6 +125,19 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 
+		it( 'destroys editor before mount is finished', () => {
+			sandbox.spy( CKEDITOR, 'error' );
+
+			const component = createEditor();
+
+			return new Promise( resolve => {
+				component.unmount();
+				resolve();
+			} ).then( () => {
+				expect( CKEDITOR.error ).not.to.be.called;
+			} );
+		} );
+
 		it( 'saves references to the editor and element', () => {
 			const component = createEditor();
 			const componentInstance = component.instance();
