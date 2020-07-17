@@ -131,6 +131,7 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 
+		// (#94)
 		it( 'does not throw error when editor destroyed before mount is finished', () => {
 			sandbox.spy( CKEDITOR, 'error' );
 
@@ -144,6 +145,7 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 
+		// (#94)
 		it( 'does not throw error when editor element removed before mount is finished', () => {
 			sandbox.spy( CKEDITOR, 'error' );
 

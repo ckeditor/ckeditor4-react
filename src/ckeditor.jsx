@@ -56,10 +56,12 @@ class CKEditor extends React.Component {
 		config.readOnly = readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl ).then( CKEDITOR => {
+			// (#94)
 			if ( this._destroyed ) {
 				return;
 			}
 
+			// (#94)
 			if ( !this.element ) {
 				throw new Error( 'Element ref not available for mounting CKEDITOR instance' );
 			}
