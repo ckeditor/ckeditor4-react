@@ -63,7 +63,7 @@ class CKEditor extends React.Component {
 
 			// (#94)
 			if ( !this.element ) {
-				throw new Error( 'Element ref not available for mounting CKEDITOR instance' );
+				throw new Error( 'Element not available for mounting CKEDITOR instance.' );
 			}
 
 			const constructor = type === 'inline' ? 'inline' : 'replace';

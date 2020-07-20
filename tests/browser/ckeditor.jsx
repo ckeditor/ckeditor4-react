@@ -172,7 +172,7 @@ describe( 'CKEditor Component', () => {
 				resolve();
 			} ).then( () => {
 				expect( console.error ).to.be.called;
-			} ).catch( err => {} );
+			} ).catch( err => {} ); // eslint-disable-line no-unused-vars
 		} );
 
 		it( 'saves references to the editor and element', () => {
