@@ -110,7 +110,7 @@ module.exports = function( config ) {
 			project: 'ckeditor4'
 		},
 
-		singleRun: false,
+		singleRun: true,
 
 		concurrency: Infinity,
 
