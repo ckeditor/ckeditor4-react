@@ -148,6 +148,7 @@ describe( 'CKEditor Component', () => {
 		// (#94)
 		it( 'does not throw CKEDITOR.error() when editor element removed before mount is finished', () => {
 			sandbox.spy( CKEDITOR, 'error' );
+			sandbox.stub( console, 'error' );
 
 			const component = createEditor();
 			const componentInstance = component.instance();
@@ -162,7 +163,7 @@ describe( 'CKEditor Component', () => {
 
 		// (#94)
 		it( 'throws console error when editor element removed before mount is finished', () => {
-			sandbox.spy( console, 'error' );
+			sandbox.stub( console, 'error' );
 
 			const component = createEditor();
 			const componentInstance = component.instance();
