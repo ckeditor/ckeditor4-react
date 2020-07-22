@@ -54,9 +54,15 @@ describe( 'CKEditor Component', () => {
 			components = [];
 			sandbox.restore();
 
-			const containers = document.querySelectorAll( 'div' );
-			containers.forEach( container => {
-				document.body.removeChild( container );
+			return new Promise( resolve => {
+				setTimeout( () => {
+					const containers = document.querySelectorAll( 'div' );
+					containers.forEach( container => {
+						document.body.removeChild( container );
+					} );
+
+					resolve();
+				} );
 			} );
 		} );
 	} );
@@ -123,6 +129,51 @@ describe( 'CKEditor Component', () => {
 
 				expect( CKEDITOR.editor.prototype.destroy ).to.be.calledOnce;
 			} );
+		} );
+
+		// (#94)
+		it( 'does not throw error when editor destroyed before mount is finished', () => {
+			sandbox.spy( CKEDITOR, 'error' );
+
+			const component = createEditor();
+
+			return new Promise( resolve => {
+				component.unmount();
+				resolve();
+			} ).then( () => {
+				expect( CKEDITOR.error ).not.to.be.called;
+			} );
+		} );
+
+		// (#94)
+		it( 'does not throw CKEDITOR.error() when editor element removed before mount is finished', () => {
+			sandbox.spy( CKEDITOR, 'error' );
+			sandbox.stub( console, 'error' );
+
+			const component = createEditor();
+			const componentInstance = component.instance();
+
+			return new Promise( resolve => {
+				componentInstance.element = null;
+				resolve();
+			} ).then( () => {
+				expect( CKEDITOR.error ).not.to.be.called;
+			} );
+		} );
+
+		// (#94)
+		it( 'throws console error when editor element removed before mount is finished', () => {
+			sandbox.stub( console, 'error' );
+
+			const component = createEditor();
+			const componentInstance = component.instance();
+
+			return new Promise( resolve => {
+				componentInstance.element = null;
+				resolve();
+			} ).then( () => {
+				expect( console.error ).to.be.called;
+			} ).catch( err => {} ); // eslint-disable-line no-unused-vars
 		} );
 
 		it( 'saves references to the editor and element', () => {
