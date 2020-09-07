@@ -1,10 +1,14 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
-## ckeditor4-react 1.1.2
+## ckeditor4-react 1.2.0
 
 Fixed Issues:
 
 * [#94](https://github.com/ckeditor/ckeditor4-react/issues/94): Fixed: The [`editor-incorrect-element`](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_errors.html#editor-incorrect-element) error is thrown due to `null` element reference when editor instance is destroyed before initialization completes. Thanks to [Christoph Dörfel](https://github.com/Garbanas)!
+
+Other Changes:
+
+* Updated the default CKEditor 4 CDN dependency to [4.15.0](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-415).
 
 ## ckeditor4-react 1.1.1
 
