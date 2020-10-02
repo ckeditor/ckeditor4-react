@@ -5,3 +5,4 @@ updates:
     schedule:
       interval: "daily"
     versioning-strategy: increase-if-necessary
+    open-pull-requests-limit: 2
