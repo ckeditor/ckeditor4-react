@@ -1,5 +1,11 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 1.2.2
+
+New features:
+
+* [#125](https://github.com/ckeditor/ckeditor4-react/issues/125): Added `name` property for easier referencing editor instances with [`CKEDITOR.instances`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html#property-instances). Thanks to [Julien Castelain](https://github.com/julien)!
+
 ## ckeditor4-react 1.2.1
 
 Other Changes:
