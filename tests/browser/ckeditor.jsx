@@ -478,6 +478,20 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 	} );
+
+	describe( 'editor with #name property', () => {
+		it( 'should be available in CKEDITOR.instances ', () => {
+			const component1 = createEditor( { name: 'editor-with-a-name' } );
+			const component2 = createEditor( { name: 'editor-with-another-name' } );
+
+			return Promise.all( [
+				waitForEditors( [ component1, component2 ] )
+			] ).then( ( ) => {
+				expect( window.CKEDITOR.instances[ 'editor-with-a-name' ] ).to.not.be.undefined;
+				expect( window.CKEDITOR.instances[ 'editor-with-another-name' ] ).to.not.be.undefined;
+			} );
+		} );
+	} );
 } );
 
 describe( 'getEditorNamespace', () => {
