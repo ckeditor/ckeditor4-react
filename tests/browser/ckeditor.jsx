@@ -506,23 +506,6 @@ describe( 'getEditorNamespace', () => {
 		expect( getEditorNamespace ).to.be.a( 'function' );
 	} );
 
-	it( 'requires non-empty string as parameter', () => {
-		const invalid = [
-			1,
-			{},
-			[],
-			null,
-			undefined,
-			''
-		];
-
-		invalid.forEach( param => {
-			expect( () => {
-				getEditorNamespace( param );
-			} ).to.throw( TypeError, 'CKEditor URL must be a non-empty string.' );
-		} );
-	} );
-
 	it( 'returns promise even if namespace is present', () => {
 		window.CKEDITOR = {};
 
