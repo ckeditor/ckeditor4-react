@@ -55,7 +55,7 @@ class CKEditor extends React.Component {
 		const { config, readOnly, type, onBeforeLoad, style, data } = this.props;
 		config.readOnly = readOnly;
 
-		getEditorNamespace( CKEditor.editorUrl, this.props.onScriptLoaded ).then( CKEDITOR => {
+		getEditorNamespace( CKEditor.editorUrl, this.props.onNamespaceLoaded ).then( CKEDITOR => {
 			// (#94)
 			if ( this._destroyed ) {
 				return;
@@ -140,7 +140,7 @@ CKEditor.propTypes = {
 	style: PropTypes.object,
 	readOnly: PropTypes.bool,
 	onBeforeLoad: PropTypes.func,
-	onScriptLoaded: PropTypes.func
+	onNamespaceLoaded: PropTypes.func
 };
 
 CKEditor.defaultProps = {
