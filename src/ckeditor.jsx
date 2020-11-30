@@ -5,7 +5,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import getEditorNamespace from './getEditorNamespace.js';
+import { getEditorNamespace } from 'ckeditor4-integrations-common';
 
 class CKEditor extends React.Component {
 	constructor( props ) {
@@ -55,7 +55,7 @@ class CKEditor extends React.Component {
 		const { config, readOnly, type, onBeforeLoad, style, data } = this.props;
 		config.readOnly = readOnly;
 
-		getEditorNamespace( CKEditor.editorUrl ).then( CKEDITOR => {
+		getEditorNamespace( CKEditor.editorUrl, this.props.onScriptLoaded ).then( CKEDITOR => {
 			// (#94)
 			if ( this._destroyed ) {
 				return;
@@ -139,7 +139,8 @@ CKEditor.propTypes = {
 	name: PropTypes.string,
 	style: PropTypes.object,
 	readOnly: PropTypes.bool,
-	onBeforeLoad: PropTypes.func
+	onBeforeLoad: PropTypes.func,
+	onScriptLoaded: PropTypes.func
 };
 
 CKEditor.defaultProps = {
