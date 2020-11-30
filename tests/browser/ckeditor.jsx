@@ -11,7 +11,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import CKEditor from '../../src/ckeditor.jsx';
-import getEditorNamespace from '../../src/getEditorNamespace.js';
+import { getEditorNamespace } from 'ckeditor4-integrations-common';
 
 const { expect, use } = chai;
 use( sinonChai );
