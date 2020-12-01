@@ -12,21 +12,18 @@ import CKEditorBuilt from '../../dist/ckeditor.js';
 
 describe( 'CKEditor Component SSR', () => {
 	describe( 'basic rendering', () => {
-		createTest( 'returns appropriate HTML', CKEditor => {
+		it( 'returns appropriate HTML (dev)', () => {
 			const expected = '<div data-reactroot=""></div>';
-			const rendered = ReactDOMServer.renderToString( <CKEditor /> );
+			const rendered = ReactDOMServer.renderToString( <CKEditorDev /> );
+
+			expect( rendered ).to.equal( expected );
+		} );
+
+		it( 'returns appropriate HTML (built)', () => {
+			const expected = '<div data-reactroot=""></div>';
+			const rendered = ReactDOMServer.renderToString( <CKEditorBuilt /> );
 
 			expect( rendered ).to.equal( expected );
 		} );
 	} );
 } );
-
-function createTest( name, test ) {
-	it( `${ name } (dev)`, () => {
-		test( CKEditorDev );
-	} );
-
-	it( `${ name } (built)`, () => {
-		test( CKEditorBuilt );
-	} );
-}

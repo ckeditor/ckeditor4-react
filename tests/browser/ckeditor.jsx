@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-/* globals CKEDITOR, chai, document, setTimeout, window */
+/* globals CKEDITOR, chai */
 
 import sinonChai from 'sinon-chai';
 import React from 'react';
@@ -79,7 +79,7 @@ describe( 'CKEditor Component', () => {
 			const component = createEditor();
 
 			return waitForEditor( component ).then( () => {
-				expect( console.error ).not.to.be.called;
+				expect( console.error ).not.to.be.called();
 			} );
 		} );
 
@@ -89,7 +89,7 @@ describe( 'CKEditor Component', () => {
 			const component = createEditor();
 
 			return waitForEditor( component ).then( () => {
-				expect( CKEDITOR.replace ).to.be.calledOnce;
+				expect( CKEDITOR.replace ).to.be.calledOnce();
 			} );
 		} );
 
@@ -101,7 +101,7 @@ describe( 'CKEditor Component', () => {
 			} );
 
 			return waitForEditor( component ).then( () => {
-				expect( CKEDITOR.replace ).to.be.calledOnce;
+				expect( CKEDITOR.replace ).to.be.calledOnce();
 			} );
 		} );
 
@@ -113,7 +113,7 @@ describe( 'CKEditor Component', () => {
 			} );
 
 			return waitForEditor( component ).then( () => {
-				expect( CKEDITOR.inline ).to.be.calledOnce;
+				expect( CKEDITOR.inline ).to.be.calledOnce();
 			} );
 		} );
 
@@ -125,7 +125,7 @@ describe( 'CKEditor Component', () => {
 			return waitForEditor( component ).then( () => {
 				component.unmount();
 
-				expect( CKEDITOR.editor.prototype.destroy ).to.be.calledOnce;
+				expect( CKEDITOR.editor.prototype.destroy ).to.be.calledOnce();
 			} );
 		} );
 
@@ -139,7 +139,7 @@ describe( 'CKEditor Component', () => {
 				component.unmount();
 				resolve();
 			} ).then( () => {
-				expect( CKEDITOR.error ).not.to.be.called;
+				expect( CKEDITOR.error ).not.to.be.called();
 			} );
 		} );
 
@@ -155,7 +155,7 @@ describe( 'CKEditor Component', () => {
 				componentInstance.element = null;
 				resolve();
 			} ).then( () => {
-				expect( CKEDITOR.error ).not.to.be.called;
+				expect( CKEDITOR.error ).not.to.be.called();
 			} );
 		} );
 
@@ -170,7 +170,7 @@ describe( 'CKEditor Component', () => {
 				componentInstance.element = null;
 				resolve();
 			} ).then( () => {
-				expect( console.error ).to.be.called;
+				expect( console.error ).to.be.called();
 			} ).catch( err => {} ); // eslint-disable-line no-unused-vars
 		} );
 
@@ -243,7 +243,7 @@ describe( 'CKEditor Component', () => {
 
 				return waitForData( editor );
 			} ).then( editor => {
-				expect( editor.setData ).to.be.calledTwice;
+				expect( editor.setData ).to.be.calledTwice();
 				expect( editor.getData().trim() ).to.equal( changedData );
 			} );
 		} );
@@ -261,7 +261,7 @@ describe( 'CKEditor Component', () => {
 					data
 				} );
 
-				expect( editor.setData ).not.to.be.called;
+				expect( editor.setData ).not.to.be.called();
 			} );
 		} );
 
@@ -306,7 +306,7 @@ describe( 'CKEditor Component', () => {
 			return waitForEditor( component ).then( editor => {
 				editor.fireOnce( 'customEvent' );
 
-				expect( spy ).to.be.calledOnce;
+				expect( spy ).to.be.calledOnce();
 			} );
 		} );
 
@@ -340,7 +340,7 @@ describe( 'CKEditor Component', () => {
 
 				editor.fireOnce( 'customEvent' );
 
-				expect( spy ).to.be.calledOnce;
+				expect( spy ).to.be.calledOnce();
 			} );
 		} );
 
@@ -358,8 +358,8 @@ describe( 'CKEditor Component', () => {
 
 				editor.fireOnce( 'customEvent' );
 
-				expect( spy1 ).not.to.be.called;
-				expect( spy2 ).to.be.calledOnce;
+				expect( spy1 ).not.to.be.called();
+				expect( spy2 ).to.be.calledOnce();
 			} );
 		} );
 	} );
@@ -471,7 +471,7 @@ describe( 'CKEditor Component', () => {
 			const component = createEditor( { onBeforeLoad } );
 
 			return waitForEditor( component ).then( () => {
-				expect( onBeforeLoad ).to.be.calledOnce;
+				expect( onBeforeLoad ).to.be.calledOnce();
 				expect( onBeforeLoad ).to.be.calledBefore( spy );
 			} );
 		} );
@@ -485,8 +485,8 @@ describe( 'CKEditor Component', () => {
 			return Promise.all( [
 				waitForEditors( [ component1, component2 ] )
 			] ).then( ( ) => {
-				expect( window.CKEDITOR.instances[ 'editor-with-a-name' ] ).to.not.be.undefined;
-				expect( window.CKEDITOR.instances[ 'editor-with-another-name' ] ).to.not.be.undefined;
+				expect( window.CKEDITOR.instances[ 'editor-with-a-name' ] ).to.not.be.undefined();
+				expect( window.CKEDITOR.instances[ 'editor-with-another-name' ] ).to.not.be.undefined();
 			} );
 		} );
 	} );
