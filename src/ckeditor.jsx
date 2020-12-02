@@ -52,10 +52,10 @@ class CKEditor extends React.Component {
 	}
 
 	_initEditor() {
-		const { config, readOnly, type, onBeforeLoad, style, data } = this.props;
+		const { config, readOnly, type, onBeforeLoad, onNamespaceLoaded, style, data } = this.props;
 		config.readOnly = readOnly;
 
-		getEditorNamespace( CKEditor.editorUrl, this.props.onNamespaceLoaded ).then( CKEDITOR => {
+		getEditorNamespace( CKEditor.editorUrl, onNamespaceLoaded ).then( CKEDITOR => {
 			// (#94)
 			if ( this._destroyed ) {
 				return;
