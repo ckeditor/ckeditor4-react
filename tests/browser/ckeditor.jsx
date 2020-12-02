@@ -19,8 +19,6 @@ configure( { adapter: new Adapter() } );
 
 let components = [];
 
-CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.13.1/standard-all/ckeditor.js';
-
 describe( 'CKEditor Component', () => {
 	let sandbox;
 
