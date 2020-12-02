@@ -493,49 +493,32 @@ describe( 'CKEditor Component', () => {
 } );
 
 describe( 'getEditorNamespace', () => {
-	// Don't need any files – Data URLs FTW!
-	const fakeScript = 'data:text/javascript;base64,d2luZG93LkNLRURJVE9SID0ge307';
-
 	beforeEach( () => {
 		delete window.CKEDITOR;
 	} );
 
-	it( 'is a function', () => {
-		expect( getEditorNamespace ).to.be.a( 'function' );
-	} );
+	it( 'called once for multiply editor instances', () => {
+		const spy = sinon.spy();
 
-	it( 'returns promise even if namespace is present', () => {
-		window.CKEDITOR = {};
-
-		const namespacePromise = getEditorNamespace( 'test' );
-		expect( namespacePromise ).to.be.an.instanceOf( Promise );
-
-		return namespacePromise.then( namespace => {
-			expect( namespace ).to.equal( window.CKEDITOR );
-		} );
-	} );
-
-	it( 'load script and resolves with loaded namespace', () => {
-		return getEditorNamespace( fakeScript ).then( namespace => {
-			expect( namespace ).to.equal( window.CKEDITOR );
-		} );
-	} );
-
-	it( 'returns the same promise', () => {
-		const promise1 = getEditorNamespace( fakeScript );
-		const promise2 = getEditorNamespace( fakeScript );
+		const editor1 = createEditor( { name: 'editor-name-one', onNamespaceLoaded: spy } );
+		const editor2 = createEditor( { name: 'editor-name-two', onNamespaceLoaded: spy } );
+		const editor3 = createEditor( { name: 'editor-name-three', onNamespaceLoaded: spy } );
 
 		return Promise.all( [
-			promise1,
-			promise2
+			waitForEditors( [ editor1, editor2, editor3 ] )
 		] ).then( () => {
-			expect( promise1 ).to.equal( promise2 );
+			expect( spy.calledOnce ).to.be.equal( true );
 		} );
 	} );
 
-	it( 'rejects with error when script cannot be loaded', () => {
-		return getEditorNamespace( 'non-existent.js' ).catch( err => {
-			expect( err ).to.be.instanceOf( Error );
+	it( 'after resolve allows to change CKEDITOR namespace', () => {
+		const language = 'custom';
+		const editor = createEditor( { name: 'editor-name', onNamespaceLoaded: namespace => {
+			namespace.config.lang = language;
+		} } );
+
+		waitForEditor( editor ).then( () => {
+			expect( CKEDITOR.config.lang ).to.be.equal( language );
 		} );
 	} );
 } );
