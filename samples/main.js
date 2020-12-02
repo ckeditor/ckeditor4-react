@@ -51,6 +51,7 @@ function EditorTypes() {
 					type="classic"
 					data={ startingData }
 					readOnly={ readOnly }
+					onNamespaceLoaded={ onNamespaceLoaded }
 				/>
 			</section>
 			<section>
@@ -59,6 +60,7 @@ function EditorTypes() {
 					type="inline"
 					data={ startingData }
 					readOnly={ readOnly }
+					onNamespaceLoaded={ onNamespaceLoaded }
 				/>
 			</section>
 
@@ -90,6 +92,7 @@ function EditorEvents() {
 				onBlur={ logEvent }
 				onChange={ logEvent }
 				onSelectionChange={ logEvent }
+				onNamespaceLoaded={ onNamespaceLoaded }
 			/>
 			<h3>Events Log</h3>
 			<p><small>To check additional details about every event, consult the console in the browser developer tools.</small></p>
@@ -159,6 +162,7 @@ function EditorTwoWayDataBinding() {
 				<CKEditor
 					data={ data }
 					onChange={ ( { editor } ) => setData( editor.getData() ) }
+					onNamespaceLoaded={ onNamespaceLoaded }
 				/>
 
 				<EditorPreview data={ data } />
@@ -214,4 +218,8 @@ function debounce( fn, wait ) {
 			fn.apply( context, args );
 		}, wait );
 	};
+}
+
+function onNamespaceLoaded( namespace ) {
+	console.log( 'CKEDITOR version: ', namespace.version );
 }
