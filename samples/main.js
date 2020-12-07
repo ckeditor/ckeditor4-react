@@ -1,7 +1,7 @@
-var { useState } = React;
-var { HashRouter, Switch, Route, Link } = ReactRouterDOM;
+const { useState } = React;
+const { HashRouter, Switch, Route, Link } = ReactRouterDOM;
 
-var startingData = '<p>This is a CKEditor 4 WYSIWYG editor instance created by ️⚛️ React.</p>';
+const startingData = '<p>This is a CKEditor 4 WYSIWYG editor instance created by ️⚛️ React.</p>';
 
 ReactDOM.render(
 	<HashRouter>
@@ -13,7 +13,7 @@ ReactDOM.render(
 
 function Navigation() {
 	return (
-		<ul class='routes'>
+		<ul className='routes'>
 			<li>
 				<Link to="/">Editor Types</Link>
 				<Link to="/events">Component Events</Link>
@@ -40,7 +40,7 @@ function Router() {
 }
 
 function EditorTypes() {
-	var [ readOnly, setReadOnly ] = useState( false );
+	const [ readOnly, setReadOnly ] = useState( false );
 
 	return (
 		<main>
@@ -51,6 +51,7 @@ function EditorTypes() {
 					type="classic"
 					data={ startingData }
 					readOnly={ readOnly }
+					onNamespaceLoaded={ onNamespaceLoaded }
 				/>
 			</section>
 			<section>
@@ -59,6 +60,7 @@ function EditorTypes() {
 					type="inline"
 					data={ startingData }
 					readOnly={ readOnly }
+					onNamespaceLoaded={ onNamespaceLoaded }
 				/>
 			</section>
 
@@ -77,7 +79,7 @@ function EditorTypes() {
 }
 
 function EditorEvents() {
-	var [ events, setEvents ] = useState( [] );
+	const [ events, setEvents ] = useState( [] );
 
 	return (
 		<main>
@@ -90,6 +92,7 @@ function EditorEvents() {
 				onBlur={ logEvent }
 				onChange={ logEvent }
 				onSelectionChange={ logEvent }
+				onNamespaceLoaded={ onNamespaceLoaded }
 			/>
 			<h3>Events Log</h3>
 			<p><small>To check additional details about every event, consult the console in the browser developer tools.</small></p>
@@ -116,7 +119,7 @@ function EditorEvents() {
 	}
 }
 
-function EventLog ( { stream } ) {
+function EventLog( { stream } ) {
 	return (
 		<div className="event-log">
 			<ul>
@@ -135,8 +138,8 @@ function EventLog ( { stream } ) {
 }
 
 function EditorTwoWayDataBinding() {
-	var [ data, setData ] = useState( startingData ),
-		[ sourceEditorFocused, setSourceEditorFocus ] = useState( false );
+	const [ data, setData ] = useState( startingData );
+	const [ sourceEditorFocused, setSourceEditorFocus ] = useState( false );
 
 	return (
 		<div>
@@ -159,6 +162,7 @@ function EditorTwoWayDataBinding() {
 				<CKEditor
 					data={ data }
 					onChange={ ( { editor } ) => setData( editor.getData() ) }
+					onNamespaceLoaded={ onNamespaceLoaded }
 				/>
 
 				<EditorPreview data={ data } />
@@ -168,9 +172,9 @@ function EditorTwoWayDataBinding() {
 }
 
 function SourceEditor( { data, textHandler, focused, setFocus } ) {
-	var textareaValue = {},
-		// Updating editor on every keystroke may freeze a browser.
-		onChange = debounce( textHandler, 300 );
+	const textareaValue = {};
+	// Updating editor on every keystroke may freeze a browser.
+	const onChange = debounce( textHandler, 300 );
 
 	// Value should be only updated if source editor is not focused.
 	// Otherwise it will interrupt typing with new data set.
@@ -203,10 +207,10 @@ function EditorPreview( { data } ) {
 }
 
 function debounce( fn, wait ) {
-	var timeout;
+	let timeout;
 
 	return function( ...args ) {
-		var context = this;
+		const context = this;
 
 		clearTimeout( timeout );
 
@@ -214,4 +218,8 @@ function debounce( fn, wait ) {
 			fn.apply( context, args );
 		}, wait );
 	};
+}
+
+function onNamespaceLoaded( namespace ) {
+	console.log( 'CKEDITOR version: ', namespace.version );
 }
