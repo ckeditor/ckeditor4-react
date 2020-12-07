@@ -5,6 +5,7 @@
 New Features:
 
 * [#125](https://github.com/ckeditor/ckeditor4-react/issues/125): Added `name` property for easier referencing editor instances with [`CKEDITOR.instances`](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html#property-instances). Thanks to [Julien Castelain](https://github.com/julien)!
+* [#129](https://github.com/ckeditor/ckeditor4-react/issues/129): Added `onNamespaceLoaded` property executed when [`CKEDITOR` namespace](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html) is loaded, which can be used for its easier customization.
 
 ## ckeditor4-react 1.2.1
 
