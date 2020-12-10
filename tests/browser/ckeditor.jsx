@@ -3,7 +3,8 @@
  * For licensing, see LICENSE.md.
  */
 
-/* globals CKEDITOR, chai, document, setTimeout, window */
+/* globals CKEDITOR, chai */
+/* eslint no-unused-expressions: "off" */
 
 import sinonChai from 'sinon-chai';
 import React from 'react';
