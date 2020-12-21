@@ -30,7 +30,7 @@ jobs:
       - name: Synchronize workflow files
         run: |
           rsync -a --include='*/' --include='*.yml' --exclude='*' ./ckeditor4-workflows-common/workflows/ ./.github/workflows/
-          if [[ $(git status ./.github/workflows/ --procelain) ]]; then
+          if [[ $(git status ./.github/workflows/ --porcelain) ]]; then
               echo "HAS_CHANGES=1" >> $GITHUB_ENV
           fi
 
