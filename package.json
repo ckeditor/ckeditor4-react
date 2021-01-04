@@ -51,7 +51,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.9",
-		"@babel/preset-env": "^7.12.7",
+		"@babel/preset-env": "^7.12.11",
 		"@babel/preset-react": "^7.12.7",
 		"@babel/register": "^7.12.1",
 		"babel-loader": "^8.2.2",
@@ -61,7 +61,7 @@
 		"core-js": "^3.8.0",
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.5",
-		"eslint": "^7.14.0",
+		"eslint": "^7.16.0",
 		"eslint-config-ckeditor5": "^3.1.0",
 		"eslint-plugin-react": "^7.21.5",
 		"http-server": "^0.12.3",
@@ -86,7 +86,7 @@
 		"sinon-chai": "^3.5.0",
 		"terser-webpack-plugin": "^4.2.2",
 		"webpack": "^4.20.2",
-		"webpack-cli": "^3.1.2"
+		"webpack-cli": "^4.3.0"
 	},
 	"dependencies": {
 		"load-script": "^1.0.0",
