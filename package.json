@@ -61,7 +61,7 @@
 		"core-js": "^3.8.2",
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.5",
-		"eslint": "^7.17.0",
+		"eslint": "^7.18.0",
 		"eslint-config-ckeditor5": "^3.1.0",
 		"eslint-plugin-react": "^7.22.0",
 		"http-server": "^0.12.3",
