@@ -54,7 +54,7 @@ function testVersion( version ) {
 	mkdirSync( scriptsPath );
 	copyFiles( filesToCopy, PACKAGE_PATH, testPath );
 	execNpmCommand( 'install', testPath );
-	execNpmCommand( `install react@${ version }`, testPath );
+	execNpmCommand( `install react@${ version } react-dom@${ version }`, testPath );
 
 	console.log( `Testing React v${ version }` );
 
