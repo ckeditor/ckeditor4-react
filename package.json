@@ -15,6 +15,7 @@
 		"pretest": "npm run lint",
 		"test": "npm run test:browser && npm run test:ssr",
 		"bump": "node ./scripts/bump.js",
+		"test:react": "node ./scripts/react-tester.js",
 		"test:browser": "karma start",
 		"pretest:ssr": "webpack --mode development",
 		"test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
