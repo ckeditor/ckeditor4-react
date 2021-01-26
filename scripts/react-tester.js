@@ -33,7 +33,8 @@ function getReactVersion( packageInfo ) {
 
 function getVersionsInRange( range, versions ) {
 	return versions.filter( version => {
-		return satisfiesSemver( version, range );
+		// 16.6.2 is broken.
+		return version !== '16.6.2' && satisfiesSemver( version, range );
 	} );
 }
 
