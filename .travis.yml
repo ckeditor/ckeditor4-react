@@ -29,7 +29,7 @@ before_install:
 install:
   - npm install
 script:
-  - npm t
+  - npm run test:react
 env:
   global:
     - secure: bih8+ZBKGTdIDJ8QFu12KGj9WptznKY0kvDx7nWyarD9Q7ZxDanMnWlmmPNFLk+iHoBzsgdiWnEecxNj5LyJMkxrVDtu02IhufUM6lMUPv4NRCBvoSvQ5YNKXpDhmIxIbkAGFmnyGuTR2srf100fL0Wt9tgVZ78P5BdehAQlfQfKJbPME7Sye+k10+0l/s+22cf3Tlyp4SvkpgU6Tv3E4psZFrNc0aOFS1z/kVTo2oxrUWgDbo53LnpgFhEG66ufViWobmM7Sc1LDYDmZ+62CkEXw/ggwHnXDh5m74MsHc4og+V2PRpzDlM4xZI6RY6dhS+W4UZXmaxGRxiY17FWRL2nas8RvpYRtez3Zd/z36wqvHPfOOp/kC17qiT7OWG0nZlQ9NcmeaJq+pCj9wqCDk+0bAEqisn6s0cmu/rOEb46qpNX/DBUHvoBGvh87LAgoZ3PvdSm4XHOeXgEwoLUB33xY0ltCG95roaJYq5i71yiyh4ZRPr/W2QK7piRc8Ak4rKxqFUKiwGZEjHYlwyiik6O8qQOfUYgoqsUwJc1KfqWKBLrvhw0LWHaviBC5aoMtHPvuT0ITogO6mIRiKNYQnlGEMtiz1ZPLBX/jicoLbKP4aO2qkcB+MHO0HPBF08g+OGjqzTf+VCNQIfOQG7pJVNPqmM9AIxKPNhR+eZPbSc=
