@@ -57,7 +57,6 @@
 		"babel-loader": "^8.2.2",
 		"chai": "^4.2.0",
 		"ckeditor4": "^4.15.1",
-		"ckeditor4-integrations-common": "^0.1.0",
 		"core-js": "^3.8.2",
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.5",
@@ -89,7 +88,7 @@
 		"webpack-cli": "^4.3.1"
 	},
 	"dependencies": {
-		"load-script": "^1.0.0",
-		"prop-types": "^15.6.2"
+		"prop-types": "^15.6.2",
+		"ckeditor4-integrations-common": "^0.2.0"
 	}
 }
