@@ -13,9 +13,17 @@ const availableVersions = getVersions();
 const semverRange = getReactVersion( packageInfo );
 const versionsToTest = getVersionsInRange( semverRange, availableVersions );
 
-mkdirSync( TESTS_PATH );
-versionsToTest.forEach( testVersion );
-rmdirSyncRecursive( TESTS_PATH );
+try {
+	console.log( '--- Ultimate React Tester ---' );
+	mkdirSync( TESTS_PATH );
+	versionsToTest.forEach( testVersion );
+	rmdirSyncRecursive( TESTS_PATH );
+	console.log( 'Done without errors. Have a nice day!' );
+} catch ( error ) {
+	console.error( 'Error occured :(' );
+	console.error( error );
+	process.exit( 1 );
+}
 
 function getVersions() {
 	const commandResult = execNpmCommand( 'view react versions --json' );
