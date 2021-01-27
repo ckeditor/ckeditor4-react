@@ -150,7 +150,7 @@ CKEditor.defaultProps = {
 	readOnly: false
 };
 
-CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.15.1/standard-all/ckeditor.js';
+CKEditor.editorUrl = 'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js';
 CKEditor.displayName = 'CKEditor';
 
 export default CKEditor;
