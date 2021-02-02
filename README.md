@@ -30,6 +30,10 @@ See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/
 
 You can also check out [CKEditor 4 WYSIWYG Editor React Integration example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in [CKEditor 4 Examples](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
+## Browser support
+
+The CKEditor 4 React component works with all the [supported browsers](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_browsers.html#officially-supported-browsers) except for Internet Explorer 8-10.
+
 ## Contributing
 
 After cloning this repository, install necessary dependencies:
