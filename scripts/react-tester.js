@@ -42,7 +42,7 @@ function getReactVersion( packageInfo ) {
 
 function getVersionsInRange( range, versions ) {
 	return versions.filter( version => {
-		// 16.6.2 is broken.
+		// 16.6.2 is broken - https://github.com/facebook/react/issues/14208.
 		return version !== '16.6.2' && satisfiesSemver( version, range );
 	} );
 }
