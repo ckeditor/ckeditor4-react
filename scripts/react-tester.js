@@ -15,6 +15,7 @@ const versionsToTest = getVersionsInRange( semverRange, availableVersions );
 
 try {
 	console.log( '--- Ultimate React Tester ---' );
+	rmdirSyncRecursive( TESTS_PATH );
 	mkdirSync( TESTS_PATH );
 	versionsToTest.forEach( testVersion );
 	rmdirSyncRecursive( TESTS_PATH );
