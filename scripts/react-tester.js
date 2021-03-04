@@ -14,7 +14,7 @@ const semverRange = getReactVersion( packageInfo );
 const versionsToTest = getVersionsInRange( semverRange, availableVersions );
 
 try {
-	console.log( '--- Ultimate React Tester ---' );
+	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
 	rmdirSyncRecursive( TESTS_PATH );
 	mkdirSync( TESTS_PATH );
 	versionsToTest.forEach( testVersion );
