@@ -4,6 +4,7 @@ const { execSync } = require( 'child_process' );
 const { mkdirSync, rmdirSync, copyFileSync } = require( 'fs' );
 const { resolve: resolvePath } = require( 'path' );
 const satisfiesSemver = require( 'semver/functions/satisfies' );
+const semverMinor = require('semver/functions/minor')
 
 const PACKAGE_PATH = resolvePath( __dirname, '..' );
 const TESTS_PATH = resolvePath( PACKAGE_PATH, 'react-tests' );
@@ -11,13 +12,17 @@ const TESTS_PATH = resolvePath( PACKAGE_PATH, 'react-tests' );
 const packageInfo = require( '../package.json' );
 const availableVersions = getVersions();
 const semverRange = getReactVersion( packageInfo );
-const versionsToTest = getVersionsInRange( semverRange, availableVersions );
+const versionsInRange = getVersionsInRange( semverRange, availableVersions );
+const versionsToTest = getLatestPatches( versionsInRange );
 
 try {
 	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
+
 	rmdirSyncRecursive( TESTS_PATH );
 	mkdirSync( TESTS_PATH );
+
 	versionsToTest.forEach( testVersion );
+
 	rmdirSyncRecursive( TESTS_PATH );
 	console.log( 'Done without errors. Have a nice day!' );
 } catch ( error ) {
@@ -45,6 +50,33 @@ function getVersionsInRange( range, versions ) {
 		// 16.6.2 is broken - https://github.com/facebook/react/issues/14208.
 		return version !== '16.6.2' && satisfiesSemver( version, range );
 	} );
+}
+
+function getLatestPatches( versions ) {
+	const latestPatches = versions.reduce( ( acc, version, index, array ) => {
+		if ( isLatestPatch( index, array ) ) {
+			acc.push( version );
+		}
+
+		return acc;
+	}, [] );
+
+	console.log( 'Versions that will be tested (' + latestPatches.length + '):', latestPatches );
+
+	return latestPatches;
+}
+
+function isLatestPatch( index, array ) {
+	// Skip checking the last array element.
+	if ( array.length == index + 1 ) {
+		return true;
+	}
+
+	if ( semverMinor( array[ index ] ) != semverMinor( array[ index + 1 ] ) ) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function testVersion( version ) {
