@@ -15,6 +15,8 @@ const semverRange = getReactVersion( packageInfo );
 const versionsInRange = getVersionsInRange( semverRange, availableVersions );
 const versionsToTest = getLatestPatches( versionsInRange );
 
+let currentlyTestedVersion;
+
 try {
 	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
 
@@ -24,10 +26,18 @@ try {
 	versionsToTest.forEach( testVersion );
 
 	rmdirSyncRecursive( TESTS_PATH );
-	console.log( 'Done without errors. Have a nice day!' );
+	console.log( '--- Done without errors. Have a nice day! ---' );
 } catch ( error ) {
-	console.error( 'Error occured :(' );
-	console.error( error );
+	if ( process.argv[ 2 ] == '-v' ) {
+		console.log( error );
+	} else {
+		console.error( error.stdout );
+	}
+
+	console.error();
+	console.error( '--- Error occured while testing version ' + currentlyTestedVersion + ' :( ---' );
+	console.error();
+
 	process.exit( 1 );
 }
 
@@ -80,7 +90,7 @@ function isLatestPatch( index, array ) {
 }
 
 function testVersion( version ) {
-	console.log( `Preparing package environment for React v${ version }` );
+	console.log( `--- Preparing package environment for React v${ version } ---` );
 
 	const testPath = resolvePath( TESTS_PATH, version );
 	const scriptsPath = resolvePath( testPath, 'scripts' );
@@ -97,7 +107,8 @@ function testVersion( version ) {
 	execNpmCommand( 'install', testPath );
 	execNpmCommand( `install react@${ version } react-dom@${ version }`, testPath );
 
-	console.log( `Testing React v${ version }` );
+	console.log( `--- Testing React v${ version } ---` );
+	currentlyTestedVersion = version;
 
 	console.log( execNpmCommand( 'test' ) );
 
