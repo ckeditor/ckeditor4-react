@@ -15,7 +15,9 @@ const semverRange = getReactVersion( packageInfo );
 const versionsInRange = getVersionsInRange( semverRange, availableVersions );
 const versionsToTest = getLatestPatches( versionsInRange );
 
-let currentlyTestedVersion;
+const versionsPassed = [];
+const versionsFailed = [];
+const errorLogs = {};
 
 try {
 	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
@@ -26,7 +28,20 @@ try {
 	versionsToTest.forEach( testVersion );
 
 	rmdirSyncRecursive( TESTS_PATH );
-	console.log( '--- Done without errors. Have a nice day! ---' );
+
+	if ( errorLogs === {} ) {
+		console.log( '--- Done without errors. Have a nice day! ---' );
+	} else {
+		for ( let key in errorLogs ) {
+			console.log( key, errorLogs[ key ] );
+		}
+
+		console.log( '--- Some versions failed. See the logs above. ---' );
+		console.log( 'Successful tests:');
+		console.log( versionsPassed );
+		console.log( 'Failed tests:');
+		console.log( versionsFailed );
+	}
 } catch ( error ) {
 	if ( process.argv[ 2 ] == '-v' ) {
 		console.log( error );
@@ -34,9 +49,7 @@ try {
 		console.error( error.stdout );
 	}
 
-	console.error();
-	console.error( '--- Error occured while testing version ' + currentlyTestedVersion + ' :( ---' );
-	console.error();
+	console.log( '--- Unexpected error occured during testing - see the log above. ---' );
 
 	process.exit( 1 );
 }
@@ -90,29 +103,38 @@ function isLatestPatch( index, array ) {
 }
 
 function testVersion( version ) {
-	console.log( `--- Preparing package environment for React v${ version } ---` );
+	try {
+		console.log( `--- Preparing package environment for React v${ version } ---` );
 
-	const testPath = resolvePath( TESTS_PATH, version );
-	const scriptsPath = resolvePath( testPath, 'scripts' );
-	const filesToCopy = [
-		'package.json',
-		'webpack.config.js',
-		'karma.conf.js',
-		'scripts/test-transpiler.js'
-	];
+		const testPath = resolvePath( TESTS_PATH, version );
+		const scriptsPath = resolvePath( testPath, 'scripts' );
+		const filesToCopy = [
+			'package.json',
+			'webpack.config.js',
+			'karma.conf.js',
+			'scripts/test-transpiler.js'
+		];
 
-	mkdirSync( testPath );
-	mkdirSync( scriptsPath );
-	copyFiles( filesToCopy, PACKAGE_PATH, testPath );
-	execNpmCommand( 'install', testPath );
-	execNpmCommand( `install react@${ version } react-dom@${ version }`, testPath );
+		mkdirSync( testPath );
+		mkdirSync( scriptsPath );
+		copyFiles( filesToCopy, PACKAGE_PATH, testPath );
+		execNpmCommand( 'install', testPath );
+		execNpmCommand( `install react@${ version } react-dom@${ version }`, testPath );
 
-	console.log( `--- Testing React v${ version } ---` );
-	currentlyTestedVersion = version;
+		console.log( `--- Testing React v${ version } ---` );
+		console.log( execNpmCommand( 'test' ) );
 
-	console.log( execNpmCommand( 'test' ) );
+		rmdirSyncRecursive( testPath );
 
-	rmdirSyncRecursive( testPath );
+		versionsPassed.push( version );
+	} catch( error ) {
+		console.error();
+		console.error( '--- Errors occured during testing version ' + version + '. See the logs at the bottom. ---' );
+		console.error();
+
+		versionsFailed.push( version );
+		errorLogs[ version ] = error.stdout;
+	}
 }
 
 function execNpmCommand( command, cwd = __dirname ) {
