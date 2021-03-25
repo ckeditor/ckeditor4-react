@@ -118,8 +118,8 @@ function testVersion( version ) {
 		mkdirSync( testPath );
 		mkdirSync( scriptsPath );
 		copyFiles( filesToCopy, PACKAGE_PATH, testPath );
-		execNpmCommand( 'install', testPath );
-		execNpmCommand( `install react@${ version } react-dom@${ version }`, testPath );
+		execNpmCommand( 'install --legacy-peer-deps', testPath );
+		execNpmCommand( `install react@${ version } react-dom@${ version } --legacy-peer-deps`, testPath );
 
 		console.log( `--- Testing React v${ version } ---` );
 		console.log( execNpmCommand( 'test' ) );
