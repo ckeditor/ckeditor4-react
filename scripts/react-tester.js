@@ -29,7 +29,7 @@ try {
 
 	rmdirSyncRecursive( TESTS_PATH );
 
-	if ( errorLogs === {} ) {
+	if ( Object.keys( errorLogs ).length === 0 ) {
 		console.log( '--- Done without errors. Have a nice day! ---' );
 	} else {
 		for ( let key in errorLogs ) {
