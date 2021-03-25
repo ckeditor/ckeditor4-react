@@ -32,13 +32,19 @@ try {
 	if ( Object.keys( errorLogs ).length === 0 ) {
 		console.log( '--- Done without errors. Have a nice day! ---' );
 	} else {
+		console.log( '---------------------------------------------------------------------------' );
+		console.log( '------------------------- Logs of failed versions -------------------------' );
+		console.log( '---------------------------------------------------------------------------' );
+		console.log();
+
 		for ( let key in errorLogs ) {
-			console.log( key, errorLogs[ key ] );
+			console.log( '--- ' + key + ' ---', errorLogs[ key ] );
 		}
 
 		console.log( '--- Some versions failed. See the logs above. ---' );
 		console.log( 'Successful tests:');
 		console.log( versionsPassed );
+		console.log();
 		console.log( 'Failed tests:');
 		console.log( versionsFailed );
 	}
