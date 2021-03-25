@@ -47,6 +47,8 @@ try {
 		console.log();
 		console.log( 'Failed tests:');
 		console.log( versionsFailed );
+
+		process.exit( 1 );
 	}
 } catch ( error ) {
 	if ( process.argv[ 2 ] == '-v' ) {
