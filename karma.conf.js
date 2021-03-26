@@ -98,7 +98,7 @@ module.exports = function( config ) {
 			BrowserStack_Safari: {
 				base: 'BrowserStack',
 				os: 'OS X',
-				os_version: 'High Sierra',
+				os_version: 'Big Sur',
 				browser: 'safari'
 			}
 		},
