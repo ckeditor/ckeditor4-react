@@ -52,7 +52,7 @@ class CKEditor extends React.Component {
 	}
 
 	_initEditor() {
-		const { config, readOnly, type, onBeforeLoad, onNamespaceLoaded, style, data } = this.props;
+		const { config, readOnly, type, onBeforeLoad, onNamespaceLoaded, style } = this.props;
 		config.readOnly = readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl, onNamespaceLoaded ).then( CKEDITOR => {
@@ -89,6 +89,8 @@ class CKEditor extends React.Component {
 					editor.container.setStyles( style );
 				} );
 			}
+
+			const data = this.props.data;
 
 			if ( data ) {
 				editor.setData( data );

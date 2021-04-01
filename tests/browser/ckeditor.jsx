@@ -278,6 +278,22 @@ describe( 'CKEditor Component', () => {
 				} );
 			} );
 		} );
+
+		it( 'uses the freshest data on mount', () => {
+			const initialData = '<p>Initial data</p>';
+			const changedData = '<p>Changed data</p>';
+			const component = createEditor( {
+				data: initialData
+			} );
+
+			component.setProps( {
+				data: changedData
+			} );
+
+			return waitForEditor( component ).then( editor => {
+				expect( editor.getData().trim() ).to.equal( changedData );
+			} );
+		} );
 	} );
 
 	describe( '#config', () => {
