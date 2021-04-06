@@ -4,3 +4,4 @@ coverage/
 dist/
 sample/dist/
 react-tests/
+*debug.log
