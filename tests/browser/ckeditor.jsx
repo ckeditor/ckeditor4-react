@@ -242,9 +242,7 @@ describe( 'CKEditor Component', () => {
 					data: changedData
 				} );
 
-				return waitForData( editor );
-			} ).then( editor => {
-				expect( editor.setData ).to.be.calledTwice;
+				expect( editor.setData ).to.be.calledOnce;
 				expect( editor.getData().trim() ).to.equal( changedData );
 			} );
 		} );
@@ -279,19 +277,51 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 
-		it( 'uses the freshest data on mount', () => {
+		it( 'uses the freshest data - component mounted, editor not loaded', () => {
 			const initialData = '<p>Initial data</p>';
 			const changedData = '<p>Changed data</p>';
 			const component = createEditor( {
 				data: initialData
 			} );
 
+			// Component is already mounted, editor is not loaded, `data` prop changes
 			component.setProps( {
 				data: changedData
 			} );
 
-			return waitForEditor( component ).then( editor => {
+			return waitForEditor( component, 'loaded' ).then( editor => {
+				sandbox.spy( editor, 'setData' );
+
+				return waitForEditor( component );
+			} ).then( editor => {
 				expect( editor.getData().trim() ).to.equal( changedData );
+			} );
+		} );
+
+		it( 'uses the freshest data on mount - component mounted, editor loaded', () => {
+			const initialData = '<p>Initial data</p>';
+			const changedData = '<p>Changed data</p>';
+			const changedDataNext = '<p>Changed data next</p>';
+			const component = createEditor( {
+				data: initialData
+			} );
+
+			// Component is already mounted, editor is not loaded, `data` prop changes
+			component.setProps( {
+				data: changedData
+			} );
+
+			return waitForEditor( component, 'loaded' ).then( editor => {
+				sandbox.spy( editor, 'setData' );
+
+				// Component is already mounted, editor is loaded but not ready, `data` prop changes again
+				component.setProps( {
+					data: changedDataNext
+				} );
+
+				return waitForEditor( component );
+			} ).then( editor => {
+				expect( editor.getData().trim() ).to.equal( changedDataNext );
 			} );
 		} );
 	} );
@@ -566,7 +596,7 @@ function waitForEditors( components ) {
 	return Promise.all( promises );
 }
 
-function waitForEditor( component ) {
+function waitForEditor( component, status = 'instanceReady' ) {
 	return new Promise( resolve => {
 		tick();
 
@@ -577,17 +607,9 @@ function waitForEditor( component ) {
 				return setTimeout( tick );
 			}
 
-			editor.once( 'instanceReady', ( { editor } ) => {
+			editor.once( status, ( { editor } ) => {
 				resolve( editor );
 			} );
 		}
-	} );
-}
-
-function waitForData( editor ) {
-	return new Promise( resolve => {
-		editor.once( 'dataReady', () => {
-			resolve( editor );
-		} );
 	} );
 }

@@ -84,16 +84,19 @@ class CKEditor extends React.Component {
 				}, null, null, -1 );
 			}
 
+			// Make sure that the freshest data is read from props when editor is ready (#114, #127).
+			editor.on( 'instanceReady', () => {
+				const data = this.props.data;
+
+				if ( data ) {
+					editor.setData( data );
+				}
+			}, null, null, -1 );
+
 			if ( style && type !== 'inline' ) {
 				editor.on( 'loaded', () => {
 					editor.container.setStyles( style );
 				} );
-			}
-
-			const data = this.props.data;
-
-			if ( data ) {
-				editor.setData( data );
 			}
 		} ).catch( console.error );
 	}

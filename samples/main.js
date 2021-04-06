@@ -1,4 +1,4 @@
-const { useState } = React;
+const { useState, useEffect } = React;
 const { HashRouter, Switch, Route, Link } = ReactRouterDOM;
 
 const startingData = '<p>This is a CKEditor 4 WYSIWYG editor instance created by ️⚛️ React.</p>';
@@ -18,6 +18,7 @@ function Navigation() {
 				<Link to="/">Editor Types</Link>
 				<Link to="/events">Component Events</Link>
 				<Link to="/binding">Two-way Data Binding</Link>
+				<Link to="/data-prop">Data Prop Changes</Link>
 			</li>
 		</ul>
 	);
@@ -34,6 +35,9 @@ function Router() {
 			</Route>
 			<Route path="/binding">
 				<EditorTwoWayDataBinding />
+			</Route>
+			<Route path="/data-prop">
+				<EditorDataPropChanges />
 			</Route>
 		</Switch>
 	);
@@ -74,6 +78,55 @@ function EditorTypes() {
 					Read-only
 				</label>
 			</p>
+		</main>
+	);
+}
+
+function EditorDataPropChanges() {
+	const [ data, setData ] = useState( startingData );
+
+	useEffect( () => {
+		setTimeout( function() {
+			setData( 'Waiting for data...' );
+		}, 0 );
+	}, [] );
+
+	useEffect( () => {
+		setTimeout( function() {
+			setData( 'Data arrived!' );
+		}, 3000 );
+	}, [] );
+
+	const generateData = () => {
+		setData( `Passed new data: ${ new Date().getTime() }` );
+	};
+
+	return (
+		<main>
+			<h2>Data Prop Changes</h2>
+			<p>
+				Editor component will show the freshest data set via `data` prop once the editor is ready.
+			</p>
+			<section>
+				<h3>Generate data</h3>
+				<button onClick={ generateData }>Set `data` prop</button>
+			</section>
+			<section>
+				<h3>Classic editor</h3>
+				<CKEditor
+					type="classic"
+					data={ data }
+					onNamespaceLoaded={ onNamespaceLoaded }
+				/>
+			</section>
+			<section>
+				<h3>Inline editor</h3>
+				<CKEditor
+					type="inline"
+					data={ data }
+					onNamespaceLoaded={ onNamespaceLoaded }
+				/>
+			</section>
 		</main>
 	);
 }
