@@ -86,15 +86,16 @@ function EditorDataPropChanges() {
 	const [ data, setData ] = useState( startingData );
 
 	useEffect( () => {
-		setTimeout( function() {
-			setData( 'Waiting for data...' );
-		}, 0 );
-	}, [] );
+		const fakeApi = () => {
+			timeout( 50 ).then( () => {
+				setData( 'Init data arrived!' );
+				return timeout( 3000 );
+			} ).then( () => {
+				setData( 'Final data arrived!' );
+			} );
+		};
 
-	useEffect( () => {
-		setTimeout( function() {
-			setData( 'Data arrived!' );
-		}, 3000 );
+		fakeApi();
 	}, [] );
 
 	const generateData = () => {
@@ -271,6 +272,12 @@ function debounce( fn, wait ) {
 			fn.apply( context, args );
 		}, wait );
 	};
+}
+
+function timeout( t ) {
+	return new Promise( resolve => {
+		setTimeout( resolve, t );
+	} );
 }
 
 function onNamespaceLoaded( namespace ) {
