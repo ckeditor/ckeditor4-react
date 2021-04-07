@@ -17,6 +17,8 @@ module.exports = function( config ) {
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
 		files: [
+			// Added as dependency here, so that script is preloaded before tests start (#185)
+			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
 			'tests/browser/**/*.jsx'
 		],
 
@@ -122,7 +124,9 @@ module.exports = function( config ) {
 
 		client: {
 			mocha: {
-				timeout: 5000
+				// Timeout should be accomodated to the needs of each environment (local, BrowserStack).
+				// Every browser must have a chance to bootstrap (#185).
+				timeout: 7500
 			}
 		}
 	} );
