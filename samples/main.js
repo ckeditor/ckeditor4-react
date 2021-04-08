@@ -274,9 +274,9 @@ function debounce( fn, wait ) {
 	};
 }
 
-function timeout( t ) {
+function timeout( time ) {
 	return new Promise( resolve => {
-		setTimeout( resolve, t );
+		setTimeout( resolve, time );
 	} );
 }
 
