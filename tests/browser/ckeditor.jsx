@@ -277,6 +277,7 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 
+		// (#114, #127)
 		it( 'uses the freshest data - component mounted, editor not loaded', () => {
 			const initialData = '<p>Initial data</p>';
 			const changedData = '<p>Changed data</p>';
@@ -284,7 +285,7 @@ describe( 'CKEditor Component', () => {
 				data: initialData
 			} );
 
-			// Component is already mounted, editor is not loaded, `data` prop changes
+			// Component is already mounted, editor is not loaded, `data` prop changes.
 			component.setProps( {
 				data: changedData
 			} );
@@ -298,6 +299,7 @@ describe( 'CKEditor Component', () => {
 			} );
 		} );
 
+		// (#114, #127)
 		it( 'uses the freshest data on mount - component mounted, editor loaded', () => {
 			const initialData = '<p>Initial data</p>';
 			const changedData = '<p>Changed data</p>';
@@ -306,7 +308,7 @@ describe( 'CKEditor Component', () => {
 				data: initialData
 			} );
 
-			// Component is already mounted, editor is not loaded, `data` prop changes
+			// Component is already mounted, editor is not loaded, `data` prop changes.
 			component.setProps( {
 				data: changedData
 			} );
@@ -314,7 +316,7 @@ describe( 'CKEditor Component', () => {
 			return waitForEditor( component, 'loaded' ).then( editor => {
 				sandbox.spy( editor, 'setData' );
 
-				// Component is already mounted, editor is loaded but not ready, `data` prop changes again
+				// Component is already mounted, editor is loaded but not ready, `data` prop changes again.
 				component.setProps( {
 					data: changedDataNext
 				} );

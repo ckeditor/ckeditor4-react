@@ -82,56 +82,6 @@ function EditorTypes() {
 	);
 }
 
-function EditorDataPropChanges() {
-	const [ data, setData ] = useState( startingData );
-
-	useEffect( () => {
-		const fakeApi = () => {
-			timeout( 50 ).then( () => {
-				setData( 'Init data arrived!' );
-				return timeout( 3000 );
-			} ).then( () => {
-				setData( 'Final data arrived!' );
-			} );
-		};
-
-		fakeApi();
-	}, [] );
-
-	const generateData = () => {
-		setData( `Passed new data: ${ new Date().getTime() }` );
-	};
-
-	return (
-		<main>
-			<h2>Data Prop Changes</h2>
-			<p>
-				Editor component will show the freshest data set via `data` prop once the editor is ready.
-			</p>
-			<section>
-				<h3>Generate data</h3>
-				<button onClick={ generateData }>Set `data` prop</button>
-			</section>
-			<section>
-				<h3>Classic editor</h3>
-				<CKEditor
-					type="classic"
-					data={ data }
-					onNamespaceLoaded={ onNamespaceLoaded }
-				/>
-			</section>
-			<section>
-				<h3>Inline editor</h3>
-				<CKEditor
-					type="inline"
-					data={ data }
-					onNamespaceLoaded={ onNamespaceLoaded }
-				/>
-			</section>
-		</main>
-	);
-}
-
 function EditorEvents() {
 	const [ events, setEvents ] = useState( [] );
 
@@ -257,6 +207,56 @@ function EditorPreview( { data } ) {
 			<h2>Rendered content</h2>
 			<div dangerouslySetInnerHTML={ { __html: data } }></div>
 		</div>
+	);
+}
+
+function EditorDataPropChanges() {
+	const [ data, setData ] = useState( startingData );
+
+	useEffect( () => {
+		const fakeApi = () => {
+			timeout( 50 ).then( () => {
+				setData( 'Init data arrived!' );
+				return timeout( 3000 );
+			} ).then( () => {
+				setData( 'Final data arrived!' );
+			} );
+		};
+
+		fakeApi();
+	}, [] );
+
+	const generateData = () => {
+		setData( `Passed new data: ${ new Date().getTime() }` );
+	};
+
+	return (
+		<main>
+			<h2>Data Prop Changes</h2>
+			<p>
+				Editor component will show the freshest data set via `data` prop once the editor is ready.
+			</p>
+			<section>
+				<h3>Generate data</h3>
+				<button onClick={ generateData }>Set `data` prop</button>
+			</section>
+			<section>
+				<h3>Classic editor</h3>
+				<CKEditor
+					type="classic"
+					data={ data }
+					onNamespaceLoaded={ onNamespaceLoaded }
+				/>
+			</section>
+			<section>
+				<h3>Inline editor</h3>
+				<CKEditor
+					type="inline"
+					data={ data }
+					onNamespaceLoaded={ onNamespaceLoaded }
+				/>
+			</section>
+		</main>
 	);
 }
 
