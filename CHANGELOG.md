@@ -1,5 +1,11 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 1.5.0
+
+Fixed Issues:
+
+* [#114](https://github.com/ckeditor/ckeditor4-react/issues/114), [#127](https://github.com/ckeditor/ckeditor4-react/issues/127): Fixed: The editor uses initial stale data if `data` property changed before editor reaches [`instanceReady` state](https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR.html#event-instanceReady).
+
 ## ckeditor4-react 1.4.0
 
 Other Changes:
