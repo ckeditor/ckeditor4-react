@@ -52,7 +52,7 @@ class CKEditor extends React.Component {
 	}
 
 	_initEditor() {
-		const { config, readOnly, type, onBeforeLoad, onNamespaceLoaded, style, data } = this.props;
+		const { config, readOnly, type, onBeforeLoad, onNamespaceLoaded, style } = this.props;
 		config.readOnly = readOnly;
 
 		getEditorNamespace( CKEditor.editorUrl, onNamespaceLoaded ).then( CKEDITOR => {
@@ -84,14 +84,20 @@ class CKEditor extends React.Component {
 				}, null, null, -1 );
 			}
 
+			// (#114, #127)
+			// Make sure that the freshest data is read from props when editor is ready.
+			editor.on( 'instanceReady', () => {
+				const data = this.props.data;
+
+				if ( data ) {
+					editor.setData( data );
+				}
+			}, null, null, -1 );
+
 			if ( style && type !== 'inline' ) {
 				editor.on( 'loaded', () => {
 					editor.container.setStyles( style );
 				} );
-			}
-
-			if ( data ) {
-				editor.setData( data );
 			}
 		} ).catch( console.error );
 	}
