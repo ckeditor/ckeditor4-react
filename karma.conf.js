@@ -117,7 +117,12 @@ module.exports = function( config ) {
 
 		concurrency: Infinity,
 
-		browserNoActivityTimeout: 0,
+		// (#191)
+		// Following settings help to mitigate BrowserStack connectivity issues.
+		captureTimeout: 180000,
+		browserNoActivityTimeout: 10000,
+		browserDisconnectTimeout: 10000,
+		browserDisconnectTolerance: 3,
 
 		mochaReporter: {
 			showDiff: true
