@@ -11,6 +11,8 @@ const basePath = process.cwd();
 const coverageDir = joinPath( basePath, 'coverage' );
 
 module.exports = function( config ) {
+	// (#191)
+	// Field `browsers` is not set in the config. It should be passed from command line.
 	config.set( {
 		basePath,
 
@@ -62,7 +64,10 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: getReporters(),
+		reporters: [
+			'mocha',
+			'coverage'
+		],
 
 		coverageReporter: {
 			reporters: [
@@ -89,8 +94,6 @@ module.exports = function( config ) {
 
 		logLevel: 'INFO',
 
-		browsers: getBrowsers(),
-
 		customLaunchers: {
 			BrowserStack_Edge: {
 				base: 'BrowserStack',
@@ -109,15 +112,24 @@ module.exports = function( config ) {
 		browserStack: {
 			username: process.env.BROWSER_STACK_USERNAME,
 			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-			build: getBuildName(),
-			project: 'ckeditor4'
+			build: process.env.BUILD_SLUG,
+			project: 'ckeditor4',
+			video: false,
+			// (#191)
+			// This is an undocumented option of karma-browserstack-launcher. It helps to mitigate rate limiting on BrowserStack end.
+			// https://github.com/mui-org/material-ui/pull/25049
+			pollingTimeout: 10000
 		},
 
 		singleRun: true,
 
 		concurrency: Infinity,
 
-		browserNoActivityTimeout: 0,
+		// (#191)
+		// These settings help to mitigate BrowserStack issues.
+		browserDisconnectTimeout: 3 * 60 * 1000,
+		browserDisconnectTolerance: 1,
+		browserNoActivityTimeout: 3 * 60 * 1000,
 
 		mochaReporter: {
 			showDiff: true
@@ -133,61 +145,3 @@ module.exports = function( config ) {
 		}
 	} );
 };
-
-// Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
-// If env variable `TRAVIS_REPO_SLUG` is not available, the function returns `undefined`.
-//
-// @returns {String|undefined}
-function getBuildName() {
-	const repoSlug = process.env.TRAVIS_REPO_SLUG;
-
-	if ( !repoSlug ) {
-		return;
-	}
-
-	const repositoryName = repoSlug.split( '/' )[ 1 ].replace( /-/g, '_' );
-	const date = new Date().getTime();
-
-	return `${ repositoryName } ${ date }`;
-}
-
-function getBrowsers() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'Chrome',
-			'Firefox',
-			'BrowserStack_Edge',
-			'BrowserStack_Safari'
-		];
-	}
-
-	return [
-		'Chrome',
-		'Firefox'
-	];
-}
-
-function getReporters() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'mocha',
-			'BrowserStack',
-			'coverage',
-		];
-	}
-
-	return [
-		'mocha',
-		'coverage',
-	];
-}
-
-function shouldEnableBrowserStack() {
-	if ( !process.env.BROWSER_STACK_USERNAME || !process.env.BROWSER_STACK_ACCESS_KEY ) {
-		return false;
-	}
-
-	// If the repository slugs are different, the pull request comes from the community (forked repository).
-	// For such builds, BrowserStack will be disabled. Read more: https://github.com/ckeditor/ckeditor5-dev/issues/358.
-	return ( process.env.TRAVIS_EVENT_TYPE !== 'pull_request' || process.env.TRAVIS_PULL_REQUEST_SLUG === process.env.TRAVIS_REPO_SLUG );
-}
