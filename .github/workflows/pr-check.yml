@@ -74,31 +74,31 @@ jobs:
     #           with:
     #               run: npm run test:all -- --browser ${{ matrix.browser }}
 
-    # test-edge:
-    #     runs-on: windows-2019
-    #     name: Run tests (Edge)
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v2
+    test-edge:
+        runs-on: windows-2019
+        name: Run tests (Edge)
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-    #         - name: Setup node
-    #           uses: actions/setup-node@v2
-    #           with:
-    #               node-version: 14
+            - name: Setup node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 14
 
-    #         - name: Setup Edge
-    #           uses: browser-actions/setup-edge@latest
-    #           with:
-    #               edge-version: stable
+            - name: Setup Edge
+              uses: browser-actions/setup-edge@latest
+              with:
+                  edge-version: stable
 
-    #         - name: Set test variables
-    #           run: $Env:EDGE_BIN = "msedge.exe"
+            - name: Set test variables
+              run: $Env:EDGE_BIN = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
 
-    #         - name: Install dependencies
-    #           run: npm install
+            - name: Install dependencies
+              run: npm install
 
-    #         - name: Run test
-    #           run: npm run test:all -- --browser Edge
+            - name: Run test
+              run: npm run test:all -- --browser Edge
 
     test-safari:
         runs-on: macos-10.15
@@ -114,7 +114,7 @@ jobs:
 
             - name: Set test variables
               run:
-                  export SAFARI_BIN=/Applications/Safari.app/Contents/MacOS/Safari;
+                  export SAFARI_BIN="/Applications/Safari.app/Contents/MacOS/Safari";
 
             - name: Install dependencies
               run: npm install
