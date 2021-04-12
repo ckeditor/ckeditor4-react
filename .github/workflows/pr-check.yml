@@ -65,7 +65,7 @@ jobs:
               run: |
                   export CHROME_BIN=$(which chrome);
                   export FIREFOX_BIN=$(which firefox);
-                  echo BUILD_SLUG='${{ env.GITHUB_REPOSITORY }} ${{ env.GITHUB_SHA }}' >> $GITHUB_ENV;
+                  echo "BUILD_SLUG=$GITHUB_REPOSITORY $GITHUB_SHA" >> $GITHUB_ENV;
 
             - name: Echo env
               run: echo ${{ env.BUILD_SLUG }}
