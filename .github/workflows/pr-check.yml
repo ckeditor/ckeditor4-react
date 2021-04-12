@@ -29,7 +29,46 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - name: Run headless test
+            - name: Run test
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                  run: npm test
+
+    all:
+        runs-on: ubuntu-20.04
+        strategy:
+            matrix:
+                browser: [chrome, firefox]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 14
+
+            - name: Setup Chrome
+              if: matrix.browser == 'chrome'
+              uses: browser-actions/setup-chrome@latest
+              with:
+                  chrome-version: stable
+
+            - name: Setup Firefox
+              if: matrix.browser == 'firefox'
+              uses: browser-actions/setup-firefox@latest
+              with:
+                  firefox-version: latest
+
+            - name: Set test variables
+              run:
+                  export CHROME_BIN=$(which chrome)
+                  export FIREFOX_BIN=$(which firefox)
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run test
               uses: GabrielBB/xvfb-action@v1
               with:
                   run: npm test
