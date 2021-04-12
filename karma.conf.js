@@ -27,6 +27,13 @@ module.exports = function( config ) {
 			'tests/**/*.jsx': [ 'webpack', 'sourcemap' ]
 		},
 
+		plugins: [
+			require( 'karma-chrome-launcher' ),
+			require( 'karma-safari-launcher' ),
+			require( 'karma-firefox-launcher' ),
+			require( '@chiragrupani/karma-chromium-edge-launcher' )
+		],
+
 		webpack: {
 			mode: 'development',
 			devtool: 'inline-source-map',
@@ -92,28 +99,6 @@ module.exports = function( config ) {
 
 		logLevel: 'INFO',
 
-		customLaunchers: {
-			BrowserStack_Edge: {
-				base: 'BrowserStack',
-				os: 'Windows',
-				os_version: '10',
-				browser: 'edge'
-			},
-			BrowserStack_Safari: {
-				base: 'BrowserStack',
-				os: 'OS X',
-				os_version: 'Big Sur',
-				browser: 'safari'
-			}
-		},
-
-		browserStack: {
-			username: process.env.BROWSER_STACK_USERNAME,
-			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-			build: getBuildName(),
-			project: 'ckeditor4'
-		},
-
 		singleRun: true,
 
 		concurrency: Infinity,
@@ -132,21 +117,3 @@ module.exports = function( config ) {
 		}
 	} );
 };
-
-/**
- * Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
- * If env variable `TRAVIS_REPO_SLUG` is not available, the function returns `undefined`.
- * @returns {string|undefined} build name
- */
-function getBuildName() {
-	const repoSlug = process.env.TRAVIS_REPO_SLUG;
-
-	if ( !repoSlug ) {
-		return;
-	}
-
-	const repositoryName = repoSlug.split( '/' )[ 1 ].replace( /-/g, '_' );
-	const date = new Date().getTime();
-
-	return `${ repositoryName } ${ date }`;
-}
