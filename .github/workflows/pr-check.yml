@@ -39,7 +39,7 @@ jobs:
         name: Run tests
         strategy:
             matrix:
-                browser: [BrowserStack_Edge, Chrome, Firefox]
+                browser: [BrowserStack_Edge]
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -49,34 +49,33 @@ jobs:
               with:
                   node-version: 14
 
-            - name: Setup Chrome
-              if: matrix.browser == 'Chrome'
-              uses: browser-actions/setup-chrome@latest
-              with:
-                  chrome-version: stable
+            # - name: Setup Chrome
+            #   if: matrix.browser == 'Chrome'
+            #   uses: browser-actions/setup-chrome@latest
+            #   with:
+            #       chrome-version: stable
 
-            - name: Setup Firefox
-              if: matrix.browser == 'Firefox'
-              uses: browser-actions/setup-firefox@latest
-              with:
-                  firefox-version: latest
+            # - name: Setup Firefox
+            #   if: matrix.browser == 'Firefox'
+            #   uses: browser-actions/setup-firefox@latest
+            #   with:
+            #       firefox-version: latest
 
-            - name: Set test variables
-              run:
-                  export CHROME_BIN=$(which chrome);
-                  export FIREFOX_BIN=$(which firefox);
+            # - name: Set test variables
+            #   run:
+            #       export CHROME_BIN=$(which chrome);
+            #       export FIREFOX_BIN=$(which firefox);
 
             - name: Install dependencies
               run: npm install
 
             - name: Run test
-              uses: GabrielBB/xvfb-action@v1
+            #   uses: GabrielBB/xvfb-action@v1
               env:
                   REPO_SLUG: ${{ github.repository.name }}
                   BROWSER_STACK_USERNAME: ${{ github.secrets.BROWSER_STACK_USERNAME }}
                   BROWSER_STACK_ACCESS_KEY: ${{ github.secrets.BROWSER_STACK_ACCESS_KEY }}
-              with:
-                  run: npm run test:all -- --browser ${{ matrix.browser }}
+              run: npm run test:all -- --browser ${{ matrix.browser }}
 
     # test-edge:
     #     runs-on: windows-2019
