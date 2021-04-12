@@ -112,6 +112,10 @@ jobs:
               with:
                   node-version: 14
 
+            - name: Set test variables
+              run:
+                  export SAFARI_BIN=/Applications/Safari.app/Contents/MacOS/Safari;
+
             - name: Install dependencies
               run: npm install
 
