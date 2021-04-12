@@ -5,3 +5,4 @@ dist/
 sample/dist/
 react-tests/
 *debug.log
+local.log

@@ -156,20 +156,8 @@ function getBuildName() {
 }
 
 function getReporters() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'mocha',
-			'BrowserStack',
-			'coverage'
-		];
-	}
-
 	return [
 		'mocha',
 		'coverage'
 	];
-}
-
-function shouldEnableBrowserStack() {
-	return process.env.BROWSER_STACK_USERNAME && process.env.BROWSER_STACK_ACCESS_KEY;
 }

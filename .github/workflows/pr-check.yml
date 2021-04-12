@@ -37,10 +37,6 @@ jobs:
     test-ff-chrome:
         runs-on: ubuntu-20.04
         name: Run tests
-        env:
-            REPO_SLUG: ${{ github.repository.name }}
-            BROWSER_STACK_USERNAME: ${{ github.secrets.BROWSER_STACK_USERNAME }}
-            BROWSER_STACK_ACCESS_KEY: ${{ github.secrets.BROWSER_STACK_ACCESS_KEY }}
         strategy:
             matrix:
                 browser: [BrowserStack_Edge, Chrome, Firefox]
@@ -75,6 +71,10 @@ jobs:
 
             - name: Run test
               uses: GabrielBB/xvfb-action@v1
+              env:
+                  REPO_SLUG: ${{ github.repository.name }}
+                  BROWSER_STACK_USERNAME: ${{ github.secrets.BROWSER_STACK_USERNAME }}
+                  BROWSER_STACK_ACCESS_KEY: ${{ github.secrets.BROWSER_STACK_ACCESS_KEY }}
               with:
                   run: npm run test:all -- --browser ${{ matrix.browser }}
 
