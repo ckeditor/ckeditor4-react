@@ -6,99 +6,99 @@ on:
             - master
 
 jobs:
-    test:
-        runs-on: ubuntu-20.04
-        name: Run tests
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    # test:
+    #     runs-on: ubuntu-20.04
+    #     name: Run tests
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v2
 
-            - name: Setup node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14
+    #         - name: Setup node
+    #           uses: actions/setup-node@v2
+    #           with:
+    #               node-version: 14
 
-            - name: Setup Chrome
-              uses: browser-actions/setup-chrome@latest
-              with:
-                  chrome-version: stable
+    #         - name: Setup Chrome
+    #           uses: browser-actions/setup-chrome@latest
+    #           with:
+    #               chrome-version: stable
 
-            - name: Set test variables
-              run: export CHROME_BIN=$(which chrome)
+    #         - name: Set test variables
+    #           run: export CHROME_BIN=$(which chrome)
 
-            - name: Install dependencies
-              run: npm install
+    #         - name: Install dependencies
+    #           run: npm install
 
-            - name: Run test
-              uses: GabrielBB/xvfb-action@v1
-              with:
-                  run: npm test
+    #         - name: Run test
+    #           uses: GabrielBB/xvfb-action@v1
+    #           with:
+    #               run: npm test
 
-    test-ff-chrome:
-        runs-on: ubuntu-20.04
-        name: Run tests (Firefox, Chrome)
-        strategy:
-            matrix:
-                browser: [Chrome, Firefox]
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    # test-ff-chrome:
+    #     runs-on: ubuntu-20.04
+    #     name: Run tests (Firefox, Chrome)
+    #     strategy:
+    #         matrix:
+    #             browser: [Chrome, Firefox]
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v2
 
-            - name: Setup node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14
+    #         - name: Setup node
+    #           uses: actions/setup-node@v2
+    #           with:
+    #               node-version: 14
 
-            - name: Setup Chrome
-              if: matrix.browser == 'Chrome'
-              uses: browser-actions/setup-chrome@latest
-              with:
-                  chrome-version: stable
+    #         - name: Setup Chrome
+    #           if: matrix.browser == 'Chrome'
+    #           uses: browser-actions/setup-chrome@latest
+    #           with:
+    #               chrome-version: stable
 
-            - name: Setup Firefox
-              if: matrix.browser == 'Firefox'
-              uses: browser-actions/setup-firefox@latest
-              with:
-                  firefox-version: latest
+    #         - name: Setup Firefox
+    #           if: matrix.browser == 'Firefox'
+    #           uses: browser-actions/setup-firefox@latest
+    #           with:
+    #               firefox-version: latest
 
-            - name: Set test variables
-              run:
-                  export CHROME_BIN=$(which chrome);
-                  export FIREFOX_BIN=$(which firefox);
+    #         - name: Set test variables
+    #           run:
+    #               export CHROME_BIN=$(which chrome);
+    #               export FIREFOX_BIN=$(which firefox);
 
-            - name: Install dependencies
-              run: npm install
+    #         - name: Install dependencies
+    #           run: npm install
 
-            - name: Run test
-              uses: GabrielBB/xvfb-action@v1
-              with:
-                  run: npm run test:all -- --browser ${{ matrix.browser }}
+    #         - name: Run test
+    #           uses: GabrielBB/xvfb-action@v1
+    #           with:
+    #               run: npm run test:all -- --browser ${{ matrix.browser }}
 
-    test-edge:
-        runs-on: windows-2019
-        name: Run tests (Edge)
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    # test-edge:
+    #     runs-on: windows-2019
+    #     name: Run tests (Edge)
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v2
 
-            - name: Setup node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14
+    #         - name: Setup node
+    #           uses: actions/setup-node@v2
+    #           with:
+    #               node-version: 14
 
-            - name: Setup Edge
-              uses: browser-actions/setup-edge@latest
-              with:
-                  edge-version: stable
+    #         - name: Setup Edge
+    #           uses: browser-actions/setup-edge@latest
+    #           with:
+    #               edge-version: stable
 
-            - name: Set test variables
-              run: $Env:EDGE_BIN = "msedge.exe"
+    #         - name: Set test variables
+    #           run: $Env:EDGE_BIN = "msedge.exe"
 
-            - name: Install dependencies
-              run: npm install
+    #         - name: Install dependencies
+    #           run: npm install
 
-            - name: Run test
-              run: npm run test:all -- --browser Edge
+    #         - name: Run test
+    #           run: npm run test:all -- --browser Edge
 
     test-safari:
         runs-on: macos-11.0
