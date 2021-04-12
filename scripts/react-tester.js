@@ -206,6 +206,8 @@ function testVersion( version ) {
 
 		versionsFailed.push( version );
 		errorLogs[ version ] = error.stdout;
+
+		throw error;
 	}
 }
 
