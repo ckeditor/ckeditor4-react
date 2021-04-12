@@ -160,8 +160,13 @@ function isLatestPatch( index, array ) {
 function prepareTestDir( version ) {
 	console.log( `--- Preparing package environment for React v${ version } ---` );
 
-	const testPath = resolvePath( TESTS_PATH, version );
-	const scriptsPath = resolvePath( testPath, 'scripts' );
+	execNpmCommand( `install react@${ version } react-dom@${ version } --legacy-peer-deps`, TESTS_PATH );
+}
+
+/**
+ * Removes test directory and its content, then re-creates empty test dir and copies init files.
+ */
+function cleanupTestDir() {
 	const filesToCopy = [
 		'package.json',
 		'webpack.config.js',
@@ -169,19 +174,13 @@ function prepareTestDir( version ) {
 		'scripts/test-transpiler.js'
 	];
 
-	mkdirSync( testPath );
-	mkdirSync( scriptsPath );
-	copyFiles( filesToCopy, PACKAGE_PATH, testPath );
-	execNpmCommand( 'install --legacy-peer-deps', testPath );
-	execNpmCommand( `install react@${ version } react-dom@${ version } --legacy-peer-deps`, testPath );
-}
-
-/**
- * Removes test directory and its content, then re-creates empty test dir.
- */
-function cleanupTestDir() {
 	rmdirSyncRecursive( TESTS_PATH );
 	mkdirSync( TESTS_PATH );
+	mkdirSync( `${ TESTS_PATH }/scripts` );
+
+	copyFiles( filesToCopy, PACKAGE_PATH, TESTS_PATH );
+
+	execNpmCommand( 'install --legacy-peer-deps', TESTS_PATH );
 }
 
 /**

@@ -108,7 +108,8 @@ module.exports = function( config ) {
 			username: process.env.BROWSER_STACK_USERNAME,
 			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
 			build: getBuildName(),
-			project: 'ckeditor4'
+			project: 'ckeditor4',
+			video: false
 		},
 
 		singleRun: true,
@@ -116,11 +117,13 @@ module.exports = function( config ) {
 		concurrency: Infinity,
 
 		// (#191)
-		// Following settings help to mitigate BrowserStack connectivity issues.
-		captureTimeout: 180000,
-		browserNoActivityTimeout: 10000,
-		browserDisconnectTimeout: 10000,
+		// Recommeneded browserstack timeouts
+		// https://github.com/karma-runner/karma-browserstack-launcher/issues/61
+		captureTimeout: 3e5,
 		browserDisconnectTolerance: 3,
+		browserDisconnectTimeout: 3e5,
+		browserSocketTimeout: 1.2e5,
+		browserNoActivityTimeout: 3e5,
 
 		mochaReporter: {
 			showDiff: true
