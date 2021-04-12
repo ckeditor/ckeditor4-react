@@ -34,12 +34,53 @@ jobs:
     #           with:
     #               run: npm test
 
-    # test-ff-chrome:
-    #     runs-on: ubuntu-20.04
-    #     name: Run tests (Firefox, Chrome)
-    #     strategy:
-    #         matrix:
-    #             browser: [Chrome, Firefox]
+    test-ff-chrome:
+        runs-on: ubuntu-20.04
+        name: Run tests
+        env:
+            REPO_SLUG: ${{ github.repository.name }}
+            BROWSER_STACK_USERNAME: ${{ github.secrets.BROWSER_STACK_USERNAME }}
+            BROWSER_STACK_ACCESS_KEY: ${{ github.secrets.BROWSER_STACK_ACCESS_KEY }}
+        strategy:
+            matrix:
+                browser: [BrowserStack_Edge, Chrome, Firefox]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 14
+
+            - name: Setup Chrome
+              if: matrix.browser == 'Chrome'
+              uses: browser-actions/setup-chrome@latest
+              with:
+                  chrome-version: stable
+
+            - name: Setup Firefox
+              if: matrix.browser == 'Firefox'
+              uses: browser-actions/setup-firefox@latest
+              with:
+                  firefox-version: latest
+
+            - name: Set test variables
+              run:
+                  export CHROME_BIN=$(which chrome);
+                  export FIREFOX_BIN=$(which firefox);
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Run test
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                  run: npm run test:all -- --browser ${{ matrix.browser }}
+
+    # test-edge:
+    #     runs-on: windows-2019
+    #     name: Run tests (Edge)
     #     steps:
     #         - name: Checkout code
     #           uses: actions/checkout@v2
@@ -49,75 +90,38 @@ jobs:
     #           with:
     #               node-version: 14
 
-    #         - name: Setup Chrome
-    #           if: matrix.browser == 'Chrome'
-    #           uses: browser-actions/setup-chrome@latest
+    #         - name: Setup Edge
+    #           uses: browser-actions/setup-edge@latest
     #           with:
-    #               chrome-version: stable
-
-    #         - name: Setup Firefox
-    #           if: matrix.browser == 'Firefox'
-    #           uses: browser-actions/setup-firefox@latest
-    #           with:
-    #               firefox-version: latest
+    #               edge-version: stable
 
     #         - name: Set test variables
-    #           run:
-    #               export CHROME_BIN=$(which chrome);
-    #               export FIREFOX_BIN=$(which firefox);
+    #           run: $Env:EDGE_BIN = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
 
     #         - name: Install dependencies
     #           run: npm install
 
     #         - name: Run test
-    #           uses: GabrielBB/xvfb-action@v1
+    #           run: npm run test:all -- --browser Edge
+
+    # test-safari:
+    #     runs-on: macos-10.15
+    #     name: Run tests (Safari)
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v2
+
+    #         - name: Setup node
+    #           uses: actions/setup-node@v2
     #           with:
-    #               run: npm run test:all -- --browser ${{ matrix.browser }}
+    #               node-version: 14
 
-    test-edge:
-        runs-on: windows-2019
-        name: Run tests (Edge)
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    #         - name: Set test variables
+    #           run:
+    #               export SAFARI_BIN="/Applications/Safari.app/Contents/MacOS/Safari";
 
-            - name: Setup node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14
+    #         - name: Install dependencies
+    #           run: npm install
 
-            - name: Setup Edge
-              uses: browser-actions/setup-edge@latest
-              with:
-                  edge-version: stable
-
-            - name: Set test variables
-              run: $Env:EDGE_BIN = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
-
-            - name: Install dependencies
-              run: npm install
-
-            - name: Run test
-              run: npm run test:all -- --browser Edge
-
-    test-safari:
-        runs-on: macos-10.15
-        name: Run tests (Safari)
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
-            - name: Setup node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: 14
-
-            - name: Set test variables
-              run:
-                  export SAFARI_BIN="/Applications/Safari.app/Contents/MacOS/Safari";
-
-            - name: Install dependencies
-              run: npm install
-
-            - name: Run test
-              run: npm run test:all -- --browser Safari
+    #         - name: Run test
+    #           run: npm run test:all -- --browser Safari

@@ -27,13 +27,6 @@ module.exports = function( config ) {
 			'tests/**/*.jsx': [ 'webpack', 'sourcemap' ]
 		},
 
-		plugins: [
-			require( 'karma-chrome-launcher' ),
-			require( 'karma-safari-launcher' ),
-			require( 'karma-firefox-launcher' ),
-			require( '@chiragrupani/karma-chromium-edge-launcher' )
-		],
-
 		webpack: {
 			mode: 'development',
 			devtool: 'inline-source-map',
@@ -69,10 +62,7 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: [
-			'mocha',
-			'coverage'
-		],
+		reporters: getReporters(),
 
 		coverageReporter: {
 			reporters: [
@@ -99,9 +89,38 @@ module.exports = function( config ) {
 
 		logLevel: 'INFO',
 
+		customLaunchers: {
+			BrowserStack_Edge: {
+				base: 'BrowserStack',
+				os: 'Windows',
+				os_version: '10',
+				browser: 'edge'
+			},
+			BrowserStack_Safari: {
+				base: 'BrowserStack',
+				os: 'OS X',
+				os_version: 'Big Sur',
+				browser: 'safari'
+			}
+		},
+
+		browserStack: {
+			username: process.env.BROWSER_STACK_USERNAME,
+			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
+			build: getBuildName(),
+			project: 'ckeditor4'
+		},
+
 		singleRun: true,
 
 		concurrency: Infinity,
+
+		// (#191)
+		// Following settings help to mitigate BrowserStack connectivity issues.
+		captureTimeout: 180000,
+		browserNoActivityTimeout: 10000,
+		browserDisconnectTimeout: 10000,
+		browserDisconnectTolerance: 3,
 
 		mochaReporter: {
 			showDiff: true
@@ -117,3 +136,40 @@ module.exports = function( config ) {
 		}
 	} );
 };
+
+/**
+ * Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
+ * If env variable `REPO_SLUG` is not available, the function returns `undefined`.
+ * @returns {string|undefined}
+ */
+function getBuildName() {
+	const repoSlug = process.env.REPO_SLUG;
+
+	if ( !repoSlug ) {
+		return;
+	}
+
+	const repositoryName = repoSlug.split( '/' )[ 1 ].replace( /-/g, '_' );
+	const date = new Date().getTime();
+
+	return `${ repositoryName } ${ date }`;
+}
+
+function getReporters() {
+	if ( shouldEnableBrowserStack() ) {
+		return [
+			'mocha',
+			'BrowserStack',
+			'coverage'
+		];
+	}
+
+	return [
+		'mocha',
+		'coverage'
+	];
+}
+
+function shouldEnableBrowserStack() {
+	return process.env.BROWSER_STACK_USERNAME && process.env.BROWSER_STACK_ACCESS_KEY;
+}
