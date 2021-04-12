@@ -101,7 +101,7 @@ jobs:
     #           run: npm run test:all -- --browser Edge
 
     test-safari:
-        runs-on: macos-11.0
+        runs-on: macos-10.15
         name: Run tests (Safari)
         steps:
             - name: Checkout code
