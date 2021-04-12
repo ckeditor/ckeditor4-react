@@ -19,12 +19,14 @@ jobs:
                   node-version: 14
 
             - name: Setup Chrome
-              uses: browser-actions/setup-chrome@latest
+              uses: browser-actions/setup-chrome@v0.0.0
               with:
                   chrome-version: stable
 
             - name: Install dependencies
               run: npm install
 
-            - name: Run test
-              run: CHROME_BIN=$(which chrome) npm test
+            - name: Run headless test
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                  run: CHROME_BIN=$(which chrome) npm test
