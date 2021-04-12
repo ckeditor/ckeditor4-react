@@ -12,7 +12,7 @@ const semverMinor = require( 'semver/functions/minor' );
  *
  * Commands:
  *
- * -v                 Sets verbose error logs.
+ * --verbose          Sets verbose error logs.
  * --browser <name>   Specifies environment to test. Possible values: 'Chrome', 'Firefox', 'Safari', 'Edge', 'SSR'. Defaults to: 'Chrome'.
  * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
  * --dry              Runs tests for currently installed version of React without creating temp dir. Use for quick feedback.

@@ -122,13 +122,9 @@ module.exports = function( config ) {
 		concurrency: Infinity,
 
 		// (#191)
-		// Recommeneded browserstack timeouts
-		// https://github.com/karma-runner/karma-browserstack-launcher/issues/61
-		captureTimeout: 3e5,
-		browserDisconnectTolerance: 3,
-		browserDisconnectTimeout: 3e5,
-		browserSocketTimeout: 1.2e5,
-		browserNoActivityTimeout: 3e5,
+		browserDisconnectTimeout: 3 * 60 * 1000, // default 2000
+		browserDisconnectTolerance: 1, // default 0
+		browserNoActivityTimeout: 3 * 60 * 1000, // default 30000
 
 		mochaReporter: {
 			showDiff: true
