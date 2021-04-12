@@ -109,7 +109,12 @@ module.exports = function( config ) {
 			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
 			build: getBuildName(),
 			project: 'ckeditor4',
-			video: false
+			video: false,
+			// (#191)
+			// The karma-browserstack-launcher polls for each browser.
+			// This is an undocumented option.
+			// https://github.com/mui-org/material-ui/pull/25049
+			pollingTimeout: 10000
 		},
 
 		singleRun: true,
