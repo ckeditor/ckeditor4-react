@@ -62,9 +62,10 @@ jobs:
                   firefox-version: latest
 
             - name: Set test variables
-              run:
+              run: |
                   export CHROME_BIN=$(which chrome);
                   export FIREFOX_BIN=$(which firefox);
+                  echo ::set-env name=BUILD_SLUG::'${{ GITHUB_REPOSITORY }} ${{ GITHUB_SHA }}'
 
             - name: Install dependencies
               run: npm install
@@ -72,7 +73,6 @@ jobs:
             - name: Run test
               uses: GabrielBB/xvfb-action@v1
               env:
-                  BUILD_SLUG: '${{ GITHUB_REPOSITORY }} ${{ GITHUB_SHA }}'
                   BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
                   BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
               with:
