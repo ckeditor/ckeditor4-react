@@ -65,7 +65,7 @@ jobs:
               run: |
                   export CHROME_BIN=$(which chrome);
                   export FIREFOX_BIN=$(which firefox);
-                  echo ::set-env name=BUILD_SLUG::'${{ GITHUB_REPOSITORY }} ${{ GITHUB_SHA }}'
+                  echo ::set-env name=BUILD_SLUG::'${{ env.GITHUB_REPOSITORY }} ${{ env.GITHUB_SHA }}'
 
             - name: Install dependencies
               run: npm install
