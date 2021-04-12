@@ -39,7 +39,7 @@ jobs:
         name: Run tests
         strategy:
             matrix:
-                browser: [BrowserStack_Edge, Chrome, Firefox]
+                browser: [BrowserStack_Edge, BrowserStack_Safari, Chrome, Firefox]
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -67,15 +67,13 @@ jobs:
                   export FIREFOX_BIN=$(which firefox);
                   echo "BUILD_SLUG=$(echo $GITHUB_REPOSITORY | cut -d '/' -f2) $(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV;
 
-            - name: Echo env
-              run: echo ${{ env.BUILD_SLUG }}
-            # - name: Install dependencies
-            #   run: npm install
+            - name: Install dependencies
+              run: npm install
 
-            # - name: Run test
-            #   uses: GabrielBB/xvfb-action@v1
-            #   env:
-            #       BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
-            #       BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
-            #   with:
-            #       run: npm run test:all -- --browser ${{ matrix.browser }}
+            - name: Run test
+              uses: GabrielBB/xvfb-action@v1
+              env:
+                  BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
+                  BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
+              with:
+                  run: npm run test:all -- --browser ${{ matrix.browser }}
