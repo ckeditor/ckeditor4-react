@@ -34,12 +34,12 @@ jobs:
     #           with:
     #               run: npm test
 
-    test-ff-chrome:
+    test-all:
         runs-on: ubuntu-20.04
         name: Run tests
         strategy:
             matrix:
-                browser: [BrowserStack_Edge]
+                browser: [BrowserStack_Edge, Chrome, Firefox]
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -49,78 +49,31 @@ jobs:
               with:
                   node-version: 14
 
-            # - name: Setup Chrome
-            #   if: matrix.browser == 'Chrome'
-            #   uses: browser-actions/setup-chrome@latest
-            #   with:
-            #       chrome-version: stable
+            - name: Setup Chrome
+              if: matrix.browser == 'Chrome'
+              uses: browser-actions/setup-chrome@latest
+              with:
+                  chrome-version: stable
 
-            # - name: Setup Firefox
-            #   if: matrix.browser == 'Firefox'
-            #   uses: browser-actions/setup-firefox@latest
-            #   with:
-            #       firefox-version: latest
+            - name: Setup Firefox
+              if: matrix.browser == 'Firefox'
+              uses: browser-actions/setup-firefox@latest
+              with:
+                  firefox-version: latest
 
-            # - name: Set test variables
-            #   run:
-            #       export CHROME_BIN=$(which chrome);
-            #       export FIREFOX_BIN=$(which firefox);
+            - name: Set test variables
+              run:
+                  export CHROME_BIN=$(which chrome);
+                  export FIREFOX_BIN=$(which firefox);
 
             - name: Install dependencies
               run: npm install
 
             - name: Run test
-            #   uses: GabrielBB/xvfb-action@v1
+              uses: GabrielBB/xvfb-action@v1
               env:
-                  REPO_SLUG: ${{ github.repository.name }}
+                  BUILD_SLUG: '${{ GITHUB_REPOSITORY }} ${{ GITHUB_SHA }}'
                   BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
                   BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
-              run: npm run test:all -- --browser ${{ matrix.browser }}
-
-    # test-edge:
-    #     runs-on: windows-2019
-    #     name: Run tests (Edge)
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v2
-
-    #         - name: Setup node
-    #           uses: actions/setup-node@v2
-    #           with:
-    #               node-version: 14
-
-    #         - name: Setup Edge
-    #           uses: browser-actions/setup-edge@latest
-    #           with:
-    #               edge-version: stable
-
-    #         - name: Set test variables
-    #           run: $Env:EDGE_BIN = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
-
-    #         - name: Install dependencies
-    #           run: npm install
-
-    #         - name: Run test
-    #           run: npm run test:all -- --browser Edge
-
-    # test-safari:
-    #     runs-on: macos-10.15
-    #     name: Run tests (Safari)
-    #     steps:
-    #         - name: Checkout code
-    #           uses: actions/checkout@v2
-
-    #         - name: Setup node
-    #           uses: actions/setup-node@v2
-    #           with:
-    #               node-version: 14
-
-    #         - name: Set test variables
-    #           run:
-    #               export SAFARI_BIN="/Applications/Safari.app/Contents/MacOS/Safari";
-
-    #         - name: Install dependencies
-    #           run: npm install
-
-    #         - name: Run test
-    #           run: npm run test:all -- --browser Safari
+              with:
+                  run: npm run test:all -- --browser ${{ matrix.browser }}

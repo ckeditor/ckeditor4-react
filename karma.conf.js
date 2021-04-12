@@ -138,21 +138,11 @@ module.exports = function( config ) {
 };
 
 /**
- * Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
- * If env variable `REPO_SLUG` is not available, the function returns `undefined`.
+ * Formats name of the build for BrowserStack.
  * @returns {string|undefined}
  */
 function getBuildName() {
-	const repoSlug = process.env.REPO_SLUG;
-
-	if ( !repoSlug ) {
-		return;
-	}
-
-	const repositoryName = repoSlug.split( '/' )[ 1 ].replace( /-/g, '_' );
-	const date = new Date().getTime();
-
-	return `${ repositoryName } ${ date }`;
+	return process.env.BUILD_SLUG || 'Karma test';
 }
 
 function getReporters() {
