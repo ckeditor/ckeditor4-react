@@ -65,15 +65,17 @@ jobs:
               run: |
                   export CHROME_BIN=$(which chrome);
                   export FIREFOX_BIN=$(which firefox);
+                  echo BUILD_SLUG='${{ env.GITHUB_REPOSITORY }} ${{ env.GITHUB_SHA }}' >> $GITHUB_ENV;
 
-            - name: Install dependencies
-              run: npm install
+            - name: Echo env
+              run: echo ${{ env.BUILD_SLUG }}
+            # - name: Install dependencies
+            #   run: npm install
 
-            - name: Run test
-              uses: GabrielBB/xvfb-action@v1
-              env:
-                  BUILD_SLUG: '$GITHUB_REPOSITORY $GITHUB_SHA'
-                  BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
-                  BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
-              with:
-                  run: npm run test:all -- --browser ${{ matrix.browser }}
+            # - name: Run test
+            #   uses: GabrielBB/xvfb-action@v1
+            #   env:
+            #       BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
+            #       BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
+            #   with:
+            #       run: npm run test:all -- --browser ${{ matrix.browser }}
