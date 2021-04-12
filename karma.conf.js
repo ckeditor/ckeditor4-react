@@ -62,7 +62,10 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: getReporters(),
+		reporters: [
+			'mocha',
+			'coverage'
+		],
 
 		coverageReporter: {
 			reporters: [
@@ -88,8 +91,6 @@ module.exports = function( config ) {
 		colors: true,
 
 		logLevel: 'INFO',
-
-		browsers: getBrowsers(),
 
 		customLaunchers: {
 			BrowserStack_Edge: {
@@ -117,13 +118,6 @@ module.exports = function( config ) {
 
 		concurrency: Infinity,
 
-		// (#191)
-		// Following settings help to mitigate BrowserStack connectivity issues.
-		captureTimeout: 180000,
-		browserNoActivityTimeout: 10000,
-		browserDisconnectTimeout: 10000,
-		browserDisconnectTolerance: 3,
-
 		mochaReporter: {
 			showDiff: true
 		},
@@ -139,10 +133,11 @@ module.exports = function( config ) {
 	} );
 };
 
-// Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
-// If env variable `TRAVIS_REPO_SLUG` is not available, the function returns `undefined`.
-//
-// @returns {String|undefined}
+/**
+ * Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
+ * If env variable `TRAVIS_REPO_SLUG` is not available, the function returns `undefined`.
+ * @returns {string|undefined} build name
+ */
 function getBuildName() {
 	const repoSlug = process.env.TRAVIS_REPO_SLUG;
 
@@ -154,45 +149,4 @@ function getBuildName() {
 	const date = new Date().getTime();
 
 	return `${ repositoryName } ${ date }`;
-}
-
-function getBrowsers() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'Chrome',
-			'Firefox',
-			'BrowserStack_Edge',
-			'BrowserStack_Safari'
-		];
-	}
-
-	return [
-		'Chrome',
-		'Firefox'
-	];
-}
-
-function getReporters() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'mocha',
-			'BrowserStack',
-			'coverage',
-		];
-	}
-
-	return [
-		'mocha',
-		'coverage',
-	];
-}
-
-function shouldEnableBrowserStack() {
-	if ( !process.env.BROWSER_STACK_USERNAME || !process.env.BROWSER_STACK_ACCESS_KEY ) {
-		return false;
-	}
-
-	// If the repository slugs are different, the pull request comes from the community (forked repository).
-	// For such builds, BrowserStack will be disabled. Read more: https://github.com/ckeditor/ckeditor5-dev/issues/358.
-	return ( process.env.TRAVIS_EVENT_TYPE !== 'pull_request' || process.env.TRAVIS_PULL_REQUEST_SLUG === process.env.TRAVIS_REPO_SLUG );
 }
