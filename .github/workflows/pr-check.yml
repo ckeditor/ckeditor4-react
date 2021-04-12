@@ -38,7 +38,7 @@ jobs:
         runs-on: ubuntu-20.04
         strategy:
             matrix:
-                browser: [chrome, firefox]
+                browser: [Chrome, Firefox]
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -49,13 +49,13 @@ jobs:
                   node-version: 14
 
             - name: Setup Chrome
-              if: matrix.browser == 'chrome'
+              if: matrix.browser == 'Chrome'
               uses: browser-actions/setup-chrome@latest
               with:
                   chrome-version: stable
 
             - name: Setup Firefox
-              if: matrix.browser == 'firefox'
+              if: matrix.browser == 'Firefox'
               uses: browser-actions/setup-firefox@latest
               with:
                   firefox-version: latest
@@ -71,4 +71,4 @@ jobs:
             - name: Run test
               uses: GabrielBB/xvfb-action@v1
               with:
-                  run: npm test
+                  run: npm test:all -- --browser ${{ matrix.browser }}
