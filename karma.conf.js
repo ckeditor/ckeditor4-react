@@ -11,6 +11,8 @@ const basePath = process.cwd();
 const coverageDir = joinPath( basePath, 'coverage' );
 
 module.exports = function( config ) {
+	// (#191)
+	// Field `browsers` is not set in the config. It should be passed from command line.
 	config.set( {
 		basePath,
 
@@ -62,7 +64,10 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: getReporters(),
+		reporters: [
+			'mocha',
+			'coverage'
+		],
 
 		coverageReporter: {
 			reporters: [
@@ -107,12 +112,11 @@ module.exports = function( config ) {
 		browserStack: {
 			username: process.env.BROWSER_STACK_USERNAME,
 			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-			build: getBuildName(),
+			build: process.env.BUILD_SLUG,
 			project: 'ckeditor4',
 			video: false,
 			// (#191)
-			// The karma-browserstack-launcher polls for each browser.
-			// This is an undocumented option.
+			// This is an undocumented option of karma-browserstack-launcher. It helps to mitigate rate limiting on BrowserStack end.
 			// https://github.com/mui-org/material-ui/pull/25049
 			pollingTimeout: 10000
 		},
@@ -122,9 +126,10 @@ module.exports = function( config ) {
 		concurrency: Infinity,
 
 		// (#191)
-		browserDisconnectTimeout: 3 * 60 * 1000, // default 2000
-		browserDisconnectTolerance: 1, // default 0
-		browserNoActivityTimeout: 3 * 60 * 1000, // default 30000
+		// These settings help to mitigate BrowserStack issues.
+		browserDisconnectTimeout: 3 * 60 * 1000,
+		browserDisconnectTolerance: 1,
+		browserNoActivityTimeout: 3 * 60 * 1000,
 
 		mochaReporter: {
 			showDiff: true
@@ -140,18 +145,3 @@ module.exports = function( config ) {
 		}
 	} );
 };
-
-/**
- * Formats name of the build for BrowserStack.
- * @returns {string|undefined}
- */
-function getBuildName() {
-	return process.env.BUILD_SLUG || 'Karma test';
-}
-
-function getReporters() {
-	return [
-		'mocha',
-		'coverage'
-	];
-}
