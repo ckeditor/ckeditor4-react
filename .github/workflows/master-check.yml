@@ -4,11 +4,6 @@ on:
     pull_request:
         branches:
             - master
-        paths:
-            - src/**
-            - karma.config.js
-            - tests/**
-            - scripts/**
 
 jobs:
     # Runs tests for all configured React version and all environments

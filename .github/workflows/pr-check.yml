@@ -4,11 +4,6 @@ on:
     pull_request:
         branches:
             - master
-        paths:
-            - src/**
-            - karma.config.js
-            - tests/**
-            - scripts/**
 
 jobs:
     # Runs linter and tests for a single React version and a default browser
