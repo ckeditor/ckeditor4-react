@@ -3,26 +3,26 @@
 	"version": "1.4.0",
 	"description": "Official React component for CKEditor 4 – the best browser-based rich text editor.",
 	"license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
-	"main": "dist/ckeditor.js",
+	"main": "dist/index.cjs.js",
+	"module": "dist/index.esm.js",
+	"types": "dist/index.d.ts",
 	"files": [
 		"dist/",
 		"sample/"
 	],
 	"scripts": {
-		"build": "webpack --mode production",
-		"develop": "webpack --mode development --watch",
-		"samples": "npm run develop & http-server -s -o samples/index.html",
+		"build": "rollup -c rollup/rollup.build.config.js",
 		"bump": "node ./scripts/bump.js",
+		"develop": "rollup -c rollup/rollup.samples.config.js --watch",
 		"lint": "eslint \"src/**/*.js?(x)\" \"tests/**/*.jsx\"",
-		"pretest": "npm run lint",
-		"test": "npm run test:browser && npm run test:ssr",
-		"test:browser": "karma start",
+		"postversion": "git rm -r --cached dist/ && git commit -m \"Clean after release [ci skip]\" && git push origin && git push origin --tags",
 		"pretest:ssr": "webpack --mode development",
-		"test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
-		"test:all-versions": "node ./scripts/react-tester.js",
 		"preversion": "npm test",
-		"version": "npm run build && git add -f dist/",
-		"postversion": "git rm -r --cached dist/ && git commit -m \"Clean after release [ci skip]\" && git push origin && git push origin --tags"
+		"test:all-versions": "node ./scripts/react-tester.js",
+		"test:browser": "karma start",
+		"test:ssr": "mocha \"tests/server/**/*.{js,jsx}\" --require ./scripts/test-transpiler.js",
+		"test": "npm run lint && npm run test:browser && npm run test:ssr",
+		"version": "npm run build && git add -f dist/"
 	},
 	"repository": {
 		"type": "git",
@@ -48,19 +48,17 @@
 	"homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
 	"peerDependencies": {
 		"ckeditor4": "^4.16.0",
-		"react": "^16.0.0"
+		"react": "^16.8.3 || ^17"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.13.8",
-		"@babel/preset-env": "^7.13.8",
-		"@babel/preset-react": "^7.12.13",
-		"@babel/register": "^7.13.8",
-		"babel-loader": "^8.2.2",
+		"@rollup/plugin-html": "^0.2.3",
+		"@rollup/plugin-typescript": "^8.2.1",
+		"@types/react": "^17.0.3",
+		"@types/react-dom": "^17.0.3",
+		"@types/react-router-dom": "^5.1.7",
 		"chai": "^4.3.0",
 		"ckeditor4": "^4.16.0",
 		"core-js": "^3.9.1",
-		"enzyme": "^3.11.0",
-		"enzyme-adapter-react-16": "^1.15.6",
 		"eslint": "^7.21.0",
 		"eslint-config-ckeditor5": "^3.1.0",
 		"eslint-plugin-react": "^7.22.0",
@@ -76,21 +74,24 @@
 		"karma-mocha-reporter": "^2.2.5",
 		"karma-sinon": "^1.0.5",
 		"karma-sourcemap-loader": "^0.3.8",
-		"mocha": "^8.3.0",
 		"karma-webpack": "^4.0.2",
-		"react": "^16.5.2",
-		"react-dom": "^16.5.2",
-		"react-router-dom": "^5.0.0",
+		"live-server": "^1.2.1",
+		"mocha": "^8.3.0",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-router-dom": "^5.2.0",
+		"rollup": "^2.45.2",
+		"rollup-plugin-cleanup": "^3.2.1",
+		"rollup-plugin-serve": "^1.1.0",
+		"rollup-plugin-terser": "^7.0.2",
 		"semver": "^7.3.4",
 		"shelljs": "^0.8.3",
 		"sinon": "^9.2.4",
 		"sinon-chai": "^3.5.0",
-		"terser-webpack-plugin": "^4.2.2",
-		"webpack": "^4.20.2",
-		"webpack-cli": "^4.5.0"
+		"tslib": "^2.2.0",
+		"typescript": "^4.2.4"
 	},
 	"dependencies": {
-		"ckeditor4-integrations-common": "^0.2.0",
-		"prop-types": "^15.6.2"
+		"ckeditor4-integrations-common": "^0.2.0"
 	}
 }
