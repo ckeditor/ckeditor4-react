@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 function CKEditor() {
-	const a = { ...{} };
-	return <div />;
+	return <div>{'Test'}</div>;
 }
 
 export default CKEditor;

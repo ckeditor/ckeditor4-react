@@ -1,6 +1,5 @@
 function useCKEditor() {
-	// Test comment
-	return { ...{} };
+	return {};
 }
 
 export default useCKEditor;
