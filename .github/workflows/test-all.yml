@@ -1,4 +1,4 @@
-name: Check commits to master
+name: Test browsers
 
 on:
     pull_request:
@@ -9,7 +9,7 @@ jobs:
     # Runs tests for all configured React version and all environments
     test-all:
         runs-on: ubuntu-20.04
-        name: Run full test suite
+        name: Run tests
         strategy:
             matrix:
                 browser: [BrowserStack_Edge, BrowserStack_Safari, Chrome, Firefox, SSR]
