@@ -15,13 +15,11 @@ const semverMinor = require( 'semver/functions/minor' );
  * --browser <name>   Specifies environment to test.
  *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'SSR'. Defaults to: 'Chrome'.
  * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
- * --dry              Runs tests for currently installed version of React without creating temp dir. Use for quick feedback.
  *
  */
 const argv = require( 'minimist' )( process.argv.slice( 2 ) );
 const testedBrowser = argv.browser || 'Chrome';
 const reactVersion = argv.react || 'current';
-const dryRun = argv.dry || false;
 
 const PACKAGE_PATH = resolvePath( __dirname, '..' );
 const TESTS_PATH = resolvePath( PACKAGE_PATH, 'react-tests' );
@@ -34,16 +32,12 @@ try {
 	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
 	console.log( `Running tests for: ${ testedBrowser }` );
 
-	if ( dryRun ) {
-		testVersion( getCurrentReactVersion() );
-	} else {
-		cleanupTestDir();
+	cleanupTestDir();
 
-		getVersionsToTest().forEach( version => {
-			prepareTestDir( version );
-			testVersion( version );
-		} );
-	}
+	getVersionsToTest().forEach( version => {
+		prepareTestDir( version );
+		testVersion( version );
+	} );
 
 	if ( Object.keys( errorLogs ).length === 0 ) {
 		console.log( '--- Done without errors. Have a nice day! ---' );

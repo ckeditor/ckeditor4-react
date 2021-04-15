@@ -12,9 +12,16 @@ const coverageDir = joinPath( basePath, 'coverage' );
 
 module.exports = function( config ) {
 	// (#191)
-	// Field `browsers` is not set in the config. It should be passed from command line.
+	// List of browsers can be overriden from command line. Defaults to Chrome.
+	const browsers = config.browsers.length === 0 ? [ 'Chrome' ] : config.browsers;
+	// (#191)
+	// Allows to apply IE11-specific options.
+	const testIE11 = browsers.some( browser => browser.includes( 'IE11' ) );
+
 	config.set( {
 		basePath,
+
+		browsers,
 
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
@@ -38,7 +45,10 @@ module.exports = function( config ) {
 			module: {
 				rules: [
 					{
-						test: /\.jsx?$/,
+						// (#191)
+						// In case of IE11 all dependencies must be transpiled (which is much slower).
+						// For other environments it's enough to transpile `.jsx` only.
+						test: testIE11 ? /\.jsx?$/ : /\.jsx$/,
 						use: {
 							loader: 'babel-loader',
 							options: {
