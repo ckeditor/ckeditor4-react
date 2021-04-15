@@ -74,7 +74,8 @@ try {
 
 /**
  * Gets list of available React versions from npm.
- * @returns {undefined}
+ *
+ * @returns {string[]}
  */
 function getVersions() {
 	const commandResult = execNpmCommand( 'view react versions --json' );
@@ -85,7 +86,8 @@ function getVersions() {
 
 /**
  * Gets peered version range from `package.json`.
- * @param {*} packageInfo contents of `package.json`
+ *
+ * @param {Object} packageInfo contents of `package.json`
  * @returns {string} peered version / version range
  */
 function getReactVersion( packageInfo ) {
@@ -97,6 +99,7 @@ function getReactVersion( packageInfo ) {
 
 /**
  * Filters versions based on requested range.
+ *
  * @param {string} range version range
  * @param {string[]} versions list of versions
  * @returns {string[]} versions in requested range
@@ -110,6 +113,7 @@ function getVersionsInRange( range, versions ) {
 
 /**
  * Gets latest patches for each minor version.
+ *
  * @param {string[]} versions list of versions
  * @returns {string[]} list of latest patches
  */
@@ -129,6 +133,7 @@ function getLatestPatches( versions ) {
 
 /**
  * Checks if version is latest patch of given list of versions.
+ *
  * @param {number} index current index
  * @param {string[]} array list of versions
  * @returns {boolean} if version is latest patch
@@ -148,6 +153,7 @@ function isLatestPatch( index, array ) {
 
 /**
  * Prepares test dir by copying required files and installing dependencies.
+ *
  * @param {string} version React version to test
  */
 function prepareTestDir( version ) {
@@ -178,6 +184,7 @@ function cleanupTestDir() {
 
 /**
  * Runs tests for requested React version and environment (see `--browser` arg).
+ *
  * @param {string} version React version to test
  */
 function testVersion( version ) {
@@ -205,9 +212,10 @@ function testVersion( version ) {
 
 /**
  * Executes npm command.
+ *
  * @param {string} command command to execute
  * @param {string} cwd dir where to execute command
- * @returns {undefined}
+ * @returns {string|Buffer}
  */
 function execNpmCommand( command, cwd = __dirname ) {
 	const cmd = `npm ${ command }`;
@@ -220,6 +228,7 @@ function execNpmCommand( command, cwd = __dirname ) {
 
 /**
  * Removes directory and its children.
+ *
  * @param {string} path dir path
  * @returns {undefined}
  */
@@ -231,6 +240,7 @@ function rmdirSyncRecursive( path ) {
 
 /**
  * Copies files from source to dest.
+ *
  * @param {string} files list of files
  * @param {string} src source path
  * @param {string} dest destination path
@@ -246,6 +256,7 @@ function copyFiles( files, src, dest ) {
 
 /**
  * Gets list of React versions to test based on `--react` argument.
+ *
  * @returns {string[]} list of versions to be tested
  */
 function getVersionsToTest() {
@@ -261,6 +272,7 @@ function getVersionsToTest() {
 
 /**
  * Gets currently installed version of React.
+ *
  * @returns {string} React version
  */
 function getCurrentReactVersion() {
@@ -269,6 +281,7 @@ function getCurrentReactVersion() {
 
 /**
  * Gets list of all React versions that can be tested.
+ *
  * @returns {string[]} list of versions to test
  */
 function getAllReactVersions() {
