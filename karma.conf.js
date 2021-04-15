@@ -22,10 +22,12 @@ module.exports = function( config ) {
 			// (#185)
 			// Added as dependency here, so that script is preloaded before tests start.
 			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
+			'tests/utils/**/*.js',
 			'tests/browser/**/*.jsx'
 		],
 
 		preprocessors: {
+			'tests/utils/**/*.js': [ 'webpack' ],
 			'tests/**/*.jsx': [ 'webpack', 'sourcemap' ]
 		},
 
@@ -36,11 +38,15 @@ module.exports = function( config ) {
 			module: {
 				rules: [
 					{
-						test: /\.jsx$/,
-						loader: 'babel-loader',
-						query: {
-							compact: false,
-							presets: [ '@babel/preset-react', '@babel/preset-env' ]
+						test: /\.jsx?$/,
+						use: {
+							loader: 'babel-loader',
+							options: {
+								presets: [
+									'@babel/preset-env',
+									'@babel/preset-react'
+								]
+							}
 						}
 					},
 
@@ -48,9 +54,7 @@ module.exports = function( config ) {
 						test: /\.jsx?$/,
 						loader: 'istanbul-instrumenter-loader',
 						include: /src/,
-						exclude: [
-							/node_modules/
-						],
+						exclude: [ /node_modules/ ],
 						query: {
 							esModules: true
 						}
@@ -64,10 +68,7 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: [
-			'mocha',
-			'coverage'
-		],
+		reporters: [ 'mocha', 'coverage' ],
 
 		coverageReporter: {
 			reporters: [
@@ -106,6 +107,12 @@ module.exports = function( config ) {
 				os: 'OS X',
 				os_version: 'Big Sur',
 				browser: 'safari'
+			},
+			BrowserStack_IE11: {
+				base: 'BrowserStack',
+				os: 'Windows',
+				os_version: '10',
+				browser: 'ie'
 			}
 		},
 
