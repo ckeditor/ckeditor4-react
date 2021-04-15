@@ -16,7 +16,7 @@ jobs:
         name: Run tests
         strategy:
             matrix:
-                browser: [BrowserStack_Edge, BrowserStack_Safari, Chrome, Firefox, SSR]
+                browser: [BrowserStack_Edge, BrowserStack_Safari, BrowserStack_IE11, Chrome, Firefox, SSR]
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
