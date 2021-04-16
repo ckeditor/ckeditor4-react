@@ -1,9 +1,10 @@
 /* eslint-env node */
 
+import commonJs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import cleanup from 'rollup-plugin-cleanup';
-import pkg from '../package.json';
+import pkg from './package.json';
 
 const input = 'src/index.ts';
 const external = Object.keys( pkg.peerDependencies || {} );
@@ -14,7 +15,7 @@ const banner =
 */`;
 
 export default [
-	// Creates `umd` build that can be consumed via <script /> tag. It's minified by default.
+	// Creates `umd` build that can be directly consumed via <script /> tag.
 	{
 		input,
 		external,
@@ -29,13 +30,14 @@ export default [
 		},
 		plugins: [
 			typescript(),
+			commonJs(),
 			terserPlugin()
 		]
 	},
 	// Creates `cjs` build that can be further optimized downstream.
 	{
 		input,
-		external,
+		external: external.concat( 'ckeditor4-integrations-common' ),
 		output: {
 			banner,
 			format: 'cjs',
@@ -49,7 +51,7 @@ export default [
 	// Creates `esm` build that can be further optimized downstream.
 	{
 		input,
-		external,
+		external: external.concat( 'ckeditor4-integrations-common' ),
 		output: {
 			banner,
 			format: 'esm',

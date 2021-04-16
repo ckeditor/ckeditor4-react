@@ -5,3 +5,4 @@ dist/
 samples-out
 react-tests/
 *debug.log
+.vscode
