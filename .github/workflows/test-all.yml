@@ -1,13 +1,13 @@
 name: Test browsers
 
 on:
-    pull_request:
-        branches:
-            - master
-            - stable
     push:
         tags:
             - v*
+        branches:
+            - master
+            - stable
+            - major
 
 jobs:
     # Runs tests for all configured React version and all environments
