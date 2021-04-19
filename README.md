@@ -48,6 +48,10 @@ npm install
 npm run test
 ```
 
+The command above should be used to get a quick feedback on passing / failing tests. By default, tests on Chrome will be launched with locally installed version of React.
+
+Run `npm run test:all` to run tests on all supported versions of React. By default, test suite runs on Chrome but `browser` argument can be passed, e.g. `npm run test:all -- --browser Firefox`. See `scripts/react-tester.js` for details.
+
 If you are going to change the source files (ones located in the `src/` directory), remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
 
 ### Running samples
