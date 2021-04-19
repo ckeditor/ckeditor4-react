@@ -15,8 +15,12 @@
 		"@typescript-eslint/no-explicit-any": "off",
 		"no-use-before-define": "off",
 		"@typescript-eslint/no-use-before-define": [
-			"error"
-		]
+			"error",
+			{
+				"functions": false
+			}
+		],
+		"@typescript-eslint/ban-ts-comment": "off"
 	},
 	"env": {
 		"browser": true

@@ -1,15 +1,20 @@
+/**
+* @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+* For licensing, see LICENSE.md.
+*/
+
 import * as React from 'react';
 import useCKEditor from './useCKEditor';
 
-const { useRef, useEffect } = React;
+const { useState, useEffect } = React;
 
-interface Props {
+export interface CKEditorProps {
 	initData?: string;
 }
 
-function CKEditor( { initData }: Props ): JSX.Element {
-	const ref = useRef( null );
-	const { editor, editorState } = useCKEditor( { ref } );
+function CKEditor( { initData }: CKEditorProps ): JSX.Element {
+	const [ element, setElement ] = useState<HTMLDivElement | null>( null );
+	const { editor, editorState } = useCKEditor( { element } );
 
 	useEffect( () => {
 		if ( editor && editorState === 'ready' ) {
@@ -17,7 +22,7 @@ function CKEditor( { initData }: Props ): JSX.Element {
 		}
 	}, [ editor, initData, editorState ] );
 
-	return <div ref={ref} />;
+	return <div ref={setElement} />;
 }
 
 export default CKEditor;
