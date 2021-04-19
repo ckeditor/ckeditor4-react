@@ -18,9 +18,7 @@ function useCKEditor( { ref }: CKEditorArgs ) {
 			.then( ( CKEDITOR: any ) => {
 				const editor = CKEDITOR.replace( ref.current );
 				setEditor( editor );
-				console.log( editor )
 				editor.on( 'instanceReady', () => {
-					console.log('test')
 					setEditorState( 'ready' );
 				} );
 			} )

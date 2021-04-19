@@ -12,11 +12,8 @@ function CKEditor( { initData }: Props ): JSX.Element {
 	const { editor, editorState } = useCKEditor( { ref } );
 
 	useEffect( () => {
-		console.log( 'lolz' );
 		if ( editor && editorState === 'ready' ) {
-			console.log( 'lolz2' );
-			// console.log( editor.getData() );
-			// editor.setData( initData );
+			editor.setData( initData );
 		}
 	}, [ editor, initData, editorState ] );
 
