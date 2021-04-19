@@ -17,6 +17,7 @@ jobs:
         strategy:
             matrix:
                 browser: [BrowserStack_Edge, BrowserStack_Safari, BrowserStack_IE11, Chrome, Firefox, SSR]
+            fail-fast: false
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
