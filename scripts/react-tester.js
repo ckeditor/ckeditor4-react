@@ -13,7 +13,7 @@ const semverMinor = require( 'semver/functions/minor' );
  * Commands:
  *
  * --browser <name>   Specifies environment to test.
- *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'SSR'. Defaults to: 'Chrome'.
+ *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'BrowserStack_IE11', 'SSR'. Defaults to: 'Chrome'.
  * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
  *
  */
