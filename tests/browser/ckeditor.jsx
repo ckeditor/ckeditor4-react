@@ -29,7 +29,6 @@ describe( 'CKEditor Component', () => {
 
 	afterEach( () => {
 		const destroyPromises = [];
-
 		components.forEach( component => {
 			// Already unmounted components throw error on another unmount.
 			try {
@@ -268,11 +267,17 @@ describe( 'CKEditor Component', () => {
 			const component = createEditor();
 
 			return waitForEditor( component ).then( () => {
-				component.unmount();
+				const editor = component.instance().editor;
 
-				component.setProps( {
-					onCustomEvent() {},
-					readOnly: true
+				return new Promise( resolve => {
+					editor.once( 'destroy', () => {
+						component.setProps( {
+							onCustomEvent() {},
+							readOnly: true
+						} );
+						resolve();
+					} );
+					component.unmount();
 				} );
 			} );
 		} );

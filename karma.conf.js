@@ -11,8 +11,17 @@ const basePath = process.cwd();
 const coverageDir = joinPath( basePath, 'coverage' );
 
 module.exports = function( config ) {
+	// (#191)
+	// List of browsers can be overriden from command line. Defaults to Chrome.
+	const browsers = config.browsers.length === 0 ? [ 'Chrome' ] : config.browsers;
+	// (#191)
+	// Allows to apply IE11-specific options.
+	const testIE11 = browsers.some( browser => browser.includes( 'IE11' ) );
+
 	config.set( {
 		basePath,
+
+		browsers,
 
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
@@ -20,10 +29,12 @@ module.exports = function( config ) {
 			// (#185)
 			// Added as dependency here, so that script is preloaded before tests start.
 			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
+			'tests/utils/**/*.js',
 			'tests/browser/**/*.jsx'
 		],
 
 		preprocessors: {
+			'tests/utils/**/*.js': [ 'webpack' ],
 			'tests/**/*.jsx': [ 'webpack', 'sourcemap' ]
 		},
 
@@ -34,11 +45,18 @@ module.exports = function( config ) {
 			module: {
 				rules: [
 					{
-						test: /\.jsx$/,
-						loader: 'babel-loader',
-						query: {
-							compact: false,
-							presets: [ '@babel/preset-react', '@babel/preset-env' ]
+						// (#191)
+						// In case of IE11 all dependencies must be transpiled (which is much slower).
+						// For other environments it's enough to transpile `.jsx` only.
+						test: testIE11 ? /\.jsx?$/ : /\.jsx$/,
+						use: {
+							loader: 'babel-loader',
+							options: {
+								presets: [
+									'@babel/preset-env',
+									'@babel/preset-react'
+								]
+							}
 						}
 					},
 
@@ -46,9 +64,7 @@ module.exports = function( config ) {
 						test: /\.jsx?$/,
 						loader: 'istanbul-instrumenter-loader',
 						include: /src/,
-						exclude: [
-							/node_modules/
-						],
+						exclude: [ /node_modules/ ],
 						query: {
 							esModules: true
 						}
@@ -62,7 +78,7 @@ module.exports = function( config ) {
 			stats: 'minimal'
 		},
 
-		reporters: getReporters(),
+		reporters: [ 'mocha', 'coverage' ],
 
 		coverageReporter: {
 			reporters: [
@@ -89,8 +105,6 @@ module.exports = function( config ) {
 
 		logLevel: 'INFO',
 
-		browsers: getBrowsers(),
-
 		customLaunchers: {
 			BrowserStack_Edge: {
 				base: 'BrowserStack',
@@ -103,21 +117,36 @@ module.exports = function( config ) {
 				os: 'OS X',
 				os_version: 'Big Sur',
 				browser: 'safari'
+			},
+			BrowserStack_IE11: {
+				base: 'BrowserStack',
+				os: 'Windows',
+				os_version: '10',
+				browser: 'ie'
 			}
 		},
 
 		browserStack: {
 			username: process.env.BROWSER_STACK_USERNAME,
 			accessKey: process.env.BROWSER_STACK_ACCESS_KEY,
-			build: getBuildName(),
-			project: 'ckeditor4'
+			build: process.env.BUILD_SLUG,
+			project: 'ckeditor4',
+			video: false,
+			// (#191)
+			// This is an undocumented option of karma-browserstack-launcher. It helps to mitigate rate limiting on BrowserStack end.
+			// https://github.com/mui-org/material-ui/pull/25049
+			pollingTimeout: 10000
 		},
 
 		singleRun: true,
 
 		concurrency: Infinity,
 
-		browserNoActivityTimeout: 0,
+		// (#191)
+		// These settings help to mitigate BrowserStack issues.
+		browserDisconnectTimeout: 3 * 60 * 1000,
+		browserDisconnectTolerance: 1,
+		browserNoActivityTimeout: 3 * 60 * 1000,
 
 		mochaReporter: {
 			showDiff: true
@@ -133,61 +162,3 @@ module.exports = function( config ) {
 		}
 	} );
 };
-
-// Formats name of the build for BrowserStack. It merges a repository name and current timestamp.
-// If env variable `TRAVIS_REPO_SLUG` is not available, the function returns `undefined`.
-//
-// @returns {String|undefined}
-function getBuildName() {
-	const repoSlug = process.env.TRAVIS_REPO_SLUG;
-
-	if ( !repoSlug ) {
-		return;
-	}
-
-	const repositoryName = repoSlug.split( '/' )[ 1 ].replace( /-/g, '_' );
-	const date = new Date().getTime();
-
-	return `${ repositoryName } ${ date }`;
-}
-
-function getBrowsers() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'Chrome',
-			'Firefox',
-			'BrowserStack_Edge',
-			'BrowserStack_Safari'
-		];
-	}
-
-	return [
-		'Chrome',
-		'Firefox'
-	];
-}
-
-function getReporters() {
-	if ( shouldEnableBrowserStack() ) {
-		return [
-			'mocha',
-			'BrowserStack',
-			'coverage',
-		];
-	}
-
-	return [
-		'mocha',
-		'coverage',
-	];
-}
-
-function shouldEnableBrowserStack() {
-	if ( !process.env.BROWSER_STACK_USERNAME || !process.env.BROWSER_STACK_ACCESS_KEY ) {
-		return false;
-	}
-
-	// If the repository slugs are different, the pull request comes from the community (forked repository).
-	// For such builds, BrowserStack will be disabled. Read more: https://github.com/ckeditor/ckeditor5-dev/issues/358.
-	return ( process.env.TRAVIS_EVENT_TYPE !== 'pull_request' || process.env.TRAVIS_PULL_REQUEST_SLUG === process.env.TRAVIS_REPO_SLUG );
-}

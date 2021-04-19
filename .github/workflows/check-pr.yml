@@ -1,0 +1,39 @@
+name: Check PR
+
+on:
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    # Runs linter and tests for a single React version and a default browser
+    test:
+        runs-on: ubuntu-20.04
+        name: Run tests
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 14
+
+            - name: Setup Chrome
+              uses: browser-actions/setup-chrome@latest
+              with:
+                  chrome-version: stable
+
+            # Set variables required for further steps.
+            # CHROME_BIN is required by Karma.
+            - name: Set test variables
+              run: export CHROME_BIN=$(which chrome)
+
+            - name: Install dependencies
+              run: npm install
+
+            # Run tests with the help of Xvfb, since there is no screen output available (required for locally installed browsers).
+            - name: Run tests
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                  run: npm test
