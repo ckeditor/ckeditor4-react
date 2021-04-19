@@ -2,7 +2,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 module.exports = function( config ) {
+	// (#191)
+	// List of browsers can be overriden from command line. Defaults to Chrome.
+	const browsers = config.browsers.length === 0 ? [ 'Chrome' ] : config.browsers;
+	// (#191)
+	// Allows to apply IE11-specific options.
+	const testIE11 = browsers.some( browser => browser.includes( 'IE11' ) );
+
 	config.set( {
+		browsers,
+
 		frameworks: [ 'jasmine' ],
 
 		files: [

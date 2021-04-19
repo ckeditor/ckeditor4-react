@@ -6,3 +6,4 @@ samples-out
 react-tests/
 *debug.log
 .vscode
+local.log

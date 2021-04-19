@@ -15,6 +15,7 @@
 		"lint": "eslint --ext .js,.ts,.tsx src tests",
 		"postversion": "git rm -r --cached dist/ && git commit -m \"Clean after release [ci skip]\" && git push origin && git push origin --tags",
 		"preversion": "npm test",
+		"test:all": "node ./scripts/react-tester.js --react all",
 		"test": "npm run lint && npm test:browser",
 		"test:browser": "karma start",
 		"version": "npm run build && git add -f dist/"
