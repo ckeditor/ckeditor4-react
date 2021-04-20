@@ -18,20 +18,23 @@ try {
 
 			console.log( 'Connected. Now testing...' );
 			Nightwatch.cli( function( argv ) {
-				Nightwatch.CliRunner( argv )
+				/* eslint-disable-next-line */
+				Nightwatch.CliRunner(argv)
 					.setup( null, function() {
 						// Code to stop browserstack local after end of parallel test
-						bsLocal.stop( function() {} );
+						/* eslint-disable-next-line */
+						bsLocal.stop(function () {});
 					} )
 					.runTests( function() {
 						// Code to stop browserstack local after end of single test
-						bsLocal.stop( function() {} );
+						/* eslint-disable-next-line */
+						bsLocal.stop(function () {});
 					} );
 			} );
 		}
 	);
-} catch ( ex ) {
+} catch ( err ) {
 	console.log( 'There was an error while starting the test runner:\n\n' );
-	process.stderr.write( ex.stack + '\n' );
+	process.stderr.write( err.stack + '\n' );
 	process.exit( 2 );
 }

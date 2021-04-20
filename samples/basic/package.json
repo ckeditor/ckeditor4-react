@@ -2,22 +2,22 @@
 	"private": true,
 	"dependencies": {
 		"ckeditor4-react": "latest",
+		"http-server": "^0.12.3",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	},
 	"scripts": {
-		"start": "webpack serve",
-		"test": "node scripts/runner.js -c conf/conf.js"
+		"build": "webpack --mode production",
+		"prod": "http-server",
+		"start": "webpack serve"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.13.15",
 		"@babel/preset-env": "^7.13.15",
 		"@babel/preset-react": "^7.13.13",
 		"babel-loader": "^8.2.2",
-		"browserstack-local": "^1.4.8",
 		"error-overlay-webpack-plugin": "^0.4.2",
 		"html-webpack-plugin": "^5.3.1",
-		"nightwatch": "^1.6.3",
 		"webpack": "^5.33.2",
 		"webpack-cli": "^4.6.0",
 		"webpack-dev-server": "^3.11.2"

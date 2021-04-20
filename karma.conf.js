@@ -14,13 +14,13 @@ module.exports = function( config ) {
 		frameworks: [ 'jasmine' ],
 
 		files: [
-			{ pattern: 'tests/jasmine.js', watched: false },
-			{ pattern: 'tests/unit.test.tsx', watched: false }
+			{ pattern: 'tests/unit/jasmine.js', watched: false },
+			{ pattern: 'tests/unit/tests.tsx', watched: false }
 		],
 
 		preprocessors: {
-			'tests/jasmine.js': [ 'rollup' ],
-			'tests/unit.test.tsx': [ 'rollup' ]
+			'tests/unit/jasmine.js': [ 'rollup' ],
+			'tests/unit/tests.tsx': [ 'rollup' ]
 		},
 
 		reporters: [ 'mocha' ],

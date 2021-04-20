@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks/dom';
 import { createDivRef, findByEditorContent } from './utils';
-import { CKEditor, useCKEditor } from '../src';
+import { CKEditor, useCKEditor } from '../../src';
 
 describe( 'CKEditor4 React', () => {
 	const requestedVersion = process.env.REQUESTED_REACT_VERSION;

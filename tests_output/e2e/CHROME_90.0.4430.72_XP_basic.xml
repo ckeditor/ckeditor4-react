@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="e2e.basic"
+    errors="0" failures="0" hostname="" id="" package="e2e" skipped="0"
+    tests="1" time="3.225" timestamp="">
+  
+    <testcase name="BrowserStack Local Testing" classname="e2e.basic" time="3.225" assertions="2">
+
+    
+
+    
+    </testcase>
+  
+
+  
+
+    
+
+  
+  </testsuite>
+</testsuites>
