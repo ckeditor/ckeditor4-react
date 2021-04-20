@@ -2,6 +2,7 @@
 
 const { execSync } = require( 'child_process' );
 const { mkdirSync, rmdirSync, copyFileSync } = require( 'fs' );
+const shell = require( 'shelljs' );
 const { resolve: resolvePath } = require( 'path' );
 const satisfiesSemver = require( 'semver/functions/satisfies' );
 const semverMinor = require( 'semver/functions/minor' );
@@ -13,7 +14,8 @@ const semverMinor = require( 'semver/functions/minor' );
  * Commands:
  *
  * --browser <name>   Specifies environment to test.
- *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'BrowserStack_IE11', 'SSR'. Defaults to: 'Chrome'.
+ *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'BrowserStack_IE11', 'SSR'.
+ * 					  Defaults to: 'Chrome'.
  * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
  *
  */
@@ -62,7 +64,9 @@ try {
 	}
 } catch ( error ) {
 	console.log( error );
-	console.log( '--- Unexpected error occured during testing - see the log above. ---' );
+	console.log(
+		'--- Unexpected error occured during testing - see the log above. ---'
+	);
 	process.exit( 1 );
 }
 
@@ -100,8 +104,7 @@ function getReactVersion( packageInfo ) {
  */
 function getVersionsInRange( range, versions ) {
 	return versions.filter( version => {
-		// 16.6.2 is broken - https://github.com/facebook/react/issues/14208.
-		return version !== '16.6.2' && satisfiesSemver( version, range );
+		return satisfiesSemver( version, range );
 	} );
 }
 
@@ -120,7 +123,10 @@ function getLatestPatches( versions ) {
 		return acc;
 	}, [] );
 
-	console.log( 'Versions that will be tested (' + latestPatches.length + '):', latestPatches );
+	console.log(
+		'Versions that will be tested (' + latestPatches.length + '):',
+		latestPatches
+	);
 
 	return latestPatches;
 }
@@ -153,25 +159,35 @@ function isLatestPatch( index, array ) {
 function prepareTestDir( version ) {
 	console.log( `--- Preparing package environment for React v${ version } ---` );
 
-	execNpmCommand( `install react@${ version } react-dom@${ version } --legacy-peer-deps`, TESTS_PATH );
+	execNpmCommand(
+		`install react@${ version } react-dom@${ version } --legacy-peer-deps`,
+		TESTS_PATH
+	);
 }
 
 /**
- * Removes test directory and its content, then re-creates empty test dir and copies init files.
+ * Removes temp directory and its content, then re-creates empty test dir and copies init files.
  */
 function cleanupTestDir() {
-	const filesToCopy = [
-		'package.json',
-		'webpack.config.js',
-		'karma.conf.js',
-		'scripts/test-transpiler.js'
-	];
-
 	rmdirSyncRecursive( TESTS_PATH );
 	mkdirSync( TESTS_PATH );
-	mkdirSync( `${ TESTS_PATH }/scripts` );
 
-	copyFiles( filesToCopy, PACKAGE_PATH, TESTS_PATH );
+	const filesToCopy = [
+		'package.json',
+		'package-lock.json',
+		'karma.conf.js',
+		'tsconfig.json',
+		'src',
+		'tests'
+	];
+
+	filesToCopy.forEach( file => {
+		shell.cp(
+			'-R',
+			resolvePath( PACKAGE_PATH, file ),
+			resolvePath( TESTS_PATH, file )
+		);
+	} );
 
 	execNpmCommand( 'install --legacy-peer-deps', TESTS_PATH );
 }
@@ -186,9 +202,14 @@ function testVersion( version ) {
 		console.log( `--- Testing React v${ version } ---` );
 
 		if ( testedBrowser === 'SSR' ) {
-			console.log( execNpmCommand( 'run test:ssr' ) );
+			console.log( execNpmCommand( 'run test:ssr', TESTS_PATH ) );
 		} else {
-			console.log( execNpmCommand( `run test:browser -- --browsers ${ testedBrowser }` ) );
+			console.log(
+				execNpmCommand(
+					`run test:browser -- --browsers ${ testedBrowser }`,
+					TESTS_PATH
+				)
+			);
 		}
 
 		versionsPassed.push( version );
@@ -229,22 +250,6 @@ function execNpmCommand( command, cwd = __dirname ) {
 function rmdirSyncRecursive( path ) {
 	return rmdirSync( path, {
 		recursive: true
-	} );
-}
-
-/**
- * Copies files from source to dest.
- *
- * @param {string} files list of files
- * @param {string} src source path
- * @param {string} dest destination path
- */
-function copyFiles( files, src, dest ) {
-	files.forEach( file => {
-		const srcPath = resolvePath( src, file );
-		const destPath = resolvePath( dest, file );
-
-		copyFileSync( srcPath, destPath );
 	} );
 }
 

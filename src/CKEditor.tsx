@@ -1,7 +1,7 @@
 /**
-* @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
-* For licensing, see LICENSE.md.
-*/
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
 
 import * as React from 'react';
 import useCKEditor from './useCKEditor';

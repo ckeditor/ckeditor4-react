@@ -1,27 +1,24 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
+const typescript = require( '@rollup/plugin-typescript' );
+const nodeResolve = require( '@rollup/plugin-node-resolve' ).nodeResolve;
+const commonJs = require( '@rollup/plugin-commonjs' );
+const polyfillNode = require( 'rollup-plugin-polyfill-node' );
 
 module.exports = function( config ) {
-	// (#191)
-	// List of browsers can be overriden from command line. Defaults to Chrome.
-	const browsers = config.browsers.length === 0 ? [ 'Chrome' ] : config.browsers;
-	// (#191)
-	// Allows to apply IE11-specific options.
-	const testIE11 = browsers.some( browser => browser.includes( 'IE11' ) );
-
 	config.set( {
-		browsers,
+		browsers: [ 'Chrome' ],
 
 		frameworks: [ 'jasmine' ],
 
 		files: [
-			{ pattern: 'tests/setup/*.js', watch: false },
-			{ pattern: 'tests/*.test.*', watch: false }
+			{ pattern: 'tests/extendDom.js', watch: false },
+			{ pattern: 'tests/**.test.*', watch: false }
 		],
 
 		preprocessors: {
-			'tests/setup/*.js': [ 'rollup' ],
-			'tests/*.test.*': [ 'rollup' ]
+			'tests/extendDom.js': [ 'rollup' ],
+			'tests/**.test.*': [ 'rollup' ]
 		},
 
 		reporters: [ 'mocha' ],
@@ -32,12 +29,12 @@ module.exports = function( config ) {
 				name: 'CKEditor4React'
 			},
 			plugins: [
-				require( '@rollup/plugin-typescript' )(),
-				require( '@rollup/plugin-node-resolve' ).nodeResolve( {
+				typescript(),
+				nodeResolve( {
 					preferBuiltins: false
 				} ),
-				require( '@rollup/plugin-commonjs' )(),
-				require( 'rollup-plugin-polyfill-node' )()
+				commonJs(),
+				polyfillNode()
 			],
 			onwarn( warning, rollupWarn ) {
 				if (
