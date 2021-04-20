@@ -1,48 +1,117 @@
 /* eslint-env node */
 
-const shell = require( 'shelljs' );
 const path = require( 'path' );
-const { execCmd, execNpmCmdSync } = require( './utils' );
+const shell = require( 'shelljs' );
+const { runReactTester, execCmd, execNpmCmdSync } = require( './utils' );
 
 const PACKAGE_PATH = path.resolve( __dirname, '..' );
-const TESTS_PATH = path.resolve( PACKAGE_PATH, '.tmp-react-tests' );
+const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-e2e-react-tests' );
 
-try {
-	console.log( '--- Ultimate CKEditor 4 - React Integration Tester - E2E ---' );
+/**
+ *
+ * Usage: `node ./scripts/e2e-runner.js <command>`
+ *
+ * Commands:
+ *
+ * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
+ *
+ */
+const argv = require( 'minimist' )( process.argv.slice( 2 ) );
+const reactVersion = argv.react || 'current';
 
-	shell.mkdir( TESTS_PATH );
-
-	[ 'package.json', 'package-lock.json', 'src', 'webpack.config.js' ].forEach(
-		file => {
-			shell.cp(
-				'-R',
-				path.resolve( 'samples/basic', file ),
-				path.resolve( TESTS_PATH, file )
-			);
-		}
-	);
-
-	execNpmCmdSync( 'link' );
-	execNpmCmdSync( 'install --legacy-peer-deps', TESTS_PATH );
-	execNpmCmdSync( 'link ckeditor4-react', TESTS_PATH );
-	execNpmCmdSync( 'run build', TESTS_PATH );
-	const server = execCmd( 'node ./node_modules/.bin/http-server', TESTS_PATH );
-	const testSuite = execCmd(
-		'node scripts/nightwatchRunner.js -t tests/e2e/basic.js',
-		PACKAGE_PATH
-	);
-
-	testSuite.stdout.on( 'data', console.log );
-	testSuite.stderr.on( 'data', console.error );
-
-	testSuite.on( 'exit', () => {
-		process.kill( server.pid + 1 );
-		process.exit( 0 );
-	} );
-} catch ( error ) {
-	console.log( error );
-	console.log(
-		'--- Unexpected error occured during testing - see the log above. ---'
-	);
+runTests().catch( error => {
+	console.error( error );
 	process.exit( 1 );
+} );
+
+async function runTests() {
+	console.log( '--- Running E2E Tests ---' );
+
+	// Make sure that main package is linked
+	execNpmCmdSync( 'link', PACKAGE_PATH );
+
+	for ( const sampleFile of shell.ls( 'tests/e2e' ) ) {
+		// Remove and re-create tmp folder
+		shell.rm( '-rf', TESTS_TMP_PATH );
+		shell.mkdir( TESTS_TMP_PATH );
+
+		// Install dependencies
+		execNpmCmdSync(
+			'install --legacy-peer-deps --loglevel error',
+			TESTS_TMP_PATH
+		);
+
+		const name = sampleFile.split( '.' )[ 0 ];
+
+		process.env.BROWSERSTACK_BUILD = `E2E Test - ${ name }`;
+
+		// Copy files
+		shell
+			.ls( path.resolve( PACKAGE_PATH, 'samples', name ) )
+			.filter( file => ![ 'node_modules', 'public' ].includes( file ) )
+			.forEach( file => {
+				shell.cp(
+					'-R',
+					path.resolve( PACKAGE_PATH, 'samples', name, file ),
+					path.resolve( TESTS_TMP_PATH, file )
+				);
+			} );
+
+		// Run react tester
+		await runReactTester(
+			reactVersion,
+			executeReactTestSuite( name ),
+			TESTS_TMP_PATH
+		);
+	}
+}
+
+function executeReactTestSuite( sample ) {
+	return function executeReactTestSuiteForSample() {
+		execNpmCmdSync( 'link ckeditor4-react', TESTS_TMP_PATH );
+		execNpmCmdSync( 'run build', TESTS_TMP_PATH );
+
+		const server = execCmd(
+			`node ./node_modules/.bin/http-server ${ path.resolve(
+				TESTS_TMP_PATH,
+				'./public'
+			) }`,
+			PACKAGE_PATH
+		);
+
+		const testSuite = execCmd(
+			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js`,
+			PACKAGE_PATH
+		);
+
+		process.on( 'error', () => {
+			cleanupHttpServer( server );
+		} );
+
+		return new Promise( ( resolve, reject ) => {
+			testSuite.stdout.on( 'data', console.log );
+			testSuite.stderr.on( 'data', console.error );
+			testSuite.on( 'exit', code => {
+				cleanupHttpServer( server );
+
+				if ( code > 0 ) {
+					reject( 'nightwatch-runner script failed' );
+				} else {
+					resolve();
+				}
+			} );
+			testSuite.on( 'error', reject );
+		} );
+	};
+}
+
+function cleanupHttpServer( childProcess ) {
+	try {
+		if ( childProcess ) {
+			process.kill( childProcess.pid + 1 );
+			process.kill( childProcess.pid );
+		}
+	} catch ( err ) {
+		// In case process does not exist anymore.
+	}
 }

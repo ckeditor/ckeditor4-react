@@ -31,7 +31,7 @@ module.exports = function( config ) {
 				name: 'CKEditor4React'
 			},
 			plugins: [
-				progress(),
+				!config.silentLogs && progress(),
 				babel( {
 					babelHelpers: 'bundled',
 					presets: [
@@ -56,7 +56,7 @@ module.exports = function( config ) {
 						)
 					}
 				} )
-			],
+			].filter( Boolean ),
 			onwarn( warning, rollupWarn ) {
 				if (
 					// Reduces noise for circular deps

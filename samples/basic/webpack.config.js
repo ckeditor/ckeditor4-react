@@ -7,11 +7,12 @@ const ErrorOverlayPlugin = require( 'error-overlay-webpack-plugin' );
 module.exports = {
 	entry: './src/index.js',
 	mode: 'development',
-	devtool: 'cheap-module-source-map',
+	devtool: 'source-map',
 	output: {
 		path: path.resolve( __dirname, './public' ),
 		filename: 'bundle.js'
 	},
+	target: [ 'web', 'es5' ],
 	resolve: {
 		extensions: [ '.js', '.jsx' ],
 		alias: {

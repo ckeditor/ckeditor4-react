@@ -94,6 +94,13 @@ function getLatestPatches( versions ) {
 
 		return acc;
 	}, [] );
+
+	console.log();
+	console.log(
+		'Versions that will be tested (' + latestPatches.length + '):',
+		latestPatches
+	);
+
 	return latestPatches;
 }
 
@@ -158,36 +165,39 @@ function getVersionsToTest( version ) {
 	}
 }
 
-function runReactTester( requestedVersion, testCmd, cwd ) {
+async function runReactTester( requestedVersion, testCmd, cwd ) {
+	console.log();
 	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
 
-	getVersionsToTest( requestedVersion ).forEach( version => {
+	for ( const version of getVersionsToTest( requestedVersion ) ) {
+		console.log();
 		console.log(
 			`--- Preparing package environment for React v${ version } ---`
 		);
 
 		execNpmCmdSync(
-			`install react@${ version } react-dom@${ version } --legacy-peer-deps`,
+			`install react@${ version } react-dom@${ version } --legacy-peer-deps --loglevel error`,
 			cwd
 		);
 
 		try {
+			console.log();
 			console.log( `--- Testing React v${ version } ---` );
 
 			process.env.REQUESTED_REACT_VERSION = version;
 
-			execNpmCmdSync( testCmd, cwd );
+			await testCmd();
 		} catch ( error ) {
 			console.error();
 			console.error(
 				`--- Errors occured during testing version ${ version } ---`
 			);
-			console.error();
 
 			throw error;
 		}
-	} );
+	}
 
+	console.log();
 	console.log( '--- Done without errors. Have a nice day! ---' );
 }
 
@@ -195,11 +205,5 @@ module.exports = {
 	execCmd,
 	execCmdSync,
 	execNpmCmdSync,
-	getAllReactVersions,
-	getCurrentReactVersion,
-	getLatestPatches,
-	getPeeredReactVersion,
-	getReactVersionsFromNpm,
-	isLatestPatch,
 	runReactTester
 };

@@ -1,27 +1,54 @@
 /* eslint-env node */
 
-const nightwatchConfig = {
-	src_folders: [ 'tests' ],
+const bsUser = process.env.BROWSERSTACK_USERNAME;
+const bsKey = process.env.BROWSERSTACK_ACCESS_KEY;
+const bsBrowser = process.env.BROWSERSTACK_BROWSER;
+const bsBuild = process.env.BROWSERSTACK_BUILD;
 
+const browsers = {
+	chrome: {
+		os: 'Windows',
+		os_version: '10'
+	},
+	edge: {
+		os: 'Windows',
+		os_version: '10'
+	},
+	firefox: {
+		os: 'Windows',
+		os_version: '10'
+	},
+	ie: {
+		os: 'Windows',
+		os_version: '10'
+	},
+	safari: {
+		os: 'OS X',
+		os_version: 'Catalina'
+	}
+};
+
+const nightwatchConfig = {
 	selenium: {
 		start_process: false,
 		host: 'hub-cloud.browserstack.com',
 		port: 443
 	},
 
+	output_folder: '.tmp-e2e-output',
+
 	test_settings: {
 		default: {
 			desiredCapabilities: {
-				build: 'browserstack-build-1',
-				'browserstack.user':
-					process.env.BROWSERSTACK_USERNAME ||
-					'BROWSERSTACK_USERNAME',
-				'browserstack.key':
-					process.env.BROWSERSTACK_ACCESS_KEY ||
-					'BROWSERSTACK_ACCESS_KEY',
+				build: bsBuild,
+				'browserstack.user': bsUser,
+				'browserstack.key': bsKey,
 				'browserstack.debug': true,
 				'browserstack.local': true,
-				browser: 'chrome'
+				'browserstack.console': 'errors',
+				browser: bsBrowser,
+				version: 'latest',
+				...browsers[ bsBrowser ]
 			}
 		}
 	}

@@ -4,7 +4,7 @@ import { CKEditor } from 'ckeditor4-react';
 function App() {
 	return (
 		<div>
-			<CKEditor initData="Hello!" />
+			<CKEditor initData="Hello world!" />
 		</div>
 	);
 }
