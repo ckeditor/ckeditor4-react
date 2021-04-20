@@ -1,9 +1,11 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const typescript = require( '@rollup/plugin-typescript' );
+const babel = require( '@rollup/plugin-babel' ).babel;
 const nodeResolve = require( '@rollup/plugin-node-resolve' ).nodeResolve;
+const replace = require( '@rollup/plugin-replace' );
 const commonJs = require( '@rollup/plugin-commonjs' );
 const polyfillNode = require( 'rollup-plugin-polyfill-node' );
+const progress = require( 'rollup-plugin-progress' );
 
 module.exports = function( config ) {
 	config.set( {
@@ -12,13 +14,13 @@ module.exports = function( config ) {
 		frameworks: [ 'jasmine' ],
 
 		files: [
-			{ pattern: 'tests/extendDom.js', watch: false },
-			{ pattern: 'tests/**.test.*', watch: false }
+			{ pattern: 'tests/jasmine.js', watched: false },
+			{ pattern: 'tests/unit.test.tsx', watched: false }
 		],
 
 		preprocessors: {
-			'tests/extendDom.js': [ 'rollup' ],
-			'tests/**.test.*': [ 'rollup' ]
+			'tests/jasmine.js': [ 'rollup' ],
+			'tests/unit.test.tsx': [ 'rollup' ]
 		},
 
 		reporters: [ 'mocha' ],
@@ -29,12 +31,31 @@ module.exports = function( config ) {
 				name: 'CKEditor4React'
 			},
 			plugins: [
-				typescript(),
+				progress(),
+				babel( {
+					babelHelpers: 'bundled',
+					presets: [
+						'@babel/preset-env',
+						'@babel/preset-typescript',
+						'@babel/preset-react'
+					],
+					extensions: [ '.ts', '.tsx', '.js' ],
+					exclude: 'node_modules/**'
+				} ),
 				nodeResolve( {
-					preferBuiltins: false
+					preferBuiltins: false,
+					extensions: [ '.ts', '.tsx', '.js' ]
 				} ),
 				commonJs(),
-				polyfillNode()
+				polyfillNode(),
+				replace( {
+					preventAssignment: true,
+					values: {
+						'process.env.REQUESTED_REACT_VERSION': JSON.stringify(
+							process.env.REQUESTED_REACT_VERSION
+						)
+					}
+				} )
 			],
 			onwarn( warning, rollupWarn ) {
 				if (
@@ -48,8 +69,6 @@ module.exports = function( config ) {
 					rollupWarn( warning );
 				}
 			}
-		},
-
-		singleRun: true
+		}
 	} );
 };

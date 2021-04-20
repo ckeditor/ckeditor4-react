@@ -1,11 +1,12 @@
 /* eslint-env node */
 
 const { execSync } = require( 'child_process' );
-const { mkdirSync, rmdirSync, copyFileSync } = require( 'fs' );
+const { mkdirSync, rmdirSync } = require( 'fs' );
 const shell = require( 'shelljs' );
 const { resolve: resolvePath } = require( 'path' );
 const satisfiesSemver = require( 'semver/functions/satisfies' );
 const semverMinor = require( 'semver/functions/minor' );
+const semverGt = require( 'semver/functions/gt' );
 
 /**
  *
@@ -104,7 +105,9 @@ function getReactVersion( packageInfo ) {
  */
 function getVersionsInRange( range, versions ) {
 	return versions.filter( version => {
-		return satisfiesSemver( version, range );
+		// Version 16.8.6 does not support async `act` test helper.
+		// https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
+		return semverGt( version, '16.8.6' ) && satisfiesSemver( version, range );
 	} );
 }
 
@@ -198,6 +201,8 @@ function cleanupTestDir() {
  * @param {string} version React version to test
  */
 function testVersion( version ) {
+	process.env.REQUESTED_REACT_VERSION = version;
+
 	try {
 		console.log( `--- Testing React v${ version } ---` );
 
