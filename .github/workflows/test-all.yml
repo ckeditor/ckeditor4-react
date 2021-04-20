@@ -1,6 +1,11 @@
-name: Test browsers
+name: Test all
 
 on:
+    pull_request:
+        branches:
+            - master
+            - stable
+            - major
     push:
         tags:
             - v*
@@ -10,14 +15,10 @@ on:
             - major
 
 jobs:
-    # Runs tests for all configured React version and all environments
-    test-all:
+    # Runs unit tests for all configured React version
+    test-units:
         runs-on: ubuntu-20.04
-        name: Run tests
-        strategy:
-            matrix:
-                browser: [BrowserStack_Edge, BrowserStack_Safari, BrowserStack_IE11, Chrome, Firefox, SSR]
-            fail-fast: false
+        name: Run unit tests
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -33,19 +34,43 @@ jobs:
               with:
                   chrome-version: stable
 
-            - name: Setup Firefox
-              if: matrix.browser == 'Firefox'
-              uses: browser-actions/setup-firefox@latest
-              with:
-                  firefox-version: latest
-
             # Set variables required for further steps.
-            # CHROME_BIN and FIREFOX_BIN are required by Karma.
-            # BUILD_SLUG corresponds to a BrowserStack job name. It's displayed as combination of repo name and short SHA.
+            # CHROME_BIN is required by Karma.
             - name: Set test variables
               run: |
                   export CHROME_BIN=$(which chrome);
-                  export FIREFOX_BIN=$(which firefox);
+
+            - name: Install dependencies
+              run: npm install
+
+            # Run tests with the help of Xvfb, since there is no screen output available (required for locally installed browsers).
+            - name: Run tests
+              uses: GabrielBB/xvfb-action@v1
+              with:
+                  run: npm run test:all:units
+
+    # Runs E2E tests for all configured React version and all environments
+    test-e2e:
+        runs-on: ubuntu-20.04
+        name: Run E2E tests
+        strategy:
+            matrix:
+                browser: [chrome, firefox, ie, edge, safari]
+            fail-fast: false
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup node
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 14
+
+            # Set variables required for further steps.
+            # BUILD_SLUG is a combination of repo name and short SHA.
+            - name: Set test variables
+              run: |
+                  export CHROME_BIN=$(which chrome);
                   echo "BUILD_SLUG=$(echo $GITHUB_REPOSITORY | cut -d '/' -f2) $(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV;
 
             - name: Install dependencies
@@ -57,5 +82,7 @@ jobs:
               env:
                   BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
                   BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
+                  BROWSER_STACK_BUILD_NAME: ${{ env.BUILD_SLUG }}
+                  BROWSER_STACK_BROWSER: ${{ matrix.browser }}
               with:
-                  run: npm run test:all -- --browser ${{ matrix.browser }}
+                  run: npm run test:all:e2e -- --browser ${{ matrix.browser }}

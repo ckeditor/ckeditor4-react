@@ -1,27 +1,27 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-module.exports = function( config ) {
-	// (#191)
-	// List of browsers can be overriden from command line. Defaults to Chrome.
-	const browsers = config.browsers.length === 0 ? [ 'Chrome' ] : config.browsers;
-	// (#191)
-	// Allows to apply IE11-specific options.
-	const testIE11 = browsers.some( browser => browser.includes( 'IE11' ) );
+const babel = require( '@rollup/plugin-babel' ).babel;
+const nodeResolve = require( '@rollup/plugin-node-resolve' ).nodeResolve;
+const replace = require( '@rollup/plugin-replace' );
+const commonJs = require( '@rollup/plugin-commonjs' );
+const polyfillNode = require( 'rollup-plugin-polyfill-node' );
+const progress = require( 'rollup-plugin-progress' );
 
+module.exports = function( config ) {
 	config.set( {
-		browsers,
+		browsers: [ 'Chrome' ],
 
 		frameworks: [ 'jasmine' ],
 
 		files: [
-			{ pattern: 'tests/setup/*.js', watch: false },
-			{ pattern: 'tests/*.test.*', watch: false }
+			{ pattern: 'tests/unit/jasmine.js', watched: false },
+			{ pattern: 'tests/unit/tests.tsx', watched: false }
 		],
 
 		preprocessors: {
-			'tests/setup/*.js': [ 'rollup' ],
-			'tests/*.test.*': [ 'rollup' ]
+			'tests/unit/jasmine.js': [ 'rollup' ],
+			'tests/unit/tests.tsx': [ 'rollup' ]
 		},
 
 		reporters: [ 'mocha' ],
@@ -32,13 +32,32 @@ module.exports = function( config ) {
 				name: 'CKEditor4React'
 			},
 			plugins: [
-				require( '@rollup/plugin-typescript' )(),
-				require( '@rollup/plugin-node-resolve' ).nodeResolve( {
-					preferBuiltins: false
+				!config.silentLogs && progress(),
+				babel( {
+					babelHelpers: 'bundled',
+					presets: [
+						'@babel/preset-env',
+						'@babel/preset-typescript',
+						'@babel/preset-react'
+					],
+					extensions: [ '.ts', '.tsx', '.js' ],
+					exclude: 'node_modules/**'
 				} ),
-				require( '@rollup/plugin-commonjs' )(),
-				require( 'rollup-plugin-polyfill-node' )()
-			],
+				nodeResolve( {
+					preferBuiltins: false,
+					extensions: [ '.ts', '.tsx', '.js' ]
+				} ),
+				commonJs(),
+				polyfillNode(),
+				replace( {
+					preventAssignment: true,
+					values: {
+						'process.env.REQUESTED_REACT_VERSION': JSON.stringify(
+							process.env.REQUESTED_REACT_VERSION
+						)
+					}
+				} )
+			].filter( Boolean ),
 			onwarn( warning, rollupWarn ) {
 				if (
 					// Reduces noise for circular deps
@@ -51,8 +70,6 @@ module.exports = function( config ) {
 					rollupWarn( warning );
 				}
 			}
-		},
-
-		singleRun: true
+		}
 	} );
 };

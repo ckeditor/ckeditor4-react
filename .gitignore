@@ -7,3 +7,5 @@ react-tests/
 *debug.log
 .vscode
 local.log
+public
+.tmp*
