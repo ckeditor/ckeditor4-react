@@ -1,13 +1,53 @@
 /* eslint-env node */
+
 const { exec, execSync } = require( 'child_process' );
+const { red, blue, green, yellow, magenta } = require( 'chalk' );
 const { satisfies, minor, gt } = require( 'semver' );
+
+/**
+ * Logging utils.
+ */
+const log = {
+	error: msg => console.log( red( msg ) ),
+	info: msg => console.log( blue( msg ) ),
+	success: msg => console.log( green( msg ) ),
+	warn: msg => console.log( yellow( msg ) ),
+	paragraph: msg => {
+		console.log();
+		console.log( blue.underline( msg ) );
+		console.log();
+	},
+	header: msg => {
+		console.log( blue.bold( msg ) );
+		console.log(
+			magenta(
+				Array.from( { length: msg.length } )
+					.map( () => '=' )
+					.join( '' )
+			)
+		);
+		console.log();
+	}
+};
+
+/**
+ * Waits for x ms. Promisified version of `setTimeout`.
+ *
+ * @param {number} time time to wait in ms
+ * @returns {Promise}
+ */
+function waitFor( time ) {
+	return new Promise( resolve => {
+		setTimeout( resolve, time );
+	} );
+}
 
 /**
  * Executes child process synchronously.
  *
  * @param {string} command command to execute
  * @param {string} cwd dir where to execute command
- * @returns {string|Buffer}
+ * @returns {string|Buffer} command output
  */
 function execCmdSync( command, cwd = __dirname ) {
 	return execSync( command, {
@@ -21,7 +61,7 @@ function execCmdSync( command, cwd = __dirname ) {
  *
  * @param {string} command command to execute
  * @param {string} cwd dir where to execute command
- * @returns {string|Buffer}
+ * @returns {string|Buffer} command output
  */
 function execCmd( command, cwd = __dirname ) {
 	return exec( command, {
@@ -31,23 +71,12 @@ function execCmd( command, cwd = __dirname ) {
 }
 
 /**
- * Executes npm command.
- *
- * @param {string} command command to execute
- * @param {string} cwd dir where to execute command
- * @returns {string|Buffer}
- */
-function execNpmCmdSync( command, cwd = __dirname ) {
-	return execCmdSync( `npm ${ command }`, cwd );
-}
-
-/**
  * Gets list of available React versions from npm.
  *
- * @returns {string[]}
+ * @returns {string[]} available React versions
  */
 function getReactVersionsFromNpm() {
-	const commandResult = execNpmCmdSync( 'view react versions --json' );
+	const commandResult = execCmdSync( 'npm view react versions --json' );
 	const versions = JSON.parse( commandResult );
 	return versions;
 }
@@ -59,10 +88,7 @@ function getReactVersionsFromNpm() {
  * @returns {string} peered version / version range
  */
 function getPeeredReactVersion( packageInfo ) {
-	const peerDependencies = packageInfo.peerDependencies;
-	const react = peerDependencies.react;
-
-	return react;
+	return packageInfo.peerDependencies.react;
 }
 
 /**
@@ -87,32 +113,23 @@ function getReactVersionsInRange( range, versions ) {
  * @returns {string[]} list of latest patches
  */
 function getLatestPatches( versions ) {
-	const latestPatches = versions.reduce( ( acc, version, index, array ) => {
+	return versions.reduce( ( acc, version, index, array ) => {
 		if ( isLatestPatch( index, array ) ) {
 			acc.push( version );
 		}
 
 		return acc;
 	}, [] );
-
-	console.log();
-	console.log(
-		'Versions that will be tested (' + latestPatches.length + '):',
-		latestPatches
-	);
-
-	return latestPatches;
 }
 
 /**
- * Checks if version is latest patch of given list of versions.
+ * Checks if version is latest patch in a given list of versions.
  *
  * @param {number} index current index
  * @param {string[]} array list of versions
  * @returns {boolean} if version is latest patch
  */
 function isLatestPatch( index, array ) {
-	// Skip checking the last array element.
 	if ( array.length == index + 1 ) {
 		return true;
 	}
@@ -165,45 +182,39 @@ function getVersionsToTest( version ) {
 	}
 }
 
-async function runReactTester( requestedVersion, testCmd, cwd ) {
-	console.log();
-	console.log( '--- Ultimate CKEditor 4 - React Integration Tester ---' );
+/**
+ * Gets list of React versions to test, then sequentially installs requested versions in a given path.
+ * Custom async callback will be invoked after each installation.
+ *
+ * @param {string} requestedVersion requested version: `all`, `current`, or fixed version
+ * @param {string} cwd path in which to install new version of React
+ * @param {function} cb async callback to execute after installation of new React version
+ */
+async function runReactTester( requestedVersion, cwd, cb ) {
+	const versionsToTest = getVersionsToTest( requestedVersion );
 
-	for ( const version of getVersionsToTest( requestedVersion ) ) {
-		console.log();
-		console.log(
-			`--- Preparing package environment for React v${ version } ---`
-		);
+	log.paragraph( 'Running React tester' );
+	log.info( 'Versions that will be tested (' + versionsToTest.length + '):' );
+	log.info( JSON.stringify( versionsToTest ) );
 
-		execNpmCmdSync(
-			`install react@${ version } react-dom@${ version } --legacy-peer-deps --loglevel error`,
+	for ( const version of versionsToTest ) {
+		log.paragraph( `Testing React v${ version }` );
+		log.info( 'Preparing package environment...' );
+		execCmdSync(
+			`npm install react@${ version } react-dom@${ version } --legacy-peer-deps --loglevel error`,
 			cwd
 		);
 
-		try {
-			console.log();
-			console.log( `--- Testing React v${ version } ---` );
+		process.env.REQUESTED_REACT_VERSION = version;
 
-			process.env.REQUESTED_REACT_VERSION = version;
-
-			await testCmd();
-		} catch ( error ) {
-			console.error();
-			console.error(
-				`--- Errors occured during testing version ${ version } ---`
-			);
-
-			throw error;
-		}
+		await cb( version );
 	}
-
-	console.log();
-	console.log( '--- Done without errors. Have a nice day! ---' );
 }
 
 module.exports = {
 	execCmd,
 	execCmdSync,
-	execNpmCmdSync,
-	runReactTester
+	runReactTester,
+	waitFor,
+	log
 };

@@ -20,7 +20,7 @@
 		"test:all:e2e": "node ./scripts/e2e-runner.js --react all",
 		"test:all:units": "node ./scripts/units-runner.js --react all",
 		"test:browser": "karma start --single-run",
-		"test": "npm run lint && npm run types:check && npm run test:browser",
+		"test": "npm run lint && npm run types:check && npm run test:browser -- --silent-build-logs=true",
 		"types:emit": "tsc src/index.ts --jsx react --emitDeclarationOnly --declaration --declarationDir dist",
 		"types:check": "tsc --noEmit",
 		"version": "npm run build && git add -f dist/"
@@ -69,6 +69,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.22.0",
 		"@typescript-eslint/parser": "^4.22.0",
 		"browserstack-local": "^1.4.8",
+		"chalk": "^4.1.1",
 		"ckeditor4": "^4.16.0",
 		"eslint": "^7.21.0",
 		"eslint-config-ckeditor5": "^3.1.0",

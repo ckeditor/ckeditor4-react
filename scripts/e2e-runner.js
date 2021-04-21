@@ -2,122 +2,153 @@
 
 const path = require( 'path' );
 const shell = require( 'shelljs' );
-const { runReactTester, execCmd, execNpmCmdSync } = require( './utils' );
+const {
+	execCmd,
+	execCmdSync,
+	log,
+	runReactTester,
+	waitFor
+} = require( './utils' );
 
 const PACKAGE_PATH = path.resolve( __dirname, '..' );
 const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-e2e-react-tests' );
 
 /**
- *
- * Usage: `node ./scripts/e2e-runner.js <command>`
- *
- * Commands:
- *
- * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
- *
+ * Runs E2E tests.
  */
-const argv = require( 'minimist' )( process.argv.slice( 2 ) );
-const reactVersion = argv.react || 'current';
+( async function() {
+	/**
+	 *
+	 * Usage: `node ./scripts/e2e-runner.js <command>`
+	 *
+	 * Commands:
+	 *
+	 * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
+	 * --sample <sample>  Specifies sample to test. By default tests all samples.
+	 *
+	 */
+	const argv = require( 'minimist' )( process.argv.slice( 2 ) );
+	const reactVersion = argv.react || 'current';
+	const requestedSample = argv.sample;
 
-runTests().catch( error => {
-	console.error( error );
-	process.exit( 1 );
-} );
+	try {
+		log.header( 'Running E2E Tests...' );
 
-async function runTests() {
-	console.log( '--- Running E2E Tests ---' );
+		log.info( 'Building library package...' );
+		execCmdSync( 'npm run build', PACKAGE_PATH );
 
-	// Make sure that main package is linked
-	execNpmCmdSync( 'link', PACKAGE_PATH );
+		log.info( 'Linking library...' );
+		execCmdSync( 'npm link', PACKAGE_PATH );
 
-	for ( const sampleFile of shell.ls( 'tests/e2e' ) ) {
-		const name = sampleFile.split( '.' )[ 0 ];
+		log.paragraph( 'Starting tests...' );
+		await runTests( reactVersion, requestedSample );
 
-		console.log();
-		console.log(
-			`--- Preparing package environment for sample: ${ name } ---`
-		);
+		log.success( 'Successfully completed all tests. Have a nice day!' );
+	} catch ( error ) {
+		log.error( 'Could not complete E2E tests!' );
+		console.error( error );
+		process.exitCode = 1;
+	}
+}() );
 
-		// Remove and re-create tmp folder
+/**
+ * Iterates over all E2E test suites, prepares environment for each of them, runs tests on requested React versions.
+ *
+ * @param {string} reactVersion React version to test. One of `all`, `current` or fixed version.
+ */
+async function runTests( reactVersion, requestedSample ) {
+	const samples = shell.ls( 'tests/e2e' );
+	const filteredSamples = requestedSample ?
+		samples.filter( file => file.split( '.' )[ 0 ] === requestedSample ) :
+		samples;
+
+	for ( const file of filteredSamples ) {
+		const sample = file.split( '.' )[ 0 ];
+
+		log.info( `Preparing package environment for tests/e2e/${ file }...` );
 		shell.rm( '-rf', TESTS_TMP_PATH );
 		shell.mkdir( TESTS_TMP_PATH );
-
-		// Copy files
 		shell
-			.ls( path.resolve( PACKAGE_PATH, 'samples', name ) )
+			.ls( path.resolve( PACKAGE_PATH, 'samples', sample ) )
 			.filter( file => ![ 'node_modules', 'public' ].includes( file ) )
 			.forEach( file => {
 				shell.cp(
 					'-R',
-					path.resolve( PACKAGE_PATH, 'samples', name, file ),
+					path.resolve( PACKAGE_PATH, 'samples', sample, file ),
 					path.resolve( TESTS_TMP_PATH, file )
 				);
 			} );
 
-		// Install dependencies
-		execNpmCmdSync(
-			'install --legacy-peer-deps --loglevel error',
+		log.info( 'Installing dependencies...' );
+		execCmdSync(
+			'npm install --legacy-peer-deps --loglevel error',
 			TESTS_TMP_PATH
 		);
 
-		console.log();
-		console.log( `--- Running tests for sample: ${ name } ---` );
-
-		// Run react tester
 		await runReactTester(
 			reactVersion,
-			executeReactTestSuite( name ),
-			TESTS_TMP_PATH
+			TESTS_TMP_PATH,
+			executeReactTestSuite( sample )
 		);
 	}
 }
 
+/**
+ * Prepares async function for React tester.
+ *
+ * @param {string} sample sample to test
+ * @returns {function} async callback
+ */
 function executeReactTestSuite( sample ) {
-	return function executeReactTestSuiteForSample() {
-		execNpmCmdSync( 'link ckeditor4-react', TESTS_TMP_PATH );
-		execNpmCmdSync( 'run build', TESTS_TMP_PATH );
+	return async function executeReactTestSuiteForSample() {
+		log.info( 'Linking parent package...' );
+		execCmdSync( 'npm link ckeditor4-react', TESTS_TMP_PATH );
 
-		const server = execCmd(
-			'node ./node_modules/.bin/http-server',
-			TESTS_TMP_PATH
-		);
+		log.info( 'Building sample...' );
+		execCmdSync( 'npm run build', TESTS_TMP_PATH );
 
-		const testSuite = execCmd(
-			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js`,
-			PACKAGE_PATH
-		);
+		let tries = 3;
 
-		server.stdout.on( 'data', console.log );
-		server.stderr.on( 'data', console.error );
-
-		process.on( 'error', () => {
-			cleanupHttpServer( server );
-		} );
-
-		return new Promise( ( resolve, reject ) => {
-			testSuite.stdout.on( 'data', console.log );
-			testSuite.stderr.on( 'data', console.error );
-			testSuite.on( 'exit', code => {
-				cleanupHttpServer( server );
-
-				if ( code > 0 ) {
-					reject( 'nightwatch-runner script failed' );
+		while ( tries-- ) {
+			try {
+				log.info( `Running Nightwatch tests for sample: ${ sample }...` );
+				await runNightwatchTests( sample );
+				break;
+			} catch ( error ) {
+				if ( tries ) {
+					log.error( `Error occurred, retrying... Tries left: ${ tries }` );
+					await waitFor( 5000 );
 				} else {
-					resolve();
+					throw error;
 				}
-			} );
-			testSuite.on( 'error', reject );
-		} );
+			}
+		}
 	};
 }
 
-function cleanupHttpServer( childProcess ) {
-	try {
-		if ( childProcess ) {
-			process.kill( childProcess.pid + 1 );
-			process.kill( childProcess.pid );
-		}
-	} catch ( err ) {
-		// In case process does not exist anymore.
-	}
+/**
+ * Initiates Nightwatch tests by running nightwatch-runner script.
+ *
+ * @param {string} sample sample to test
+ * @returns {Promise} async callback
+ */
+function runNightwatchTests( sample ) {
+	const assets = path.resolve( TESTS_TMP_PATH, './public' );
+	const testSuite = execCmd(
+		`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-folder-path ${ assets } --test-sample ${ sample }`,
+		PACKAGE_PATH
+	);
+
+	return new Promise( ( resolve, reject ) => {
+		testSuite.stdout.on( 'data', log.info );
+		testSuite.stderr.on( 'data', log.error );
+
+		testSuite.on( 'exit', code => {
+			if ( code > 0 ) {
+				reject( 'nightwatch-runner script failed' );
+			} else {
+				resolve();
+			}
+		} );
+	} );
 }

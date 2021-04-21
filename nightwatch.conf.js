@@ -1,9 +1,15 @@
 /* eslint-env node */
 
+// The following environment variables must be set before running `e2e-runner`.
 const bsUser = process.env.BROWSER_STACK_USERNAME;
 const bsKey = process.env.BROWSER_STACK_ACCESS_KEY;
 const bsBrowser = process.env.BROWSER_STACK_BROWSER;
+
+// The following environment variables should be set before running `e2e-runner` but are optional.
 const bsBuildName = process.env.BROWSER_STACK_BUILD_NAME;
+
+// The following variables will be set via `e2e-runner` script.
+const bsLocalIdentifier = process.env.BROWSER_STACK_LOCAL_IDENTIFIER;
 
 const browsers = {
 	chrome: {
@@ -45,7 +51,7 @@ const nightwatchConfig = {
 				'browserstack.key': bsKey,
 				'browserstack.debug': true,
 				'browserstack.local': true,
-				'browserstack.console': 'errors',
+				'browserstack.localIdentifier': bsLocalIdentifier,
 				browser: bsBrowser,
 				version: 'latest',
 				...browsers[ bsBrowser ]

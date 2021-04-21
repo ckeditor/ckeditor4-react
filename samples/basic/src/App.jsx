@@ -3,9 +3,10 @@ import { CKEditor } from 'ckeditor4-react';
 
 function App() {
 	return (
-		<div>
+		<section>
+			<div title="React version">{`Running React v${ React.version }`}</div>
 			<CKEditor initData="Hello world!" />
-		</div>
+		</section>
 	);
 }
 

@@ -3,7 +3,7 @@ name: Check PR
 on:
     pull_request:
         branches:
-            - master
+            - major
 
 jobs:
     # Runs linter and tests for a single React version and a default browser

@@ -15,6 +15,7 @@ module.exports = function( config ) {
 		frameworks: [ 'jasmine' ],
 
 		files: [
+			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
 			{ pattern: 'tests/unit/jasmine.js', watched: false },
 			{ pattern: 'tests/unit/tests.tsx', watched: false }
 		],
@@ -32,7 +33,7 @@ module.exports = function( config ) {
 				name: 'CKEditor4React'
 			},
 			plugins: [
-				!config.silentLogs && progress(),
+				!config.silentBuildLogs && progress(),
 				babel( {
 					babelHelpers: 'bundled',
 					presets: [

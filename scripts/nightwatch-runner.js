@@ -1,40 +1,99 @@
 /* eslint-env node */
 
 const Nightwatch = require( 'nightwatch' );
-const browserstack = require( 'browserstack-local' );
-let bsLocal;
+const { Local } = require( 'browserstack-local' );
+const { log } = require( './utils' );
 
-try {
-	process.mainModule.filename = './node_modules/nightwatch/bin/nightwatch';
-	// Code to start browserstack local before start of test
-	console.log( 'Connecting local' );
-	Nightwatch.bsLocal = bsLocal = new browserstack.Local();
-	bsLocal.start(
-		{ key: process.env.BROWSER_STACK_ACCESS_KEY },
-		function( error ) {
-			if ( error ) {
-				throw error;
+const bsLocal = new Local();
+Nightwatch.bsLocal = bsLocal;
+
+// The following environment variables must be set before running `e2e-runner`.
+const bsUser = process.env.BROWSER_STACK_USERNAME;
+const bsKey = process.env.BROWSER_STACK_ACCESS_KEY;
+
+/**
+ * Starts BrowserStack Local, then runs Nightwatch. Closes BS Local afterwards.
+ */
+( async function() {
+	const argv = require( 'minimist' )( process.argv.slice( 2 ) );
+	const bsFolderPath = argv[ 'bs-folder-path' ];
+	const testSample = argv[ 'test-sample' ];
+
+	try {
+		log.paragraph( 'Connecting to BrowserStack...' );
+		await startConnection( bsFolderPath );
+		await runNightwatchCli( testSample );
+	} catch ( error ) {
+		log.error( 'An error occurred within Nightwatch runner!' );
+		console.error( error );
+		process.exitCode = 1;
+	}
+}() );
+
+/**
+ * Initializes connection via BrowserStack Local.
+ *
+ * @param {string} bsFolderPath absolute path to tested static assets
+ * @returns {Promise} promise
+ */
+function startConnection( bsFolderPath ) {
+	return new Promise( ( resolve, reject ) => {
+		/**
+		 * !!! Important !!!
+		 *
+		 * Set random string as identifier for BrowserStack Local session, especially if there are sessions which are run in parallel.
+		 *
+		 */
+		const identifier = Math.random()
+			.toString( 36 )
+			.replace( /[^a-z]+/g, '' )
+			.substr( 0, 5 );
+
+		process.env.BROWSER_STACK_LOCAL_IDENTIFIER = identifier;
+
+		bsLocal.start(
+			{
+				key: bsKey,
+				folder: bsFolderPath,
+				localIdentifier: identifier
+			},
+			error => {
+				if ( error ) {
+					reject( error );
+				} else {
+					resolve();
+				}
 			}
+		);
+	} );
+}
 
-			console.log( 'Connected. Now testing...' );
-			Nightwatch.cli( function( argv ) {
-				/* eslint-disable-next-line */
-				Nightwatch.CliRunner(argv)
-					.setup( null, function() {
-						// Code to stop browserstack local after end of parallel test
-						/* eslint-disable-next-line */
-						bsLocal.stop(function () {});
-					} )
-					.runTests( function() {
-						// Code to stop browserstack local after end of single test
-						/* eslint-disable-next-line */
-						bsLocal.stop(function () {});
+/**
+ * Runs Nightwatch runner. Resolves once testing is done and stops BrowserStack Local.
+ *
+ * @param {string} sample current test sample
+ * @returns {Promise} promise
+ */
+function runNightwatchCli( sample ) {
+	return new Promise( ( resolve, reject ) => {
+		process.env.NIGHTWATCH_LOCAL_SERVER = `http://${ bsUser }.browserstack.com`;
+		process.env.NIGHTWATCH_TEST_SAMPLE = sample;
+
+		Nightwatch.cli( argv => {
+			/* eslint-disable-next-line new-cap */
+			const runner = Nightwatch.CliRunner( argv );
+
+			runner
+				.setup()
+				.runTests()
+				.then( () => {
+					bsLocal.stop( resolve );
+				} )
+				.catch( err => {
+					bsLocal.stop( () => {
+						reject( err );
 					} );
-			} );
-		}
-	);
-} catch ( err ) {
-	console.log( 'There was an error while starting the test runner:\n\n' );
-	process.stderr.write( err.stack + '\n' );
-	process.exit( 1 );
+				} );
+		} );
+	} );
 }

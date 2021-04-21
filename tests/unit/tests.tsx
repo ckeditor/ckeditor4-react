@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { render } from '@testing-library/react';
+import { configure, render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks/dom';
 import { createDivRef, findByEditorContent } from './utils';
 import { CKEditor, useCKEditor } from '../../src';
 
 describe( 'CKEditor4 React', () => {
+	// Increase timeout so that CI can have a chance to capture changes.
+	const timeout = 5000;
 	const requestedVersion = process.env.REQUESTED_REACT_VERSION;
 
 	beforeAll( () => {
+		// Timeout for async utils in RTL can be set globally
+		configure( { asyncUtilTimeout: timeout } );
+
 		if ( !requestedVersion ) {
 			console.warn(
 				`REQUESTED_REACT_VERSION variable was not set. Runtime version of React is ${ React.version }.`
@@ -42,11 +47,11 @@ describe( 'CKEditor4 React', () => {
 				useCKEditor( { element: ref.current } )
 			);
 			expect( result.current.editorState ).toEqual( 'loading' );
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout } );
 			expect( result.current.editorState ).toEqual( 'unloaded' );
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout } );
 			expect( result.current.editorState ).toEqual( 'loaded' );
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout } );
 			expect( result.current.editorState ).toEqual( 'ready' );
 		} );
 	} );
