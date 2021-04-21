@@ -30,47 +30,15 @@ See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/
 
 You can also check out [CKEditor 4 WYSIWYG Editor React Integration example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in [CKEditor 4 Examples](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
+See ready-to-fork examples in `samples` directory. Each sample is a self-contained app that can be [easily forked](https://docs.github.com/en/github/getting-started-with-github/splitting-a-subfolder-out-into-a-new-repository) within GitHub. Also, you can fork examples via services such as [CodeSandbox](https://codesandbox.io/).
+
 ## Browser support
 
 The CKEditor 4 React component works with all the [supported browsers](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_browsers.html#officially-supported-browsers) except for Internet Explorer 8-10.
 
 ## Contributing
 
-After cloning this repository, install necessary dependencies:
-
-```
-npm install
-```
-
-### Executing tests
-
-```
-npm run test
-```
-
-The command above should be used to get a quick feedback on passing / failing tests. By default, tests on Chrome will be launched with locally installed version of React.
-
-Run `npm run test:all` to run tests on all supported versions of React. By default, test suite runs on Chrome but `browser` argument can be passed, e.g. `npm run test:all -- --browser Firefox`. See `scripts/react-tester.js` for details.
-
-If you are going to change the source files (ones located in the `src/` directory), remember about rebuilding the package. You can use `npm run develop` in order to do it automatically.
-
-### Running samples
-
-Samples uses development built version to simplify component testing. Run below command to open sample page in your default system browser:
-
-```
-npm run samples
-```
-
-Any component changes will be automatically rebuild.
-
-### Building the package
-
-Build a minified version of the package that is ready to publish:
-
-```
-npm run build
-```
+See [CONTRIBUTIONS.md](CONTRIBUTIONS.md).
 
 ## License
 
