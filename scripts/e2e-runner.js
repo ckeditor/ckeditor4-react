@@ -30,20 +30,18 @@ async function runTests() {
 	// Make sure that main package is linked
 	execNpmCmdSync( 'link', PACKAGE_PATH );
 
+	// Remove and re-create tmp folder
+	shell.rm( '-rf', TESTS_TMP_PATH );
+	shell.mkdir( TESTS_TMP_PATH );
+
 	for ( const sampleFile of shell.ls( 'tests/e2e' ) ) {
-		// Remove and re-create tmp folder
-		shell.rm( '-rf', TESTS_TMP_PATH );
-		shell.mkdir( TESTS_TMP_PATH );
-
-		// Install dependencies
-		execNpmCmdSync(
-			'install --legacy-peer-deps --loglevel error',
-			TESTS_TMP_PATH
-		);
-
 		const name = sampleFile.split( '.' )[ 0 ];
-
 		process.env.BROWSERSTACK_BUILD = `E2E Test - ${ name }`;
+
+		console.log();
+		console.log(
+			`--- Preparing package environment for sample: ${ name } ---`
+		);
 
 		// Copy files
 		shell
@@ -56,6 +54,17 @@ async function runTests() {
 					path.resolve( TESTS_TMP_PATH, file )
 				);
 			} );
+
+		// Install dependencies
+		execNpmCmdSync(
+			'install --legacy-peer-deps --loglevel error',
+			TESTS_TMP_PATH
+		);
+
+		console.log();
+		console.log(
+			`--- Running tests for sample: ${ name } ---`
+		);
 
 		// Run react tester
 		await runReactTester(
@@ -72,11 +81,8 @@ function executeReactTestSuite( sample ) {
 		execNpmCmdSync( 'run build', TESTS_TMP_PATH );
 
 		const server = execCmd(
-			`node ./node_modules/.bin/http-server ${ path.resolve(
-				TESTS_TMP_PATH,
-				'./public'
-			) }`,
-			PACKAGE_PATH
+			'node ./node_modules/.bin/http-server',
+			TESTS_TMP_PATH
 		);
 
 		const testSuite = execCmd(

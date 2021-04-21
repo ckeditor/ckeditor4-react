@@ -27,7 +27,7 @@ export default [
 				react: 'React'
 			}
 		},
-		plugins: [ typescript(), commonJs(), cleanupPlugin() ]
+		plugins: [ typescript(), commonJs(), cleanupPlugin(), terser() ]
 	},
 	// Creates `cjs` build that can be further optimized downstream.
 	{

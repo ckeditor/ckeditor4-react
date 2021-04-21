@@ -1,5 +1,6 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
+
 const babel = require( '@rollup/plugin-babel' ).babel;
 const nodeResolve = require( '@rollup/plugin-node-resolve' ).nodeResolve;
 const replace = require( '@rollup/plugin-replace' );
