@@ -1,9 +1,9 @@
 /* eslint-env node */
 
-const bsUser = process.env.BROWSERSTACK_USERNAME;
-const bsKey = process.env.BROWSERSTACK_ACCESS_KEY;
-const bsBrowser = process.env.BROWSERSTACK_BROWSER;
-const bsBuild = process.env.BROWSERSTACK_BUILD;
+const bsUser = process.env.BROWSER_STACK_USERNAME;
+const bsKey = process.env.BROWSER_STACK_ACCESS_KEY;
+const bsBrowser = process.env.BROWSER_STACK_BROWSER;
+const bsBuildName = process.env.BROWSER_STACK_BUILD_NAME;
 
 const browsers = {
 	chrome: {
@@ -40,7 +40,7 @@ const nightwatchConfig = {
 	test_settings: {
 		default: {
 			desiredCapabilities: {
-				build: bsBuild,
+				build: bsBuildName,
 				'browserstack.user': bsUser,
 				'browserstack.key': bsKey,
 				'browserstack.debug': true,

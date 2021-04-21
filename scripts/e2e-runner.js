@@ -32,7 +32,6 @@ async function runTests() {
 
 	for ( const sampleFile of shell.ls( 'tests/e2e' ) ) {
 		const name = sampleFile.split( '.' )[ 0 ];
-		process.env.BROWSERSTACK_BUILD = `E2E Test - ${ name }`;
 
 		console.log();
 		console.log(

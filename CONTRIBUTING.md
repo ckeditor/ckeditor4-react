@@ -58,12 +58,12 @@ npm run test:all:units
 
 E2E tests are to ensure that library _build files_ can be used with minimal setup on the consumer end and that they work on all supported browsers. E2E tests will run on examples inside `samples` directory. Tests will be run for each supported React version.
 
-All tests will run on BrowserStack, so make sure that environment variables `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` are set (values must be kept secret). In addition set `BROWSERSTACK_BROWSER` variable to one of `chrome`, `safari`, `ie`, `firefox`, `edge` values.
+All tests will run on BrowserStack, so make sure that environment variables `BROWSER_STACK_USERNAME` and `BROWSER_STACK_ACCESS_KEY` are set (values must be kept secret). In addition set `BROWSER_STACK_BROWSER` variable to one of `chrome`, `safari`, `ie`, `firefox`, `edge` values.
 
 E2E tests are meant to run in CI environment but it's possible to run them locally as well. For example:
 
 ```
-BROWSERSTACK_USERNAME=name BROWSERSTACK_ACCESS_KEY=key BROWSERSTACK_BROWSER=safari npm run test:all:e2e
+BROWSER_STACK_USERNAME=name BROWSER_STACK_ACCESS_KEY=key BROWSER_STACK_BROWSER=safari npm run test:all:e2e
 ```
 
 ### Samples

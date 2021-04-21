@@ -10,7 +10,7 @@ try {
 	console.log( 'Connecting local' );
 	Nightwatch.bsLocal = bsLocal = new browserstack.Local();
 	bsLocal.start(
-		{ key: process.env.BROWSERSTACK_ACCESS_KEY },
+		{ key: process.env.BROWSER_STACK_ACCESS_KEY },
 		function( error ) {
 			if ( error ) {
 				throw error;
