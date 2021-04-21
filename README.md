@@ -38,7 +38,7 @@ The CKEditor 4 React component works with all the [supported browsers](https://c
 
 ## Contributing
 
-See [CONTRIBUTIONS.md](CONTRIBUTIONS.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
