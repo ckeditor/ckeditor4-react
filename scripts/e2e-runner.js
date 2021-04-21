@@ -30,10 +30,6 @@ async function runTests() {
 	// Make sure that main package is linked
 	execNpmCmdSync( 'link', PACKAGE_PATH );
 
-	// Remove and re-create tmp folder
-	shell.rm( '-rf', TESTS_TMP_PATH );
-	shell.mkdir( TESTS_TMP_PATH );
-
 	for ( const sampleFile of shell.ls( 'tests/e2e' ) ) {
 		const name = sampleFile.split( '.' )[ 0 ];
 		process.env.BROWSERSTACK_BUILD = `E2E Test - ${ name }`;
@@ -42,6 +38,10 @@ async function runTests() {
 		console.log(
 			`--- Preparing package environment for sample: ${ name } ---`
 		);
+
+		// Remove and re-create tmp folder
+		shell.rm( '-rf', TESTS_TMP_PATH );
+		shell.mkdir( TESTS_TMP_PATH );
 
 		// Copy files
 		shell
@@ -62,9 +62,7 @@ async function runTests() {
 		);
 
 		console.log();
-		console.log(
-			`--- Running tests for sample: ${ name } ---`
-		);
+		console.log( `--- Running tests for sample: ${ name } ---` );
 
 		// Run react tester
 		await runReactTester(
@@ -89,6 +87,9 @@ function executeReactTestSuite( sample ) {
 			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js`,
 			PACKAGE_PATH
 		);
+
+		server.stdout.on( 'data', console.log );
+		server.stderr.on( 'data', console.error );
 
 		process.on( 'error', () => {
 			cleanupHttpServer( server );

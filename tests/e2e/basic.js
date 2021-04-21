@@ -3,7 +3,7 @@
 module.exports = {
 	'editor is visible'( browser ) {
 		browser
-			.url( 'http://localhost:8080' )
+			.url( 'http://127.0.0.1:8080' )
 			.waitForElementPresent( 'body', 1000 )
 			.assert.visible( { selector: '.cke_editor_editor1' } )
 			.end();
