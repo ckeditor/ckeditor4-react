@@ -4,12 +4,18 @@ import { renderHook } from '@testing-library/react-hooks/dom';
 import { createDivRef, findByEditorContent } from './utils';
 import { CKEditor, useCKEditor } from '../../src';
 
+// @ts-ignore
+import JasmineDOM from '@testing-library/jasmine-dom';
+
 describe( 'CKEditor4 React', () => {
 	// Increase timeout so that CI can have a chance to capture changes.
 	const timeout = 5000;
 	const requestedVersion = process.env.REQUESTED_REACT_VERSION;
 
 	beforeAll( () => {
+		// Extend jasmine with custom RTL matchers
+		jasmine.getEnv().addMatchers( JasmineDOM );
+
 		// Timeout for async utils in RTL can be set globally
 		configure( { asyncUtilTimeout: timeout } );
 

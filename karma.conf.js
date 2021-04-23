@@ -16,12 +16,10 @@ module.exports = function( config ) {
 
 		files: [
 			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
-			{ pattern: 'tests/unit/jasmine.js', watched: false },
 			{ pattern: 'tests/unit/tests.tsx', watched: false }
 		],
 
 		preprocessors: {
-			'tests/unit/jasmine.js': [ 'rollup' ],
 			'tests/unit/tests.tsx': [ 'rollup' ]
 		},
 
