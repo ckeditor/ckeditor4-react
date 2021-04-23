@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+// @ts-ignore
 import { getEditorNamespace } from 'ckeditor4-integrations-common';
 
 const { useState, useEffect } = React;
