@@ -16,11 +16,13 @@ module.exports = function( config ) {
 
 		files: [
 			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
-			{ pattern: 'tests/unit/tests.tsx', watched: false }
+			// Karma builds a separate bundle for each file which is significantly slower.
+			// Therefore, use single entry point for improved performance.
+			{ pattern: 'tests/unit/index.ts', watched: false }
 		],
 
 		preprocessors: {
-			'tests/unit/tests.tsx': [ 'rollup' ]
+			'tests/unit/index.ts': [ 'rollup' ]
 		},
 
 		reporters: [ 'mocha' ],
@@ -51,9 +53,10 @@ module.exports = function( config ) {
 				replace( {
 					preventAssignment: true,
 					values: {
-						'process.env.REQUESTED_REACT_VERSION': JSON.stringify(
-							process.env.REQUESTED_REACT_VERSION
-						)
+						'process.env.REQUESTED_REACT_VERSION': `"${
+							process.env.REQUESTED_REACT_VERSION || ''
+						}"`,
+						'process.env.NODE_ENV': '"test"'
 					}
 				} )
 			].filter( Boolean ),

@@ -17,10 +17,11 @@
 		"postversion": "git rm -r --cached dist/ && git commit -m \"Clean after release [ci skip]\" && git push origin && git push origin --tags",
 		"preversion": "npm test",
 		"start": "rollup -c -w",
-		"test:all:e2e": "node ./scripts/e2e-runner.js --react all",
-		"test:all:units": "node ./scripts/units-runner.js --react all",
-		"test:browser": "karma start --single-run",
-		"test": "npm run lint && npm run types:check && npm run test:browser -- --silent-build-logs=true",
+		"test:all:e2e": "npm run test:e2e -- --react all",
+		"test:all:units": "npm run test:units -- --react all",
+		"test:units": "node ./scripts/units-runner.js",
+		"test:e2e": "node ./scripts/e2e-runner.js",
+		"test": "npm run lint && npm run types:check && npm run test:units -- --silent-build-logs=true",
 		"types:emit": "tsc src/index.ts --jsx react --emitDeclarationOnly --declaration --declarationDir dist",
 		"types:check": "tsc --noEmit",
 		"version": "npm run build && git add -f dist/"
@@ -74,6 +75,7 @@
 		"eslint": "^7.21.0",
 		"eslint-config-ckeditor5": "^3.1.0",
 		"eslint-plugin-react": "^7.22.0",
+		"eslint-plugin-react-hooks": "^4.2.0",
 		"jasmine": "^3.7.0",
 		"karma": "^6.3.2",
 		"karma-browserstack-launcher": "^1.6.0",
@@ -97,6 +99,8 @@
 		"typescript": "^4.2.4"
 	},
 	"dependencies": {
-		"ckeditor4-integrations-common": "^0.2.0"
+		"@types/prop-types": "^15.7.3",
+		"ckeditor4-integrations-common": "^0.2.0",
+		"prop-types": "^15.7.2"
 	}
 }

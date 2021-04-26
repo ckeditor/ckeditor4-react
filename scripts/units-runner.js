@@ -51,7 +51,7 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 		await runReactTester( reactVersion, TESTS_TMP_PATH, () => {
 			return console.log(
 				execCmdSync(
-					'npm run test:browser -- --silent-build-logs=true',
+					'npm run test:units -- --silent-build-logs=true',
 					TESTS_TMP_PATH
 				)
 			);

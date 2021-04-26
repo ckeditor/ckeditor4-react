@@ -7,7 +7,7 @@ const localServer = process.env.NIGHTWATCH_LOCAL_SERVER;
 const testSample = process.env.NIGHTWATCH_TEST_SAMPLE;
 
 /**
- * Test suite for `samples/basic` example.
+ * Test suite for `samples/state-lifting` example.
  */
 describe( `${ testSample } - react v${ reactVersion }`, () => {
 	beforeEach( async browser => {
@@ -29,12 +29,25 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 		await browser.assert.visible( '.cke_1' );
 	} );
 
-	test( 'editor initializes correctly', async browser => {
+	test( 'editor sets data from outside', async browser => {
+		await browser.setValue( 'xpath', '//textarea', 'Hello from textarea!' );
+		await browser.assert.containsText( '.preview', 'Hello from textarea!' );
 		await browser.frame( 0 );
-		await browser.assert.containsText( '.cke_editable', 'Hello world!' );
-		await browser.assert.visible( {
-			selector: '//body[@contenteditable="true"]',
-			locateStrategy: 'xpath'
-		} );
+		await browser.assert.containsText(
+			'.cke_editable',
+			'Hello from textarea!'
+		);
+		await browser.clearValue( 'xpath', '//body[@contenteditable="true"]' );
+		await browser.setValue(
+			'xpath',
+			'//body[@contenteditable="true"]',
+			'Hello from CKEditor!'
+		);
+		await browser.frameParent();
+		await browser.assert.containsText(
+			{ selector: '//textarea', locateStrategy: 'xpath' },
+			'Hello from CKEditor!'
+		);
+		await browser.assert.containsText( '.preview', 'Hello from CKEditor!' );
 	} );
 } );

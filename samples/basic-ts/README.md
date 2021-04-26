@@ -1,4 +1,4 @@
-# Basic example
+# Basic example with TypeScript
 
 `CKEditor4` component is initialized and init data is set.
 

@@ -2,6 +2,8 @@
 
 import commonJs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import cleanup from 'rollup-plugin-cleanup';
 import pkg from './package.json';
@@ -14,25 +16,66 @@ const banner = `/**
 */`;
 
 export default [
-	// Creates `umd` build that can be directly consumed via <script /> tag.
+	// Creates `umd` build that can be directly consumed via <script /> tag (development mode).
 	{
 		input,
 		external,
 		output: {
 			banner,
 			format: 'umd',
-			file: 'dist/index.umd.min.js',
+			file: 'dist/index.umd.development.js',
 			name: 'CKEditor4React',
 			globals: {
 				react: 'React'
 			}
 		},
-		plugins: [ typescript(), commonJs(), cleanupPlugin(), terser() ]
+		plugins: [
+			typescript(),
+			nodeResolve(),
+			commonJs(),
+			replace( {
+				preventAssignment: true,
+				values: {
+					'process.env.NODE_ENV': '"development"'
+				}
+			} ),
+			cleanupPlugin()
+		]
+	},
+	// Creates `umd` build that can be directly consumed via <script /> tag (production mode).
+	{
+		input,
+		external,
+		output: {
+			banner,
+			format: 'umd',
+			file: 'dist/index.umd.production.min.js',
+			name: 'CKEditor4React',
+			globals: {
+				react: 'React'
+			}
+		},
+		plugins: [
+			typescript(),
+			nodeResolve(),
+			commonJs(),
+			replace( {
+				preventAssignment: true,
+				values: {
+					'process.env.NODE_ENV': '"production"'
+				}
+			} ),
+			cleanupPlugin(),
+			terser()
+		]
 	},
 	// Creates `cjs` build that can be further optimized downstream.
 	{
 		input,
-		external: external.concat( 'ckeditor4-integrations-common' ),
+		external: external.concat( [
+			'ckeditor4-integrations-common',
+			'prop-types'
+		] ),
 		output: {
 			banner,
 			format: 'cjs',
@@ -43,7 +86,10 @@ export default [
 	// Creates `esm` build that can be further optimized downstream.
 	{
 		input,
-		external: external.concat( 'ckeditor4-integrations-common' ),
+		external: external.concat( [
+			'ckeditor4-integrations-common',
+			'prop-types'
+		] ),
 		output: {
 			banner,
 			format: 'esm',
@@ -67,6 +113,9 @@ export default [
 function cleanupPlugin() {
 	return cleanup( {
 		extensions: [ 'ts', 'tsx', 'js' ],
-		comments: [ /Copyright (c) Microsoft Corporation./, /@license Copyright (c) 2003-2021, CKSource - Frederico Knabben./ ]
+		comments: [
+			/Copyright (c) Microsoft Corporation./,
+			/@license Copyright (c) 2003-2021, CKSource - Frederico Knabben./
+		]
 	} );
 }
