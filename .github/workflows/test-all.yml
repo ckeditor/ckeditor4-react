@@ -4,15 +4,10 @@ on:
     pull_request:
         branches:
             - master
-            - stable
             - major
     push:
         tags:
             - v*
-        branches:
-            - master
-            - stable
-            - major
 
 jobs:
     # Runs unit tests for all configured React version

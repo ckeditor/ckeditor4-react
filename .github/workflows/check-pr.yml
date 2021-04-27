@@ -3,6 +3,7 @@ name: Check PR
 on:
     pull_request:
         branches:
+            - master
             - major
 
 jobs:
