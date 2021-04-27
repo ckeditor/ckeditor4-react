@@ -10,13 +10,13 @@ npm install
 
 ### Development
 
-First, make sure that `CHROME_BIN` environment variable is set, e.g. in your `.bashrc` file: `export CHROME_BIN=path_to_chrome_bin`. Then run the following command:
-
 ```
 npm run develop
 ```
 
 Unit tests will start in watch mode and you are ready to develop. Please note that source code will be transpiled via `babel` so there is no type checking with TypeScript. In order to validate types with TS run `npm run types:check` or run full build (see below).
+
+By default Karma will run tests on Chrome so make sure that its binary is available on your system. If Karma cannot find the binary, you might need to set `CHROME_BIN` environment variable, e.g. in your `.bashrc` file: `export CHROME_BIN=path_to_chrome_bin`.
 
 ### Build
 
