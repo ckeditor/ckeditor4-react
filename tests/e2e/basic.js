@@ -17,10 +17,7 @@ describe( `${ testSample } - react v${ reactVersion } - sanity checks`, () => {
 
 	test( 'requested version of React is running', async browser => {
 		await browser.assert.visible(
-			{
-				selector: '//div[@title="React version"]',
-				locateStrategy: 'xpath'
-			},
+			'.react-version',
 			`Running React v${ reactVersion }`
 		);
 	} );
