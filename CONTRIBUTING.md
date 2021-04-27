@@ -68,12 +68,20 @@ BROWSER_STACK_USERNAME=name BROWSER_STACK_ACCESS_KEY=key BROWSER_STACK_BROWSER=s
 
 ### Samples
 
+Before running any sample locally, make sure to expose root package as a link and build the library:
+
+```
+`npm link && npm run build`
+```
+
+It's enough to `npm link` the root package once. Run build on every change in root `src` folder.
+
 Example apps are located in `samples` directory. Each sample is a self-contained application that has mandatory `start` and `build` scripts. In order to run a sample go thorugh the following steps:
 
-1. Expose parent package as link: `npm link`
-2. Build library: `npm run build`
-3. `cd` into sample, e.g. `cd samples/basic`
-4. Run `npm install`
-5. Link parent package: `npm link ckeditor4-react`
-6. Start example: `npm start`
-7. Navigate to `localhost:8080`
+1. `cd` into sample, e.g. `cd samples/basic`
+2. Run `npm install`
+3. Link root package: `npm link ckeditor4-react`
+4. Start example: `npm start`
+5. Navigate to `localhost:8080`
+
+It's important to re-run `npm link ckeditor4-react` in a sample folder anytime `npm install` operation was performed in that sample!
