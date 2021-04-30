@@ -41,7 +41,7 @@ jobs:
             - name: Run tests
               uses: GabrielBB/xvfb-action@v1
               with:
-                  run: npm run test:all:units
+                  run: npm run test:units:all
 
     # Runs E2E tests for all configured React version and all environments
     test-e2e:
@@ -78,4 +78,4 @@ jobs:
                   BROWSER_STACK_BUILD_NAME: ${{ env.BUILD_SLUG }}
                   BROWSER_STACK_BROWSER: ${{ matrix.browser }}
               with:
-                  run: npm run test:all:e2e
+                  run: npm run test:e2e:all

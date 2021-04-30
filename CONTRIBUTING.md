@@ -51,7 +51,7 @@ This command will make a single run of linter, type checker and unit tests.
 In order to run unit tests on all supported React versions:
 
 ```
-npm run test:all:units
+npm run test:units:all
 ```
 
 #### Full suite of E2E tests
@@ -63,7 +63,7 @@ All tests will run on BrowserStack, so make sure that environment variables `BRO
 E2E tests are meant to run in CI environment but it's possible to run them locally as well. For example:
 
 ```
-BROWSER_STACK_USERNAME=name BROWSER_STACK_ACCESS_KEY=key BROWSER_STACK_BROWSER=safari npm run test:all:e2e
+BROWSER_STACK_USERNAME=name BROWSER_STACK_ACCESS_KEY=key BROWSER_STACK_BROWSER=safari npm run test:e2e:all
 ```
 
 ### Samples

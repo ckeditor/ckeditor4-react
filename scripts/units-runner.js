@@ -34,6 +34,7 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 			'karma.conf.js',
 			'tsconfig.json',
 			'src',
+			'scripts',
 			'tests'
 		].forEach( file => {
 			shell.cp(
@@ -51,7 +52,7 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 		await runReactTester( reactVersion, TESTS_TMP_PATH, () => {
 			return console.log(
 				execCmdSync(
-					'npm run test:units -- --silent-build-logs=true',
+					'node node_modules/.bin/karma start --single-run --silent-build-logs=true',
 					TESTS_TMP_PATH
 				)
 			);
