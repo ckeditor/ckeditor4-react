@@ -58,7 +58,7 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 			);
 		} );
 	} catch ( error ) {
-		log.error( 'Could not complete E2E tests!' );
+		log.error( 'Could not complete unit tests!' );
 		console.error( error );
 		process.exitCode = 1;
 	}
