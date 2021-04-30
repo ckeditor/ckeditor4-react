@@ -204,7 +204,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that `onDestroyed` callback is passed and invoked.
+		 * Ensures that `onDestroyed` callback is registered.
 		 */
 		it( 'invokes `onDestroyed` callback', async () => {
 			const onDestroyed = jasmine.createSpy( 'onDestroyed' );
@@ -216,7 +216,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that `onInstanceReady` callback is passed and invoked.
+		 * Ensures that `onInstanceReady` callback is registered.
 		 */
 		it( 'invokes `onInstanceReady` callback', async () => {
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
@@ -233,7 +233,24 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that `onLoaded` callback is passed and invoked.
+		 * Ensures that custom `onInstanceReady` callback is registered before built-in init data setter.
+		 */
+		it( 'invokes `onInstanceReady` callback before built-in init data setter', async () => {
+			render(
+				<CKEditor
+					onInstanceReady={( { editor } ) => {
+						editor.setData( 'Hello from callback!' );
+					}}
+					initData="Hello world!"
+				/>
+			);
+			expect(
+				await findByClassicEditorContent( 'Hello from callback!' )
+			).toBeVisible();
+		} );
+
+		/**
+		 * Ensures that `onLoaded` callback is registered.
 		 */
 		it( 'invokes `onLoaded` callback', async () => {
 			const onLoaded = jasmine.createSpy( 'onLoaded' );

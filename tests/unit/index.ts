@@ -11,6 +11,7 @@ describe( 'CKEditor4 React', () => {
 	const timeout = 5000;
 	const requestedVersion = process.env.REQUESTED_REACT_VERSION;
 	const windw = window as any;
+	const log = windw.console.log;
 
 	beforeAll( () => {
 		// Extend jasmine with custom RTL matchers
@@ -35,6 +36,11 @@ describe( 'CKEditor4 React', () => {
 			expect( Object.entries( windw.CKEDITOR.instances ).length ).toEqual( 0 );
 			delete windw.CKEDITOR;
 		}
+	} );
+
+	afterEach( async () => {
+		// Restore console.log in case a test has overriden it with a spy.
+		windw.console.log = log;
 	} );
 
 	initCommonTests();

@@ -38,6 +38,42 @@ function init() {
 		} );
 
 		/**
+		 * With debugging enabled, events are logged to console.
+		 */
+		it( 'turns on `debug` mode', async () => {
+			const windw = window as any;
+			windw.console.log = jasmine.createSpy( 'windw.console.log' );
+			const ref = createDivRef();
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
+			const { result: ckEditorResult, waitForValueToChange } = renderHook(
+				() =>
+					useCKEditor( {
+						element: ref.current
+					} )
+			);
+			const { rerender, unmount } = renderHook( ( props: any ) =>
+				useCKEditorEvent( {
+					handler: onInstanceReady,
+					evtName: 'instanceReady',
+					editor: ckEditorResult.current.editor,
+					debug: true,
+					...props
+				} )
+			);
+			await waitForValueToChange(
+				() => ckEditorResult.current.status === 'loaded'
+			);
+			rerender( { editor: ckEditorResult.current.editor } );
+			await waitForValueToChange(
+				() => ckEditorResult.current.status === 'ready'
+			);
+			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
+			expect( windw.console.log ).toHaveBeenCalledTimes( 1 );
+			unmount();
+			expect( windw.console.log ).toHaveBeenCalledTimes( 2 );
+		} );
+
+		/**
 		 * Unregisters event handler on unmount.
 		 */
 		it( 'unregisters handler on unmount', async () => {

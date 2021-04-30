@@ -43,9 +43,10 @@ function App() {
 				/>
 				<div className="paper flex-grow-3">
 					<CKEditor
+						debug={true}
 						config={config}
 						initData={initData}
-						name="my-classic-editor"
+						name={`my-classic-editor-${ currentType }`}
 						readOnly={readOnly}
 						style={getStyle( currentStyle )}
 						type={currentType}

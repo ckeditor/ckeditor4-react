@@ -22,6 +22,7 @@ const { useCallback, useEffect, useState } = React;
  */
 function CKEditor( {
 	config,
+	debug,
 	editorUrl,
 	initData,
 	name,
@@ -48,6 +49,7 @@ function CKEditor( {
 
 	const { editor, status } = useCKEditor( {
 		config,
+		debug,
 		editorUrl,
 		element,
 		onBeforeLoad,
@@ -57,7 +59,9 @@ function CKEditor( {
 
 	const handleInitData = useCallback<CKEditorEventHandler>(
 		( { editor } ) => {
-			editor.setData( initData );
+			if ( initData ) {
+				editor.setData( initData );
+			}
 		},
 		[ initData ]
 	);
@@ -96,21 +100,13 @@ function CKEditor( {
 	}, [ editor, status, readOnly ] );
 
 	/**
-	 * Sets init data.
-	 */
-	useCKEditorEvent( {
-		handler: handleInitData,
-		evtName: 'instanceReady',
-		editor
-	} );
-
-	/**
 	 * Passes custom handler for `destroy` event.
 	 */
 	useCKEditorEvent( {
 		handler: onDestroyed,
 		evtName: 'destroy',
-		editor
+		editor,
+		debug
 	} );
 
 	/**
@@ -119,7 +115,8 @@ function CKEditor( {
 	useCKEditorEvent( {
 		handler: onInstanceReady,
 		evtName: 'instanceReady',
-		editor
+		editor,
+		debug
 	} );
 
 	/**
@@ -128,7 +125,18 @@ function CKEditor( {
 	useCKEditorEvent( {
 		handler: onLoaded,
 		evtName: 'loaded',
-		editor
+		editor,
+		debug
+	} );
+
+	/**
+	 * Sets init data.
+	 */
+	useCKEditorEvent( {
+		handler: handleInitData,
+		evtName: 'instanceReady',
+		editor,
+		debug
 	} );
 
 	return (
@@ -147,6 +155,11 @@ const propTypes = {
 	 * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 	 */
 	config: PropTypes.object,
+
+	/**
+	 * Turns on debugging. Logs info related to editor lifecycle events.
+	 */
+	debug: PropTypes.bool,
 
 	/**
 	 * Url with editor's source code. Uses newest version from https://cdn.ckeditor.com domain by default.

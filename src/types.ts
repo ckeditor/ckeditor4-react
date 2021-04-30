@@ -80,6 +80,11 @@ export interface CKEditorHookProps {
 	config?: CKEditorConfig | null;
 
 	/**
+	 * Turns on debugging. Logs info related to editor lifecycle events.
+	 */
+	debug?: boolean | null;
+
+	/**
 	 * Url with editor's source code. Uses https://cdn.ckeditor.com domain by default.
 	 */
 	editorUrl?: string | null;
@@ -115,6 +120,11 @@ export interface CKEditorHookProps {
 }
 
 export interface CKEditorEventHookProps {
+
+	/**
+	 * Turns on debugging. Logs info related to editor lifecycle events.
+	 */
+	debug?: boolean | null;
 
 	/**
 	 * Instance of editor.

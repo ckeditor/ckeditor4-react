@@ -27,6 +27,7 @@ const defConfig: CKEditorConfig = {};
  */
 function useCKEditor( {
 	config,
+	debug,
 	editorUrl,
 	element,
 	onBeforeLoad,
@@ -131,7 +132,8 @@ function useCKEditor( {
 	useCKEditorEvent( {
 		editor: state.editor,
 		evtName: 'loaded',
-		handler: handleLoaded
+		handler: handleLoaded,
+		debug
 	} );
 
 	/**
@@ -140,7 +142,8 @@ function useCKEditor( {
 	useCKEditorEvent( {
 		editor: state.editor,
 		evtName: 'instanceReady',
-		handler: handleInstanceReady
+		handler: handleInstanceReady,
+		debug
 	} );
 
 	/**
@@ -149,7 +152,8 @@ function useCKEditor( {
 	useCKEditorEvent( {
 		editor: state.editor,
 		evtName: 'destroy',
-		handler: handleDestroyed
+		handler: handleDestroyed,
+		debug
 	} );
 
 	/**
