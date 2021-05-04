@@ -1,5 +1,9 @@
-# Editor as component
+# Multiple editor instances (re-ordering case)
 
-Simple showcase of `CKEditor` component. Please notice that a new instance of editor is created when toggling between `classic` and `inline` mode.
+Example of handling multiple `CKEditor` components (re-ordering case).
+
+Please note that due to upstream issues classic editor must be re-initialized:
+- https://github.com/ckeditor/ckeditor4/pull/4463
+- https://github.com/ckeditor/ckeditor4/pull/4481
 
 See on CodeSandbox (insert link here).

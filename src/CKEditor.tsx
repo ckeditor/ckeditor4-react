@@ -53,6 +53,7 @@ function CKEditor( {
 		editorUrl,
 		element,
 		onBeforeLoad,
+		onLoaded,
 		onNamespaceLoaded,
 		type
 	} );
@@ -70,17 +71,17 @@ function CKEditor( {
 	 * Toggles styles.
 	 */
 	useEffect( () => {
-		if (
+		const canSetStyles =
 			type !== 'inline' &&
-			style &&
 			editor &&
-			( status === 'loaded' || status === 'ready' )
-		) {
+			( status === 'loaded' || status === 'ready' );
+
+		if ( style && canSetStyles ) {
 			editor.container.setStyles( style );
 		}
 
 		return () => {
-			if ( type !== 'inline' && style && editor ) {
+			if ( style && canSetStyles ) {
 				Object.keys( style )
 					.map( camelToKebab )
 					.forEach( styleName => {
@@ -120,23 +121,14 @@ function CKEditor( {
 	} );
 
 	/**
-	 * Passes custom handler for `loaded` event.
-	 */
-	useCKEditorEvent( {
-		handler: onLoaded,
-		evtName: 'loaded',
-		editor,
-		debug
-	} );
-
-	/**
 	 * Sets init data.
 	 */
 	useCKEditorEvent( {
 		handler: handleInitData,
 		evtName: 'instanceReady',
 		editor,
-		debug
+		debug,
+		priority: 0
 	} );
 
 	return (

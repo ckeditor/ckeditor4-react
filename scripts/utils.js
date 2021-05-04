@@ -2,7 +2,7 @@
 
 const { exec, execSync } = require( 'child_process' );
 const { red, blue, green, yellow, magenta } = require( 'chalk' );
-const { satisfies, minor, gt } = require( 'semver' );
+const { satisfies, minor } = require( 'semver' );
 
 /**
  * Logging utils.
@@ -100,9 +100,7 @@ function getPeeredReactVersion( packageInfo ) {
  */
 function getReactVersionsInRange( range, versions ) {
 	return versions.filter( version => {
-		// Version 16.8.6 does not support async `act` test helper.
-		// https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
-		return gt( version, '16.8.6' ) && satisfies( version, range );
+		return satisfies( version, range );
 	} );
 }
 
@@ -186,12 +184,13 @@ function getVersionsToTest( version ) {
  * Gets list of React versions to test, then sequentially installs requested versions in a given path.
  * Custom async callback will be invoked after each installation.
  *
- * @param {string} requestedVersion requested version: `all`, `current`, or fixed version
- * @param {string} cwd path in which to install new version of React
+ * @param {object} config runner config
  * @param {function} cb async callback to execute after installation of new React version
  */
-async function runReactTester( requestedVersion, cwd, cb ) {
-	const versionsToTest = getVersionsToTest( requestedVersion );
+async function runReactTester( { version, cwd, skip = [] }, cb ) {
+	const versionsToTest = getVersionsToTest( version ).filter(
+		v => skip.indexOf( v ) === -1
+	);
 
 	log.paragraph( 'Running React tester' );
 	log.info( 'Versions that will be tested (' + versionsToTest.length + '):' );

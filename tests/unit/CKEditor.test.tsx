@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOMServer from 'react-dom/server';
 import { render } from '@testing-library/react';
 import {
 	findByEditorName,
@@ -119,6 +120,20 @@ function init() {
 		} );
 
 		/**
+		 * Ensures that editor's style can be changed after initialization.
+		 */
+		it( 'sets custom styles for editor after init', async () => {
+			const style1 = { border: '1px solid red' };
+			const { rerender } = render( <CKEditor style={style1} /> );
+			const el1 = await findClassicEditor();
+			expect( el1.style.border ).toEqual( style1.border );
+			const style2 = { border: '1px solid green' };
+			rerender( <CKEditor style={style2} /> );
+			const el2 = await findClassicEditor();
+			expect( el2.style.border ).toEqual( style2.border );
+		} );
+
+		/**
 		 * Ensures that initial data remains "initial". It should be set once.
 		 */
 		it( 'does not change data after init', async () => {
@@ -233,9 +248,9 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that custom `onInstanceReady` callback is registered before built-in init data setter.
+		 * Ensures that built-in callbacks are registered with high priority.
 		 */
-		it( 'invokes `onInstanceReady` callback before built-in init data setter', async () => {
+		it( 'invokes built-in `instanceReady` handler with high prio', async () => {
 			render(
 				<CKEditor
 					onInstanceReady={( { editor } ) => {
@@ -245,7 +260,7 @@ function init() {
 				/>
 			);
 			expect(
-				await findByClassicEditorContent( 'Hello from callback!' )
+				await findByClassicEditorContent( 'Hello world!' )
 			).toBeVisible();
 		} );
 
@@ -267,6 +282,14 @@ function init() {
 			render( <CKEditor onNamespaceLoaded={onNamespaceLoaded} /> );
 			expect( await findClassicEditor() ).toBeVisible();
 			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		/**
+		 * Renders correctly to string.
+		 */
+		it( 'renders as string', async () => {
+			const result = ReactDOMServer.renderToString( <CKEditor /> );
+			expect( result ).toEqual( '<div data-reactroot=""></div>' );
 		} );
 	} );
 }

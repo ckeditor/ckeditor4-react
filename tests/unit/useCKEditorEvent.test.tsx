@@ -103,6 +103,83 @@ function init() {
 			ckEditorResult.current.editor.setReadOnly( false );
 			expect( onReadOnly ).toHaveBeenCalledTimes( 1 );
 		} );
+
+		/**
+		 * Accepts and passes custom listener data.
+		 */
+		it( 'uses listener data', async () => {
+			const ref = createDivRef();
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
+			const { result: ckEditorResult, waitForValueToChange } = renderHook(
+				() =>
+					useCKEditor( {
+						element: ref.current
+					} )
+			);
+			const { rerender } = renderHook( ( props: any ) =>
+				useCKEditorEvent( {
+					handler: onInstanceReady,
+					evtName: 'instanceReady',
+					editor: ckEditorResult.current.editor,
+					listenerData: { hello: 'hello' },
+					...props
+				} )
+			);
+			await waitForValueToChange(
+				() => ckEditorResult.current.status === 'loaded'
+			);
+			rerender( { editor: ckEditorResult.current.editor } );
+			await waitForValueToChange(
+				() => ckEditorResult.current.status === 'ready'
+			);
+			expect( onInstanceReady ).toHaveBeenCalledWith(
+				jasmine.objectContaining( {
+					listenerData: { hello: 'hello' }
+				} )
+			);
+		} );
+
+		/**
+		 * Sets priority in which handlers are invoked.
+		 */
+		it( 'accepts priority', async () => {
+			const ref = createDivRef();
+			const onInstanceReady1 = jasmine.createSpy( 'onInstanceReady1' );
+			const onInstanceReady2 = jasmine.createSpy( 'onInstanceReady2' );
+			const { result: ckEditorResult, waitForValueToChange } = renderHook(
+				() =>
+					useCKEditor( {
+						element: ref.current
+					} )
+			);
+			const hook1 = renderHook( ( props: any ) =>
+				useCKEditorEvent( {
+					handler: onInstanceReady1,
+					evtName: 'instanceReady',
+					editor: ckEditorResult.current.editor,
+					priority: 1,
+					...props
+				} )
+			);
+			const hook2 = renderHook( ( props: any ) =>
+				useCKEditorEvent( {
+					handler: onInstanceReady2,
+					evtName: 'instanceReady',
+					editor: ckEditorResult.current.editor,
+					priority: 0,
+					...props
+				} )
+			);
+			await waitForValueToChange(
+				() => ckEditorResult.current.status === 'loaded'
+			);
+			hook1.rerender( { editor: ckEditorResult.current.editor } );
+			hook2.rerender( { editor: ckEditorResult.current.editor } );
+			await waitForValueToChange(
+				() => ckEditorResult.current.status === 'ready'
+			);
+			expect( onInstanceReady2 ).toHaveBeenCalledBefore( onInstanceReady1 );
+		} );
 	} );
 }
 

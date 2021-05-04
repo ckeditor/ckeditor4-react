@@ -7,7 +7,6 @@
 		"jsx": "react"
 	},
 	"include": [
-		"src",
-		"modules.ts"
+		"src"
 	]
 }

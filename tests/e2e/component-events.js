@@ -7,7 +7,7 @@ const localServer = process.env.NIGHTWATCH_LOCAL_SERVER;
 const testSample = process.env.NIGHTWATCH_TEST_SAMPLE;
 
 /**
- * Test suite for `samples/events-basic` example.
+ * Test suite for `samples/component-events` example.
  */
 describe( `${ testSample } - react v${ reactVersion }`, () => {
 	beforeEach( async browser => {

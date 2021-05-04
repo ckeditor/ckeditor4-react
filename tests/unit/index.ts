@@ -1,10 +1,12 @@
 import * as React from 'react';
+// @ts-ignore
 import JasmineDOM from '@testing-library/jasmine-dom';
 import { configure } from '@testing-library/react';
 import initCommonTests from './common.test';
 import initUseCKEditorTests from './useCKEditor.test';
 import initUseCKEditorEventTests from './useCKEditorEvent.test';
 import initCKEditorTests from './CKEditor.test';
+import initUtilsTests from './utils.test';
 
 describe( 'CKEditor4 React', () => {
 	// Increase timeout so that CI can have a chance to capture changes.
@@ -47,4 +49,5 @@ describe( 'CKEditor4 React', () => {
 	initUseCKEditorTests();
 	initUseCKEditorEventTests();
 	initCKEditorTests();
+	initUtilsTests();
 } );

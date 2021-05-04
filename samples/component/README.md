@@ -1,5 +1,5 @@
-# Editor as component
+# Editor as `CKEditor` component
 
-Simple showcase of `CKEditor` component. Please notice that a new instance of editor is created when toggling between `classic` and `inline` mode.
+Advanced showcase of `CKEditor` component.
 
 See on CodeSandbox (insert link here).

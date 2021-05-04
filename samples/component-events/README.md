@@ -1,5 +1,5 @@
-# Editor as component
+# Editor events with `CKEditor` component
 
-Exmample usage of editor's event handlers with `CKEditor` component.
+Showcase of using editor events when using `CKEditor` component.
 
 See on CodeSandbox (insert link here).

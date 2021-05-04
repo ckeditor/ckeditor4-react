@@ -1,3 +1,8 @@
+/**
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
 import * as React from 'react';
 import { uniqueName } from './utils';
 import type {
@@ -12,10 +17,12 @@ const { useEffect } = React;
  * `useCKEditorEvent` is a helper hook that registers and unregisters editor's event handlers.
  */
 function useCKEditorEvent( {
-	editor,
 	debug,
+	editor,
 	evtName,
-	handler
+	handler,
+	listenerData,
+	priority
 }: CKEditorEventHookProps ) {
 	useEffect( () => {
 		const handlerId = uniqueName();
@@ -39,7 +46,7 @@ function useCKEditorEvent( {
 		}
 
 		if ( editor && _handler ) {
-			editor.on( evtName, _handler );
+			editor.on( evtName, _handler, null, listenerData, priority );
 		}
 
 		return () => {
@@ -54,7 +61,7 @@ function useCKEditorEvent( {
 				editor.removeListener( evtName, _handler );
 			}
 		};
-	}, [ editor, evtName, debug, handler ] );
+	}, [ editor, evtName, debug, handler, listenerData, priority ] );
 }
 
 export default useCKEditorEvent;

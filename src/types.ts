@@ -1,3 +1,8 @@
+/**
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import CKEditor from './CKEditor';
@@ -10,14 +15,14 @@ export interface CKEditorEventPayload {
 	data?: Record<string, unknown> | null;
 
 	/**
-	 * Editor instance that holds the sender.
+	 * Editor instance that holds the event sender.
 	 */
 	editor?: CKEditorInstance | null;
 
 	/**
 	 * Extra data appended during listener registration.
 	 */
-	listenerData?: Record<string, unknown> | null;
+	listenerData?: any;
 
 	/**
 	 * Event name.
@@ -103,6 +108,11 @@ export interface CKEditorHookProps {
 	onBeforeLoad?: CKEditorNamespaceCb | null;
 
 	/**
+	 * Callback invoked once the editor instance is loaded.
+	 */
+	onLoaded?: CKEditorEventHandler | null;
+
+	/**
 	 * Callback function with CKEDITOR namespace passed as the only argument.
 	 * It is invoked exactly once regardless the number of editor instances.
 	 * It is called after CKEDITOR namespace is loaded and before any editor instances are initialized.
@@ -140,6 +150,16 @@ export interface CKEditorEventHookProps {
 	 * Editor's event name.
 	 */
 	evtName: CKEditorEvent;
+
+	/**
+	 * Custom data passed to listener.
+	 */
+	listenerData?: any;
+
+	/**
+	 * Sets handler's priority.
+	 */
+	priority?: number;
 }
 
 export interface CKEditorHookResult {

@@ -17,6 +17,7 @@ const banner = `/**
 
 export default [
 	// Creates `umd` build that can be directly consumed via <script /> tag (development mode).
+	// Setting `NODE_ENV` value to `development` enables dev utils such as prop-types.
 	{
 		input,
 		external,
@@ -43,6 +44,7 @@ export default [
 		]
 	},
 	// Creates `umd` build that can be directly consumed via <script /> tag (production mode).
+	// Setting `NODE_ENV` value to `production` disables dev utils.
 	{
 		input,
 		external,

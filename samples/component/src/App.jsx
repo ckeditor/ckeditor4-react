@@ -23,6 +23,9 @@ function App() {
 		setStyle( value );
 	};
 
+	/**
+	 * Please notice that a new instance of editor is created on toggling between `classic` and `inline` type.
+	 */
 	const handleTypeChange = evt => {
 		const value = evt.currentTarget.value;
 		setType( value );

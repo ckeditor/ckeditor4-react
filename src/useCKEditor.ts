@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import { getEditorNamespace } from 'ckeditor4-integrations-common';
+import useCKEditorEvent from './useCKEditorEvent';
 import type {
 	CKEditorConfig,
 	CKEditorEventHandler,
@@ -14,7 +15,6 @@ import type {
 	CKEditorNamespace,
 	CKEditorStatus
 } from './types';
-import useCKEditorEvent from './useCKEditorEvent';
 
 const { useCallback, useEffect, useReducer } = React;
 
@@ -31,6 +31,7 @@ function useCKEditor( {
 	editorUrl,
 	element,
 	onBeforeLoad,
+	onLoaded,
 	onNamespaceLoaded,
 	type = 'classic'
 }: CKEditorHookProps ): CKEditorHookResult {
@@ -59,12 +60,35 @@ function useCKEditor( {
 						onBeforeLoad( CKEDITOR );
 					}
 
+					const editor = CKEDITOR[
+						type === 'inline' ? 'inline' : 'replace'
+					]( element, configInit );
+
 					dispatch( {
 						type: 'unloaded',
-						payload: CKEDITOR[
-							type === 'inline' ? 'inline' : 'replace'
-						]( element, configInit )
+						payload: editor
 					} );
+
+					/**
+					 * `loaded` event listeners should be registered as soon as possible.
+					 * Otherwise we risk missing it.
+					 */
+
+					editor.on(
+						'loaded',
+						() => {
+							dispatch( {
+								type: 'loaded'
+							} );
+						},
+						null,
+						null,
+						-1
+					);
+
+					if ( onLoaded ) {
+						editor.on( 'loaded', onLoaded );
+					}
 				} )
 				.catch( ( error: Error ) => {
 					if ( process.env.NODE_ENV !== 'test' ) {
@@ -78,6 +102,7 @@ function useCKEditor( {
 		editorUrlInit,
 		element,
 		onBeforeLoad,
+		onLoaded,
 		onNamespaceLoaded,
 		state.editor,
 		type
@@ -91,13 +116,6 @@ function useCKEditor( {
 			state.editor.destroy();
 		}
 	}, [ state.editor ] );
-
-	/**
-	 * Handler for `loaded` event.
-	 */
-	const handleLoaded = useCallback<CKEditorEventHandler>( () => {
-		dispatch( { type: 'loaded' } );
-	}, [] );
 
 	const isInline = type === 'inline';
 	const isReadOnly = configInit.readOnly;
@@ -127,23 +145,14 @@ function useCKEditor( {
 	}, [] );
 
 	/**
-	 * Registers handler for `loaded` event.
-	 */
-	useCKEditorEvent( {
-		editor: state.editor,
-		evtName: 'loaded',
-		handler: handleLoaded,
-		debug
-	} );
-
-	/**
 	 * Registers handler for `instanceReady` event.
 	 */
 	useCKEditorEvent( {
 		editor: state.editor,
 		evtName: 'instanceReady',
 		handler: handleInstanceReady,
-		debug
+		debug,
+		priority: -1
 	} );
 
 	/**
@@ -153,7 +162,8 @@ function useCKEditor( {
 		editor: state.editor,
 		evtName: 'destroy',
 		handler: handleDestroyed,
-		debug
+		debug,
+		priority: -1
 	} );
 
 	/**

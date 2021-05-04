@@ -12,6 +12,16 @@ const initState = {
 	avocado: 'avocado'
 };
 
+/**
+ * Inline editors can be easily re-ordered.
+ *
+ * Please note that due to upstream issues classic editor must be re-initialized after re-ordering:
+ * - https://github.com/ckeditor/ckeditor4/pull/4463
+ * - https://github.com/ckeditor/ckeditor4/pull/4481
+ *
+ * This example uses a simple cache to re-initialize classic editor with previous data.
+ *
+ */
 function App() {
 	const [ order, setOrder ] = useState( Object.keys( initState ) );
 	const [ cache, setCache ] = useState( initState );

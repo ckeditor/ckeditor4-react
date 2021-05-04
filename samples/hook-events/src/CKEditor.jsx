@@ -5,6 +5,17 @@ import { useCKEditor, useCKEditorEvent } from 'ckeditor4-react';
 
 const { useCallback, useState } = React;
 
+/**
+ * `useCKEditor` hook supports lifecycle event handlers:
+ *
+ * - onBeforeLoad
+ * - onNamespaceLoaded
+ *
+ * All other event handlers can be registered with help of `useCKEditorEvent`.
+ *
+ * Please notice how each handler is wrapped with `useCallback`. This is required to avoid endless render loop.
+ *
+ */
 function CKEditor( { pushEvent, uniqueName } ) {
 	const [ element, setElement ] = useState();
 
@@ -16,10 +27,15 @@ function CKEditor( { pushEvent, uniqueName } ) {
 		pushEvent( 'beforeLoad' );
 	}, [ pushEvent ] );
 
+	const handleLoaded = useCallback( () => {
+		pushEvent( 'loaded' );
+	}, [ pushEvent ] );
+
 	const { editor } = useCKEditor( {
 		element,
 		debug: true,
 		onNamespaceLoaded: handleNamespaceLoaded,
+		onLoaded: handleLoaded,
 		onBeforeLoad: handleBeforeLoad
 	} );
 
@@ -32,10 +48,6 @@ function CKEditor( { pushEvent, uniqueName } ) {
 
 	const handleInstanceReady = useCallback( () => {
 		pushEvent( 'instanceReady' );
-	}, [ pushEvent ] );
-
-	const handleLoaded = useCallback( () => {
-		pushEvent( 'loaded' );
 	}, [ pushEvent ] );
 
 	const handleBlur = useCallback( () => {
@@ -57,13 +69,6 @@ function CKEditor( { pushEvent, uniqueName } ) {
 		editor,
 		handler: handleInstanceReady,
 		evtName: 'instanceReady',
-		debug: true
-	} );
-
-	useCKEditorEvent( {
-		editor,
-		handler: handleLoaded,
-		evtName: 'loaded',
 		debug: true
 	} );
 

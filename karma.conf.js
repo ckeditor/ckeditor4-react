@@ -15,9 +15,9 @@ module.exports = function( config ) {
 		frameworks: [ 'jasmine' ],
 
 		files: [
+			// Preloads editor before any tests are run.
 			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
-			// Karma builds a separate bundle for each file which is significantly slower.
-			// Therefore, use single entry point for improved performance.
+			// Uses single point of entry for improved build performance.
 			{ pattern: 'tests/unit/index.ts', watched: false }
 		],
 
@@ -62,10 +62,10 @@ module.exports = function( config ) {
 			].filter( Boolean ),
 			onwarn( warning, rollupWarn ) {
 				if (
-					// Reduces noise for circular deps
+					// Reduces noise for circular deps.
 					// https://github.com/rollup/rollup/issues/2271
 					warning.code !== 'CIRCULAR_DEPENDENCY' &&
-					// Prevents warning about known issue when bundling RTL
+					// Prevents namespace warning when bundling RTL.
 					// https://github.com/testing-library/react-testing-library/issues/790
 					warning.code !== 'NAMESPACE_CONFLICT'
 				) {

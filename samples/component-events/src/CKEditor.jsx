@@ -5,19 +5,23 @@ import { CKEditor, useCKEditorEvent } from 'ckeditor4-react';
 
 const { useCallback, useState } = React;
 
+/**
+ * `CKEditor` component supports lifecycle event handlers:
+ *
+ * - onBeforeLoad
+ * - onDestroyed
+ * - onInstanceReady
+ * - onLoaded
+ * - onNamespaceLoaded
+ *
+ * All other event handlers can be registered with help of `useCKEditorEvent`.
+ *
+ * Please notice how each handler is wrapped with `useCallback`. This is required to avoid endless render loop.
+ *
+ */
 function CKEditorCmp( { pushEvent, uniqueName } ) {
 	const [ editor, setEditor ] = useState( undefined );
 
-	/**
-	 * `CKEditor` component supports lifecycle event handlers:
-	 *
-	 * - onBeforeLoad
-	 * - onDestroyed
-	 * - onInstanceReady
-	 * - onLoaded
-	 * - onNamespaceLoaded
-	 *
-	 */
 	const handleBeforeLoad = useCallback( () => {
 		pushEvent( 'beforeLoad' );
 	}, [ pushEvent ] );
@@ -43,9 +47,6 @@ function CKEditorCmp( { pushEvent, uniqueName } ) {
 		pushEvent( 'namespaceLoaded' );
 	}, [ pushEvent ] );
 
-	/**
-	 * Custom events can be registered with the help of `useCKEditorEvent` hook.
-	 */
 	const handleBlur = useCallback( () => {
 		pushEvent( 'blur' );
 	}, [ pushEvent ] );
