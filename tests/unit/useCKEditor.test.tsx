@@ -21,8 +21,10 @@ function init() {
 					onNamespaceLoaded
 				} )
 			);
+			// Timeout is increased so that slower CI environment has a chance to catch-up.
 			await waitForValueToChange(
-				() => result.current.status === 'unloaded'
+				() => result.current.status === 'unloaded',
+				{ timeout: 5000 }
 			);
 			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
 			unmount();

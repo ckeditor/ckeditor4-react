@@ -2,7 +2,6 @@
 
 const path = require( 'path' );
 const shell = require( 'shelljs' );
-const { gt } = require( 'semver' );
 const { runReactTester, execCmdSync, log } = require( './utils' );
 
 const PACKAGE_PATH = path.resolve( __dirname, '..' );
