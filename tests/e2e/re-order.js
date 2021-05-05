@@ -47,15 +47,15 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 				 * The code below works fine on some browsers only.
 				 */
 
-				const {
-					value: { ELEMENT }
-				} = await browser.element(
-					'xpath',
-					`//div[@id='cke_${ value }']//iframe`
-				);
-				await browser.frame( { ELEMENT } );
-				await browser.assert.containsText( '.cke_editable', value );
-				await browser.frame( null );
+				// const {
+				// 	value: { ELEMENT }
+				// } = await browser.element(
+				// 	'xpath',
+				// 	`//div[@id='cke_${ value }']//iframe`
+				// );
+				// await browser.frame( { ELEMENT } );
+				// await browser.assert.containsText( '.cke_editable', value );
+				// await browser.frame( null );
 			}
 		}
 	} );
