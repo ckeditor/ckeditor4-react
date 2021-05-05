@@ -66,7 +66,7 @@ export type CKEditorNamespaceCb = ( CKEDITOR: CKEditorNamespace ) => void;
 export type CKEditorInstance = any;
 
 /**
- * Editor instance's config.
+ * Editor instance config.
  */
 export type CKEditorConfig = Record<string, any>;
 
@@ -104,11 +104,17 @@ export interface CKEditorHookProps {
 	/**
 	 * Callback function with CKEDITOR namespace passed as the only argument.
 	 * It is invoked each time a new editor instance is loaded.
+	 *
+	 * There is no native editor's equivalent for this callback.
 	 */
 	onBeforeLoad?: CKEditorNamespaceCb | null;
 
 	/**
 	 * Callback invoked once the editor instance is loaded.
+	 *
+	 * Associated with `loaded` event.
+	 *
+	 * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#event-loaded
 	 */
 	onLoaded?: CKEditorEventHandler | null;
 
@@ -116,6 +122,8 @@ export interface CKEditorHookProps {
 	 * Callback function with CKEDITOR namespace passed as the only argument.
 	 * It is invoked exactly once regardless the number of editor instances.
 	 * It is called after CKEDITOR namespace is loaded and before any editor instances are initialized.
+	 *
+	 * There is no native editor's equivalent for this callback.
 	 */
 	onNamespaceLoaded?: CKEditorNamespaceCb | null;
 
@@ -162,6 +170,8 @@ export interface CKEditorEventHookProps {
 	priority?: number;
 }
 
+export type CKEditorRegisterEventArgs = CKEditorEventHookProps;
+
 export interface CKEditorHookResult {
 
 	/**
@@ -170,9 +180,19 @@ export interface CKEditorHookResult {
 	editor?: CKEditorInstance;
 
 	/**
-	 * Current status of editor's instance.
+	 * Status of editor's instance. Equivalent of `editor.status`.
 	 */
 	status?: CKEditorStatus;
+
+	/**
+	 * Indicates if an error occurred. This is a non-recoverable state. Hook must be remounted.
+	 */
+	error?: boolean;
+
+	/**
+	 * Indicates if loading of CKEditor is in progress.
+	 */
+	loading?: boolean;
 }
 
 /**
@@ -181,27 +201,15 @@ export interface CKEditorHookResult {
 export type CKEditorType = 'classic' | 'inline';
 
 /**
- * Enhances `editor.status` with `init`, `loading` and `error` state.
- *
  * Possible values:
- * - `init`: editor initialization has not started yet
- * - `loading`: editor is being loaded
  * - `unloaded`: editor is initialized but its components (plugins, languages, etc.) are not
  * - `loaded`: editor components are fully loaded
  * - `ready`: editor is ready for interaction
  * - `destroyed`: editor instance was destroyed
- * - `error`: an error happened during editor initialization
  *
  * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#property-status
  */
-export type CKEditorStatus =
-	| 'init'
-	| 'loading'
-	| 'unloaded'
-	| 'loaded'
-	| 'ready'
-	| 'destroyed'
-	| 'error';
+export type CKEditorStatus = 'unloaded' | 'loaded' | 'ready' | 'destroyed';
 
 export type CKEditorProps = PropTypes.InferProps<
 

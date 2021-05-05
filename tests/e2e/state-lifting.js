@@ -43,7 +43,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 			'//body[@contenteditable="true"]',
 			'Hello from CKEditor!'
 		);
-		await browser.frameParent();
+		await browser.frame( null );
 		await browser.assert.containsText(
 			{ selector: '//textarea', locateStrategy: 'xpath' },
 			'Hello from CKEditor!'

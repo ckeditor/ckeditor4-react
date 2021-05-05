@@ -17,7 +17,7 @@ import { CKEditor } from '../../src';
 function init() {
 	describe( 'CKEditor', () => {
 		/**
-		 * Ensures that editor is initialized in classic mode and in writable mode by default.
+		 * Ensures that classic editor is initialized in writable mode by default.
 		 */
 		it( 'initializes classic editor', async () => {
 			render( <CKEditor /> );
@@ -35,7 +35,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that editor is initialized in inline mode.
+		 * Ensures that inline editor is initialized in writable mode.
 		 */
 		it( 'initializes inline editor', async () => {
 			render( <CKEditor type="inline" /> );
@@ -69,7 +69,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that inline editor is initialized as read-only.
+		 * Ensures that `readOnly` prop has precedence over `config.readOnly`.
 		 */
 		it( 'overrides `readOnly` in config with prop value', async () => {
 			render( <CKEditor config={{ readOnly: true }} readOnly={false} /> );
@@ -108,7 +108,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that editor can be set to read-only mode after initialization.
+		 * Ensures that read-only mode can be toggled after initialization.
 		 */
 		it( 'sets editor as read-only after init', async () => {
 			const { rerender } = render( <CKEditor initData="Hello world!" /> );
@@ -248,6 +248,16 @@ function init() {
 		} );
 
 		/**
+		 * Ensures that `onLoaded` callback is registered.
+		 */
+		it( 'invokes `onLoaded` callback', async () => {
+			const onLoaded = jasmine.createSpy( 'onLoaded' );
+			render( <CKEditor onLoaded={onLoaded} /> );
+			expect( await findClassicEditor() ).toBeVisible();
+			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		/**
 		 * Ensures that built-in callbacks are registered with high priority.
 		 */
 		it( 'invokes built-in `instanceReady` handler with high prio', async () => {
@@ -262,26 +272,6 @@ function init() {
 			expect(
 				await findByClassicEditorContent( 'Hello world!' )
 			).toBeVisible();
-		} );
-
-		/**
-		 * Ensures that `onLoaded` callback is registered.
-		 */
-		it( 'invokes `onLoaded` callback', async () => {
-			const onLoaded = jasmine.createSpy( 'onLoaded' );
-			render( <CKEditor onLoaded={onLoaded} /> );
-			expect( await findClassicEditor() ).toBeVisible();
-			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
-		} );
-
-		/**
-		 * Ensures that `onNamespaceLoaded` callback is passed and invoked.
-		 */
-		it( 'invokes `onNamespaceLoaded` callback', async () => {
-			const onNamespaceLoaded = jasmine.createSpy( 'onNamespaceLoaded' );
-			render( <CKEditor onNamespaceLoaded={onNamespaceLoaded} /> );
-			expect( await findClassicEditor() ).toBeVisible();
-			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		/**

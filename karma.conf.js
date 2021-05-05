@@ -15,11 +15,15 @@ module.exports = function( config ) {
 		frameworks: [ 'jasmine' ],
 
 		files: [
-			// Preloads editor before any tests are run.
-			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
 			// Uses single point of entry for improved build performance.
 			{ pattern: 'tests/unit/index.ts', watched: false }
 		],
+
+		client: {
+			jasmine: {
+				random: false
+			}
+		},
 
 		preprocessors: {
 			'tests/unit/index.ts': [ 'rollup' ]

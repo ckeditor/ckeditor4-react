@@ -136,11 +136,13 @@ function executeReactTestSuite( sample ) {
 function runNightwatchTests( sample ) {
 	const assets = path.resolve( TESTS_TMP_PATH, './public' );
 
+	let server;
 	let testSuite;
 
 	if ( sample === 'ssr' ) {
+		server = execCmd( 'node dist/server.js', TESTS_TMP_PATH );
 		testSuite = execCmd(
-			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:8080 --test-sample ${ sample }`,
+			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:3000 --test-sample ${ sample }`,
 			PACKAGE_PATH
 		);
 	} else {
@@ -155,6 +157,11 @@ function runNightwatchTests( sample ) {
 		testSuite.stderr.on( 'data', log.error );
 
 		testSuite.on( 'exit', code => {
+			if ( server ) {
+				process.kill( server.pid );
+				process.kill( server.pid + 1 );
+			}
+
 			if ( code > 0 ) {
 				reject( 'nightwatch-runner script failed' );
 			} else {

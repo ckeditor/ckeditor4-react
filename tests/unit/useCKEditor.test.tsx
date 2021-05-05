@@ -5,6 +5,43 @@ import { useCKEditor } from '../../src';
 function init() {
 	describe( 'useCKEditor', () => {
 		/**
+		 * Ensures that `onNamespaceLoaded` callback is called once during lifetime of CKEDITOR namespace.
+		 *
+		 * !!! IMPORTANT !!!
+		 *
+		 * This test must run first!
+		 *
+		 */
+		it( 'invokes `onNamespaceLoaded` callback', async () => {
+			const onNamespaceLoaded = jasmine.createSpy( 'onNamespaceLoaded' );
+			const ref = createDivRef();
+			const { result, unmount, waitForValueToChange } = renderHook( () =>
+				useCKEditor( {
+					element: ref.current,
+					onNamespaceLoaded
+				} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'unloaded'
+			);
+			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
+			unmount();
+			const {
+				result: resultNext,
+				waitForValueToChange: waitForValueToChangeNext
+			} = renderHook( () =>
+				useCKEditor( {
+					element: ref.current,
+					onNamespaceLoaded
+				} )
+			);
+			await waitForValueToChangeNext(
+				() => resultNext.current.status === 'unloaded'
+			);
+			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		/**
 		 * Ensures that editor instance is created and returned.
 		 */
 		it( 'creates editor instance', async () => {
@@ -42,10 +79,11 @@ function init() {
 				useCKEditor( { element: ref.current } )
 			);
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'loading' );
+			expect( result.current.loading ).toBeTrue();
 			await waitForNextUpdate();
 			expect( result.current.editor ).toBeDefined();
 			expect( result.current.status ).toEqual( 'unloaded' );
+			expect( result.current.loading ).toBeFalse();
 			await waitForNextUpdate();
 			expect( result.current.editor ).toBeDefined();
 			expect( result.current.status ).toEqual( 'loaded' );
@@ -67,10 +105,10 @@ function init() {
 				} )
 			);
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'loading' );
+			expect( result.current.loading ).toBeTrue();
 			await waitForNextUpdate();
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'error' );
+			expect( result.current.error ).toBeTrue();
 		} );
 
 		/**
@@ -91,14 +129,14 @@ function init() {
 					'https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js'
 			} );
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'loading' );
+			expect( result.current.loading ).toBeTrue();
 			await waitForValueToChange( () => result.current.status === 'ready' );
 		} );
 
 		/**
 		 * Ensures that editor instance is re-created on editor type change.
 		 */
-		it( 're-initializes editor on editor type change', async () => {
+		it( 're-initializes editor on type change', async () => {
 			const ref = createDivRef();
 			const { result, rerender, waitForValueToChange } = renderHook(
 				( props: any ) =>
@@ -112,7 +150,7 @@ function init() {
 				type: 'inline'
 			} );
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'loading' );
+			expect( result.current.loading ).toBeTrue();
 			await waitForValueToChange( () => result.current.status === 'ready' );
 		} );
 
@@ -133,12 +171,12 @@ function init() {
 				config: { skin: 'myskin' }
 			} );
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'loading' );
+			expect( result.current.loading ).toBeTrue();
 			await waitForValueToChange( () => result.current.status === 'ready' );
 		} );
 
 		/**
-		 * Ensures that editor instance is re-created on element ref change.
+		 * Ensures that editor instance is re-created on element change.
 		 */
 		it( 're-initializes editor on element change', async () => {
 			const ref = createDivRef();
@@ -155,7 +193,7 @@ function init() {
 				element: nextRef.current
 			} );
 			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.status ).toEqual( 'loading' );
+			expect( result.current.loading ).toBeTrue();
 			await waitForValueToChange( () => result.current.status === 'ready' );
 		} );
 
@@ -177,38 +215,6 @@ function init() {
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
 			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
-		} );
-
-		/**
-		 * Ensures that `onNamespaceLoaded` callback is called once during lifetime of CKEDITOR namespace.
-		 */
-		it( 'invokes `onNamespaceLoaded` callback', async () => {
-			const onNamespaceLoaded = jasmine.createSpy( 'onNamespaceLoaded' );
-			const ref = createDivRef();
-			const { result, unmount, waitForValueToChange } = renderHook( () =>
-				useCKEditor( {
-					element: ref.current,
-					onNamespaceLoaded
-				} )
-			);
-			await waitForValueToChange(
-				() => result.current.status === 'unloaded'
-			);
-			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
-			unmount();
-			const {
-				result: resultNext,
-				waitForValueToChange: waitForValueToChangeNext
-			} = renderHook( () =>
-				useCKEditor( {
-					element: ref.current,
-					onNamespaceLoaded
-				} )
-			);
-			await waitForValueToChangeNext(
-				() => resultNext.current.status === 'unloaded'
-			);
-			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
 		} );
 	} );
 }

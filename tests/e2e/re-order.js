@@ -49,7 +49,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 				);
 				await browser.frame( { ELEMENT } );
 				await browser.assert.containsText( '.cke_editable', value );
-				await browser.frameParent();
+				await browser.frame( null );
 			}
 		}
 	} );

@@ -5,6 +5,9 @@
 
 export * from './types';
 
+export * from './registerEditorEventHandler';
+export { default as registerEditorEventHandler } from './registerEditorEventHandler';
+
 export * from './useCKEditorEvent';
 export { default as useCKEditorEvent } from './useCKEditorEvent';
 

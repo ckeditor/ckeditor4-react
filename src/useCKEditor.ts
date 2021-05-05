@@ -15,6 +15,7 @@ import type {
 	CKEditorNamespace,
 	CKEditorStatus
 } from './types';
+import registerEditorEventHandler from './registerEditorEventHandler';
 
 const { useCallback, useEffect, useReducer } = React;
 
@@ -41,9 +42,9 @@ function useCKEditor( {
 	/**
 	 * Holds current editor instance and editor's enhanced status.
 	 */
-	const [ state, dispatch ] = useReducer( reducer, {
+	const [ { editor, _status }, dispatch ] = useReducer( reducer, {
 		editor: undefined,
-		status: 'init'
+		_status: 'init'
 	} );
 
 	/**
@@ -51,7 +52,7 @@ function useCKEditor( {
 	 * A new instance of this callback will be created whenever new url, config, type, or lifecycle callbacks are provided.
 	 */
 	const initEditor = useCallback( () => {
-		if ( element && !state.editor ) {
+		if ( element && !editor ) {
 			dispatch( { type: 'loading' } );
 
 			getEditorNamespace( editorUrlInit, onNamespaceLoaded )
@@ -71,23 +72,25 @@ function useCKEditor( {
 
 					/**
 					 * `loaded` event listeners should be registered as soon as possible.
-					 * Otherwise we risk missing it.
+					 * Otherwise we risk missing the event.
 					 */
 
-					editor.on(
-						'loaded',
-						() => {
+					registerEditorEventHandler( {
+						editor,
+						evtName: 'loaded',
+						handler: () => {
 							dispatch( {
 								type: 'loaded'
 							} );
-						},
-						null,
-						null,
-						-1
-					);
+						}
+					} );
 
 					if ( onLoaded ) {
-						editor.on( 'loaded', onLoaded );
+						registerEditorEventHandler( {
+							editor,
+							evtName: 'loaded',
+							handler: onLoaded
+						} );
 					}
 				} )
 				.catch( ( error: Error ) => {
@@ -104,7 +107,7 @@ function useCKEditor( {
 		onBeforeLoad,
 		onLoaded,
 		onNamespaceLoaded,
-		state.editor,
+		editor,
 		type
 	] );
 
@@ -112,10 +115,10 @@ function useCKEditor( {
 	 * Callback that destroys editor.
 	 */
 	const destroyEditor = useCallback( () => {
-		if ( state.editor ) {
-			state.editor.destroy();
+		if ( editor ) {
+			editor.destroy();
 		}
-	}, [ state.editor ] );
+	}, [ editor ] );
 
 	const isInline = type === 'inline';
 	const isReadOnly = configInit.readOnly;
@@ -141,14 +144,14 @@ function useCKEditor( {
 	 * Handler for `destroy` event.
 	 */
 	const handleDestroyed = useCallback<CKEditorEventHandler>( () => {
-		dispatch( { type: 'destroy' } );
+		dispatch( { type: 'destroyed' } );
 	}, [] );
 
 	/**
 	 * Registers handler for `instanceReady` event.
 	 */
 	useCKEditorEvent( {
-		editor: state.editor,
+		editor,
 		evtName: 'instanceReady',
 		handler: handleInstanceReady,
 		debug,
@@ -159,7 +162,7 @@ function useCKEditor( {
 	 * Registers handler for `destroy` event.
 	 */
 	useCKEditorEvent( {
-		editor: state.editor,
+		editor,
 		evtName: 'destroy',
 		handler: handleDestroyed,
 		debug,
@@ -177,59 +180,59 @@ function useCKEditor( {
 		return destroyEditor;
 	}, [ destroyEditor, initEditor ] );
 
-	return state;
+	return {
+		editor,
+		status: editor?.status,
+		error: _status === 'error',
+		loading: _status === 'loading'
+	};
 }
 
 function reducer( state: HookState, action: HookAction ): HookState {
 	switch ( action.type ) {
 		case 'init':
-			return { editor: undefined, status: 'init' };
+			return { ...state, _status: 'init' };
 		case 'loading':
-			return { editor: undefined, status: 'loading' };
+			return { ...state, _status: 'loading' };
 		case 'unloaded':
 			return {
 				editor: action.payload,
-				status: 'unloaded'
+				_status: 'unloaded'
 			};
 		case 'loaded':
 			return {
 				...state,
-				status: 'loaded'
+				_status: 'loaded'
 			};
 		case 'ready':
 			return {
 				...state,
-				status: 'ready'
+				_status: 'ready'
 			};
-		case 'destroy':
+		case 'destroyed':
 			return {
 				editor: undefined,
-				status: 'destroyed'
+				_status: 'destroyed'
 			};
 		case 'error':
 			return {
 				editor: undefined,
-				status: 'error'
+				_status: 'error'
 			};
 		default:
 			return state;
 	}
 }
 
+type HookInternalStatus = 'init' | 'loading' | 'error' | CKEditorStatus;
+
 interface HookState {
 	editor?: CKEditorInstance;
-	status: CKEditorStatus;
+	_status?: HookInternalStatus;
 }
 
 interface HookAction {
-	type:
-		| 'init'
-		| 'loading'
-		| 'unloaded'
-		| 'loaded'
-		| 'ready'
-		| 'destroy'
-		| 'error';
+	type: HookInternalStatus;
 	payload?: CKEditorInstance;
 }
 

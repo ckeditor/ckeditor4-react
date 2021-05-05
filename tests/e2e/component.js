@@ -47,7 +47,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 			'.cke_editable',
 			'Hello from classic editor!'
 		);
-		await browser.frameParent();
+		await browser.frame( null );
 		await browser.click( 'input[id=inline]' );
 		await browser.assert.containsText(
 			'.cke_editable_inline',
@@ -68,7 +68,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 			selector: '//body[@contenteditable="false"]',
 			locateStrategy: 'xpath'
 		} );
-		await browser.frameParent();
+		await browser.frame( null );
 		await browser.click( 'input[id=read-only]' );
 		await browser.frame( 0 );
 		await browser.assert.visible( {

@@ -75,7 +75,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 		);
 		await browser.frame( 0 );
 		await browser.click( '.cke_editable' );
-		await browser.frameParent();
+		await browser.frame( null );
 		await browser.click( 'xpath', '//table' );
 		await browser.assert.containsText(
 			{

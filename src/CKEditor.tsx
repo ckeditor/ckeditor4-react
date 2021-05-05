@@ -173,21 +173,33 @@ const propTypes = {
 	/**
 	 * Callback function with CKEDITOR namespace passed as the only argument.
 	 * It is invoked each time a new editor instance is loaded.
+	 *
+	 * There is no native editor's equivalent for this callback.
 	 */
 	onBeforeLoad: PropTypes.func,
 
 	/**
 	 * Callback invoked once the editor instance is destroyed.
+	 * Associated with `destroy` event.
+	 *
+	 * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#method-destroy
 	 */
 	onDestroyed: PropTypes.func,
 
 	/**
 	 * Callback invoked once the editor instance is ready.
+	 * Associated with `instanceReady` event.
+	 *
+	 * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#event-instanceReady
 	 */
 	onInstanceReady: PropTypes.func,
 
 	/**
 	 * Callback invoked once the editor instance is loaded.
+	 *
+	 * Associated with `loaded` event.
+	 *
+	 * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#event-loaded
 	 */
 	onLoaded: PropTypes.func,
 
@@ -195,6 +207,8 @@ const propTypes = {
 	 * Callback function with CKEDITOR namespace passed as the only argument.
 	 * It is invoked exactly once regardless the number of editor instances.
 	 * It is called after CKEDITOR namespace is loaded and before any editor instances are initialized.
+	 *
+	 * There is no native editor's equivalent for this callback.
 	 */
 	onNamespaceLoaded: PropTypes.func,
 
@@ -202,8 +216,8 @@ const propTypes = {
 	 * This prop has two-fold effect:
 	 *
 	 * - Serves as a convenience prop to start editor in read-only mode.
-	 *   It's an equivalent of passing `config.readOnly = true` but the former way takes precedence.
-	 * - Allows to change editor's mode to read-only on runtime, once the editor is in `ready` state.
+	 *   It's an equivalent of passing `config.readOnly = true` but takes precedence over it.
+	 * - Allows to toggle editor's `read-only` mode on runtime.
 	 *
 	 * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-readOnly
 	 */
