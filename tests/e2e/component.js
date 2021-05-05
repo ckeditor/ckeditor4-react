@@ -80,7 +80,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 
 	test( 'editor changes style', async browser => {
 		await browser.click( 'input[id=blue]' );
-		if ( bsBrowser === 'ie' ) {
+		if ( [ 'ie', 'safari' ].indexOf( bsBrowser ) !== -1 ) {
 			await browser.assert.attributeContains(
 				'.cke',
 				'style',
@@ -94,7 +94,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 			);
 		}
 		await browser.click( 'input[id=green]' );
-		if ( bsBrowser === 'ie' ) {
+		if ( [ 'ie', 'safari' ].indexOf( bsBrowser ) !== -1 ) {
 			await browser.assert.attributeContains(
 				'.cke',
 				'style',
