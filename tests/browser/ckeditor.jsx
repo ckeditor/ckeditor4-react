@@ -73,17 +73,17 @@ describe( 'CKEditor Component', () => {
 	} );
 
 	// (#204)
-	const requestedVersion = process.env.REQUESTED_REACT_VERSION;
-
-	it( `uses requested React v${ requestedVersion }`, () => {
+	it( 'uses requested React', () => {
+		const requestedVersion = process.env.REQUESTED_REACT_VERSION;
 		const runningVersion = React.version;
 
 		if ( !requestedVersion ) {
 			console.warn(
 				`REQUESTED_REACT_VERSION variable was not set. Running tests for React v${ runningVersion }`
 			);
+		} else {
+			expect( requestedVersion ).to.equal( runningVersion );
 		}
-		expect( requestedVersion ).to.equal( runningVersion );
 	} );
 
 	describe( 'mounting and types', () => {

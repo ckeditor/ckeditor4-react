@@ -76,7 +76,7 @@ module.exports = function( config ) {
 			plugins: [
 				new webpack.DefinePlugin( {
 					'process.env.REQUESTED_REACT_VERSION': JSON.stringify(
-						process.env.REQUESTED_REACT_VERSION
+						process.env.REQUESTED_REACT_VERSION || ''
 					)
 				} )
 			]
