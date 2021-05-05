@@ -1,6 +1,11 @@
 name: Test browsers
 
 on:
+    pull_request:
+        branches:
+            - master
+            - stable
+            - major
     push:
         tags:
             - v*
