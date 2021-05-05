@@ -30,24 +30,21 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 	} );
 
 	test( 'editor sets data from outside', async browser => {
-		await browser.setValue( 'xpath', '//textarea', 'Hello from textarea!' );
-		await browser.assert.containsText( '.preview', 'Hello from textarea!' );
+		await browser.setValue( 'xpath', '//textarea', 'textarea' );
+		await browser.assert.containsText( '.preview', 'textarea' );
 		await browser.frame( 0 );
-		await browser.assert.containsText(
-			'.cke_editable',
-			'Hello from textarea!'
-		);
+		await browser.assert.containsText( '.cke_editable', 'textarea' );
 		await browser.clearValue( 'xpath', '//body[@contenteditable="true"]' );
 		await browser.setValue(
 			'xpath',
 			'//body[@contenteditable="true"]',
-			'Hello from CKEditor!'
+			'CKEditor'
 		);
 		await browser.frame( null );
 		await browser.assert.containsText(
 			{ selector: '//textarea', locateStrategy: 'xpath' },
-			'Hello from CKEditor!'
+			'CKEditor'
 		);
-		await browser.assert.containsText( '.preview', 'Hello from CKEditor!' );
+		await browser.assert.containsText( '.preview', 'CKEditor' );
 	} );
 } );

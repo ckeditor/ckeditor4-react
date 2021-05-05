@@ -80,32 +80,24 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 
 	test( 'editor changes style', async browser => {
 		await browser.click( 'input[id=blue]' );
-		if ( [ 'ie', 'safari' ].indexOf( bsBrowser ) !== -1 ) {
-			await browser.assert.attributeContains(
-				'.cke',
-				'style',
-				'border: 1px solid blue'
-			);
-		} else {
-			await browser.assert.attributeContains(
-				'.cke',
-				'style',
-				'border-color: blue'
-			);
-		}
+		await checkBorderStyle( 'blue' );
 		await browser.click( 'input[id=green]' );
-		if ( [ 'ie', 'safari' ].indexOf( bsBrowser ) !== -1 ) {
-			await browser.assert.attributeContains(
-				'.cke',
-				'style',
-				'border: 1px solid green'
-			);
-		} else {
-			await browser.assert.attributeContains(
-				'.cke',
-				'style',
-				'border-color: green'
-			);
+		await checkBorderStyle( 'green' );
+
+		async function checkBorderStyle( color ) {
+			if ( [ 'ie', 'safari' ].indexOf( bsBrowser ) !== -1 ) {
+				await browser.assert.attributeContains(
+					'.cke',
+					'style',
+					`order: 1px solid ${ color }`
+				);
+			} else {
+				await browser.assert.attributeContains(
+					'.cke',
+					'style',
+					`border-color: ${ color }`
+				);
+			}
 		}
 	} );
 } );

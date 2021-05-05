@@ -165,7 +165,7 @@ function getAllReactVersions() {
 }
 
 /**
- * Enhances list of React versions with `all`, `current`, and a fixed version.
+ * Enhances list of React versions with `all`, `current`, `last-two`, and a fixed version.
  *
  * @returns {string[]} list of versions to be tested
  */
@@ -175,6 +175,8 @@ function getVersionsToTest( version ) {
 			return getAllReactVersions();
 		case 'current':
 			return [ getCurrentReactVersion() ];
+		case 'last-two':
+			return getAllReactVersions().slice( -2 );
 		default:
 			return [ version ];
 	}
