@@ -1,5 +1,5 @@
-# `umd` example
+# `umd` build
 
-In this example `umd` build of `ckeditor4-react` package is used. CKEditor4 is initialized and init data is set.
+Showcase of how `umd` build of `ckeditor4-react` package can be used.
 
 See on CodeSandbox (insert link here).

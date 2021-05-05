@@ -9,7 +9,7 @@ const testSample = process.env.NIGHTWATCH_TEST_SAMPLE;
 /**
  * Test suite for `samples/basic` example.
  */
-describe( `${ testSample } - react v${ reactVersion } - sanity checks`, () => {
+describe( `${ testSample } - react v${ reactVersion }`, () => {
 	beforeEach( async browser => {
 		await browser.url( localServer );
 		await browser.waitForElementPresent( 'body', 1000 );
@@ -17,8 +17,11 @@ describe( `${ testSample } - react v${ reactVersion } - sanity checks`, () => {
 
 	test( 'requested version of React is running', async browser => {
 		await browser.assert.visible(
-			'.react-version',
-			`Running React v${ reactVersion }`
+			{
+				selector: '//footer',
+				locateStrategy: 'xpath'
+			},
+			`React v${ reactVersion }`
 		);
 	} );
 
@@ -26,8 +29,12 @@ describe( `${ testSample } - react v${ reactVersion } - sanity checks`, () => {
 		await browser.assert.visible( '.cke_1' );
 	} );
 
-	test( 'editor initial content is set', async browser => {
+	test( 'editor initializes correctly', async browser => {
 		await browser.frame( 0 );
 		await browser.assert.containsText( '.cke_editable', 'Hello world!' );
+		await browser.assert.visible( {
+			selector: '//body[@contenteditable="true"]',
+			locateStrategy: 'xpath'
+		} );
 	} );
 } );

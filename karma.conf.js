@@ -15,12 +15,18 @@ module.exports = function( config ) {
 		frameworks: [ 'jasmine' ],
 
 		files: [
-			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
-			{ pattern: 'tests/unit/tests.tsx', watched: false }
+			// Uses single point of entry for improved build performance.
+			{ pattern: 'tests/unit/index.ts', watched: false }
 		],
 
+		client: {
+			jasmine: {
+				random: false
+			}
+		},
+
 		preprocessors: {
-			'tests/unit/tests.tsx': [ 'rollup' ]
+			'tests/unit/index.ts': [ 'rollup' ]
 		},
 
 		reporters: [ 'mocha' ],
@@ -51,18 +57,19 @@ module.exports = function( config ) {
 				replace( {
 					preventAssignment: true,
 					values: {
-						'process.env.REQUESTED_REACT_VERSION': JSON.stringify(
-							process.env.REQUESTED_REACT_VERSION
-						)
+						'process.env.REQUESTED_REACT_VERSION': `"${
+							process.env.REQUESTED_REACT_VERSION || ''
+						}"`,
+						'process.env.NODE_ENV': '"test"'
 					}
 				} )
 			].filter( Boolean ),
 			onwarn( warning, rollupWarn ) {
 				if (
-					// Reduces noise for circular deps
+					// Reduces noise for circular deps.
 					// https://github.com/rollup/rollup/issues/2271
 					warning.code !== 'CIRCULAR_DEPENDENCY' &&
-					// Prevents warning about known issue when bundling RTL
+					// Prevents namespace warning when bundling RTL.
 					// https://github.com/testing-library/react-testing-library/issues/790
 					warning.code !== 'NAMESPACE_CONFLICT'
 				) {

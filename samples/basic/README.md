@@ -1,5 +1,5 @@
 # Basic example
 
-CKEditor4 is initialized and init data is set.
+This is a basic showcase of `CKEditor4` component.
 
 See on CodeSandbox (insert link here).

@@ -14,7 +14,7 @@ if ( !( args && args[ 2 ] && args[ 2 ].length > 2 ) ) {
 
 const version = args[ 2 ];
 
-// Update the CDN link in the 'src/ckeditor.jsx' file.
+// Update the CDN link in the 'src/useCKEditor.ts' file.
 updateCdnLink( path.resolve( __dirname, '..', 'src', 'useCKEditor.ts' ) );
 
 // Update the CDN link in the 'karma.conf.js' file.

@@ -17,12 +17,13 @@ const bsKey = process.env.BROWSER_STACK_ACCESS_KEY;
 ( async function() {
 	const argv = require( 'minimist' )( process.argv.slice( 2 ) );
 	const bsFolderPath = argv[ 'bs-folder-path' ];
+	const bsServer = argv[ 'bs-server' ];
 	const testSample = argv[ 'test-sample' ];
 
 	try {
 		log.paragraph( 'Connecting to BrowserStack...' );
 		await startConnection( bsFolderPath );
-		await runNightwatchCli( testSample );
+		await runNightwatchCli( testSample, bsServer );
 	} catch ( error ) {
 		log.error( 'An error occurred within Nightwatch runner!' );
 		console.error( error );
@@ -72,11 +73,15 @@ function startConnection( bsFolderPath ) {
  * Runs Nightwatch runner. Resolves once testing is done and stops BrowserStack Local.
  *
  * @param {string} sample current test sample
+ * @param {string} server server address from which tested app is served
  * @returns {Promise} promise
  */
-function runNightwatchCli( sample ) {
+function runNightwatchCli(
+	sample,
+	bsServer = `http://${ bsUser }.browserstack.com`
+) {
 	return new Promise( ( resolve, reject ) => {
-		process.env.NIGHTWATCH_LOCAL_SERVER = `http://${ bsUser }.browserstack.com`;
+		process.env.NIGHTWATCH_LOCAL_SERVER = bsServer;
 		process.env.NIGHTWATCH_TEST_SAMPLE = sample;
 
 		Nightwatch.cli( argv => {

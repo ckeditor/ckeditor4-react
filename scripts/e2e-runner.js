@@ -86,8 +86,7 @@ async function runTests( reactVersion, requestedSample ) {
 		);
 
 		await runReactTester(
-			reactVersion,
-			TESTS_TMP_PATH,
+			{ version: reactVersion, cwd: TESTS_TMP_PATH },
 			executeReactTestSuite( sample )
 		);
 	}
@@ -116,7 +115,9 @@ function executeReactTestSuite( sample ) {
 				break;
 			} catch ( error ) {
 				if ( tries ) {
-					log.error( `Error occurred, retrying... Tries left: ${ tries }` );
+					log.error(
+						`Error occurred, retrying... Tries left: ${ tries }`
+					);
 					await waitFor( 5000 );
 				} else {
 					throw error;
@@ -132,18 +133,36 @@ function executeReactTestSuite( sample ) {
  * @param {string} sample sample to test
  * @returns {Promise} async callback
  */
-function runNightwatchTests( sample ) {
+async function runNightwatchTests( sample ) {
 	const assets = path.resolve( TESTS_TMP_PATH, './public' );
-	const testSuite = execCmd(
-		`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-folder-path ${ assets } --test-sample ${ sample }`,
-		PACKAGE_PATH
-	);
+
+	let server;
+	let testSuite;
+
+	if ( sample === 'ssr' ) {
+		server = execCmd( 'node dist/server.js', TESTS_TMP_PATH );
+		await waitFor( 3000 );
+		testSuite = execCmd(
+			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:3000 --test-sample ${ sample }`,
+			PACKAGE_PATH
+		);
+	} else {
+		testSuite = execCmd(
+			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-folder-path ${ assets } --test-sample ${ sample }`,
+			PACKAGE_PATH
+		);
+	}
 
 	return new Promise( ( resolve, reject ) => {
 		testSuite.stdout.on( 'data', log.info );
 		testSuite.stderr.on( 'data', log.error );
 
 		testSuite.on( 'exit', code => {
+			if ( server ) {
+				process.kill( server.pid );
+				process.kill( server.pid + 1 );
+			}
+
 			if ( code > 0 ) {
 				reject( 'nightwatch-runner script failed' );
 			} else {

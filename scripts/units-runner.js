@@ -34,6 +34,7 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 			'karma.conf.js',
 			'tsconfig.json',
 			'src',
+			'scripts',
 			'tests'
 		].forEach( file => {
 			shell.cp(
@@ -48,16 +49,28 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 			TESTS_TMP_PATH
 		);
 
-		await runReactTester( reactVersion, TESTS_TMP_PATH, () => {
-			return console.log(
-				execCmdSync(
-					'npm run test:browser -- --silent-build-logs=true',
-					TESTS_TMP_PATH
-				)
-			);
-		} );
+		await runReactTester(
+			{
+				version: reactVersion,
+
+				/**
+				 * Version 16.8.6 does not support async `act` test helper.
+				 * https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#async-act-for-testing
+				 */
+				skip: [ '16.8.6' ],
+				cwd: TESTS_TMP_PATH
+			},
+			() => {
+				return console.log(
+					execCmdSync(
+						'node node_modules/.bin/karma start --single-run --silent-build-logs=true',
+						TESTS_TMP_PATH
+					)
+				);
+			}
+		);
 	} catch ( error ) {
-		log.error( 'Could not complete E2E tests!' );
+		log.error( 'Could not complete unit tests!' );
 		console.error( error );
 		process.exitCode = 1;
 	}
