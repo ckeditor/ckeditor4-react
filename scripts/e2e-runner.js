@@ -133,7 +133,7 @@ function executeReactTestSuite( sample ) {
  * @param {string} sample sample to test
  * @returns {Promise} async callback
  */
-function runNightwatchTests( sample ) {
+async function runNightwatchTests( sample ) {
 	const assets = path.resolve( TESTS_TMP_PATH, './public' );
 
 	let server;
@@ -141,6 +141,7 @@ function runNightwatchTests( sample ) {
 
 	if ( sample === 'ssr' ) {
 		server = execCmd( 'node dist/server.js', TESTS_TMP_PATH );
+		await waitFor( 3000 );
 		testSuite = execCmd(
 			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:3000 --test-sample ${ sample }`,
 			PACKAGE_PATH

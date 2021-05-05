@@ -5,6 +5,7 @@
 const reactVersion = process.env.REQUESTED_REACT_VERSION;
 const localServer = process.env.NIGHTWATCH_LOCAL_SERVER;
 const testSample = process.env.NIGHTWATCH_TEST_SAMPLE;
+const bsBrowser = process.env.BROWSER_STACK_BROWSER;
 
 /**
  * Test suite for `samples/component` example.
@@ -79,16 +80,32 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 
 	test( 'editor changes style', async browser => {
 		await browser.click( 'input[id=blue]' );
-		await browser.assert.cssProperty(
-			'.cke',
-			'border-color',
-			'rgb(0, 0, 255)'
-		);
+		if ( bsBrowser === 'ie' ) {
+			await browser.assert.attributeContains(
+				'.cke',
+				'style',
+				'border: 1px solid blue'
+			);
+		} else {
+			await browser.assert.attributeContains(
+				'.cke',
+				'style',
+				'border-color: blue'
+			);
+		}
 		await browser.click( 'input[id=green]' );
-		await browser.assert.cssProperty(
-			'.cke',
-			'border-color',
-			'rgb(0, 128, 0)'
-		);
+		if ( bsBrowser === 'ie' ) {
+			await browser.assert.attributeContains(
+				'.cke',
+				'style',
+				'border: 1px solid green'
+			);
+		} else {
+			await browser.assert.attributeContains(
+				'.cke',
+				'style',
+				'border-color: green'
+			);
+		}
 	} );
 } );

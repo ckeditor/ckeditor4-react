@@ -67,4 +67,10 @@ const nightwatchConfig = {
 	}
 };
 
+for ( const i in nightwatchConfig.test_settings ) {
+	const config = nightwatchConfig.test_settings[ i ];
+	config.selenium_host = nightwatchConfig.selenium.host;
+	config.selenium_port = nightwatchConfig.selenium.port;
+}
+
 module.exports = nightwatchConfig;

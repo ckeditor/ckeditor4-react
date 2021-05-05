@@ -41,6 +41,12 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 
 				// Checks classic editor
 				await browser.assert.visible( `#cke_${ value }` );
+
+				/**
+				 * Asserting content of randomly ordered iframes seems to be non-trivial task in Nightwatch.
+				 * The code below works fine on some browsers only.
+				 */
+
 				const {
 					value: { ELEMENT }
 				} = await browser.element(
