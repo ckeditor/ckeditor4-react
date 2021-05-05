@@ -13,7 +13,8 @@ const semverMinor = require( 'semver/functions/minor' );
  * Commands:
  *
  * --browser <name>   Specifies environment to test.
- *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'BrowserStack_IE11', 'SSR'. Defaults to: 'Chrome'.
+ *                    Possible values: 'Chrome', 'Firefox', 'BrowserStack_Safari', 'BrowserStack_Edge', 'BrowserStack_IE11', 'SSR'.
+ *                    Defaults to: 'Chrome'.
  * --react <version>  Specifies react version to test. Possible values: 'all', 'current' or specific version. Defaults to: 'current'.
  *
  */
@@ -153,7 +154,10 @@ function isLatestPatch( index, array ) {
 function prepareTestDir( version ) {
 	console.log( `--- Preparing package environment for React v${ version } ---` );
 
-	execNpmCommand( `install react@${ version } react-dom@${ version } --legacy-peer-deps`, TESTS_PATH );
+	execNpmCommand(
+		`install react@${ version } react-dom@${ version } --legacy-peer-deps`,
+		TESTS_PATH
+	);
 }
 
 /**
@@ -164,11 +168,20 @@ function cleanupTestDir() {
 		'package.json',
 		'webpack.config.js',
 		'karma.conf.js',
-		'scripts/test-transpiler.js'
+		'scripts/test-transpiler.js',
+		'src/ckeditor.jsx',
+		'tests/browser/ckeditor.jsx',
+		'tests/server/ckeditor.jsx',
+		'tests/utils/polyfill.js'
 	];
 
 	rmdirSyncRecursive( TESTS_PATH );
 	mkdirSync( TESTS_PATH );
+	mkdirSync( `${ TESTS_PATH }/src` );
+	mkdirSync( `${ TESTS_PATH }/tests` );
+	mkdirSync( `${ TESTS_PATH }/tests/browser` );
+	mkdirSync( `${ TESTS_PATH }/tests/server` );
+	mkdirSync( `${ TESTS_PATH }/tests/utils` );
 	mkdirSync( `${ TESTS_PATH }/scripts` );
 
 	copyFiles( filesToCopy, PACKAGE_PATH, TESTS_PATH );
@@ -185,10 +198,17 @@ function testVersion( version ) {
 	try {
 		console.log( `--- Testing React v${ version } ---` );
 
+		process.env.REQUESTED_REACT_VERSION = version;
+
 		if ( testedBrowser === 'SSR' ) {
-			console.log( execNpmCommand( 'run test:ssr' ) );
+			console.log( execNpmCommand( 'run test:ssr', TESTS_PATH ) );
 		} else {
-			console.log( execNpmCommand( `run test:browser -- --browsers ${ testedBrowser }` ) );
+			console.log(
+				execNpmCommand(
+					`run test:browser -- --browsers ${ testedBrowser }`,
+					TESTS_PATH
+				)
+			);
 		}
 
 		versionsPassed.push( version );

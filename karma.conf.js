@@ -5,6 +5,7 @@
 
 /* global process, require, module */
 
+const webpack = require( 'webpack' );
 const { join: joinPath } = require( 'path' );
 
 const basePath = process.cwd();
@@ -70,7 +71,15 @@ module.exports = function( config ) {
 						}
 					}
 				]
-			}
+			},
+
+			plugins: [
+				new webpack.DefinePlugin( {
+					'process.env.REQUESTED_REACT_VERSION': JSON.stringify(
+						process.env.REQUESTED_REACT_VERSION
+					)
+				} )
+			]
 		},
 
 		webpackMiddleware: {
