@@ -78,4 +78,4 @@ jobs:
                   BROWSER_STACK_BUILD_NAME: ${{ env.BUILD_SLUG }}
                   BROWSER_STACK_BROWSER: ${{ matrix.browser }}
               with:
-                  run: npm run test:e2e:all
+                  run: npm run test:e2e -- --react current
