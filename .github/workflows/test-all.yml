@@ -15,7 +15,8 @@ on:
             - major
 
 jobs:
-    # Runs tests for all configured React version and all environments
+    # Runs tests for selected React versions and all environments
+    # Top-level React version (as per package-lock.json) will be used for PRs. All versions of React will be tested otherwise.
     test-all:
         runs-on: ubuntu-20.04
         name: Run tests
