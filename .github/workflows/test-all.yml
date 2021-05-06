@@ -46,11 +46,13 @@ jobs:
 
             # Set variables required for further steps.
             # CHROME_BIN and FIREFOX_BIN are required by Karma.
+            # REACT_VERSION is set to "current" for pull request events and "all" for other events.
             # BUILD_SLUG corresponds to a BrowserStack job name. It's displayed as combination of repo name and short SHA.
             - name: Set test variables
               run: |
                   export CHROME_BIN=$(which chrome);
                   export FIREFOX_BIN=$(which firefox);
+                  if [ -z ${GITHUB_HEAD_REF} ]; then echo "REACT_VERSION=current"; else echo "REACT_VERSION=all"; fi >> $GITHUB_ENV;
                   echo "BUILD_SLUG=$(echo $GITHUB_REPOSITORY | cut -d '/' -f2) $(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV;
 
             - name: Install dependencies
@@ -63,4 +65,4 @@ jobs:
                   BROWSER_STACK_USERNAME: ${{ secrets.BROWSER_STACK_USERNAME }}
                   BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
               with:
-                  run: npm run test:all -- --browser ${{ matrix.browser }}
+                  run: npm run test:react-tester -- --react ${{ env.REACT_VERSION }}  --browser ${{ matrix.browser }}
