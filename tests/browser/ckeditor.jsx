@@ -8,6 +8,8 @@
 
 import sinonChai from 'sinon-chai';
 import React from 'react';
+/* global process */
+
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -68,6 +70,20 @@ describe( 'CKEditor Component', () => {
 	// (#48)
 	it( 'has proper displayName property', () => {
 		expect( CKEditor.displayName ).to.equal( 'CKEditor' );
+	} );
+
+	// (#204)
+	it( 'uses requested React', () => {
+		const requestedVersion = process.env.REQUESTED_REACT_VERSION;
+		const runningVersion = React.version;
+
+		if ( !requestedVersion ) {
+			console.warn(
+				`REQUESTED_REACT_VERSION variable was not set. Running tests for React v${ runningVersion }`
+			);
+		} else {
+			expect( requestedVersion ).to.equal( runningVersion );
+		}
 	} );
 
 	describe( 'mounting and types', () => {
