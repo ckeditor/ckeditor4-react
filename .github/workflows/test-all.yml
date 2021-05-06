@@ -52,7 +52,7 @@ jobs:
               run: |
                   export CHROME_BIN=$(which chrome);
                   export FIREFOX_BIN=$(which firefox);
-                  if [ -z ${GITHUB_HEAD_REF} ]; then echo "REACT_VERSION=current"; else echo "REACT_VERSION=all"; fi >> $GITHUB_ENV;
+                  if [ -z ${GITHUB_HEAD_REF} ]; then echo "REACT_VERSION=all"; else echo "REACT_VERSION=current"; fi >> $GITHUB_ENV;
                   echo "BUILD_SLUG=$(echo $GITHUB_REPOSITORY | cut -d '/' -f2) $(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV;
 
             - name: Install dependencies
