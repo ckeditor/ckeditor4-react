@@ -1,83 +1,55 @@
 /* eslint-disable react/prop-types */
 
 import * as React from 'react';
-import { CKEditor, useCKEditorEvent } from 'ckeditor4-react';
-
-const { useCallback, useState } = React;
+import { CKEditor } from 'ckeditor4-react';
 
 /**
- * `CKEditor` component supports lifecycle event handlers:
+ * `CKEditor` component accepts handlers for all editor events, e.g. `instanceReady` -> `onInstanceReady`.
  *
- * - onBeforeLoad
- * - onDestroyed
- * - onInstanceReady
- * - onLoaded
- * - onNamespaceLoaded
- *
- * All other event handlers can be registered with help of `useCKEditorEvent`.
- *
- * Please notice how each handler is wrapped with `useCallback`. This is required to avoid endless render loop.
- *
+ * `CKEditor` component ensures referential equality between renders for event handlers.
+ * This means that first value of an event handler will be memoized and used through the lifecycle of `CKEditor` component.
+ * If this behavior is not expected, then use `useCKEditor` hook directly.
  */
 function CKEditorCmp( { pushEvent, uniqueName } ) {
-	const [ editor, setEditor ] = useState( undefined );
-
-	const handleBeforeLoad = useCallback( () => {
+	const handleBeforeLoad = () => {
 		pushEvent( 'beforeLoad' );
-	}, [ pushEvent ] );
+	};
 
-	const handleDestroyed = useCallback( () => {
+	const handleDestroyed = () => {
 		pushEvent( 'destroy' );
-		setEditor( undefined );
-	}, [ pushEvent ] );
+	};
 
-	const handleInstanceReady = useCallback(
-		( { editor } ) => {
-			pushEvent( 'instanceReady' );
-			setEditor( editor );
-		},
-		[ pushEvent ]
-	);
+	const handleInstanceReady = () => {
+		pushEvent( 'instanceReady' );
+	};
 
-	const handleLoaded = useCallback( () => {
+	const handleLoaded = () => {
 		pushEvent( 'loaded' );
-	}, [ pushEvent ] );
+	};
 
-	const handleNamespaceLoaded = useCallback( () => {
+	const handleNamespaceLoaded = () => {
 		pushEvent( 'namespaceLoaded' );
-	}, [ pushEvent ] );
+	};
 
-	const handleBlur = useCallback( () => {
+	const handleBlur = () => {
 		pushEvent( 'blur' );
-	}, [ pushEvent ] );
+	};
 
-	const handleFocus = useCallback( () => {
+	const handleFocus = () => {
 		pushEvent( 'focus' );
-	}, [ pushEvent ] );
-
-	useCKEditorEvent( {
-		editor,
-		handler: handleFocus,
-		evtName: 'focus',
-		debug: true
-	} );
-
-	useCKEditorEvent( {
-		editor,
-		handler: handleBlur,
-		evtName: 'blur',
-		debug: true
-	} );
+	};
 
 	return (
 		<CKEditor
 			debug={true}
 			name={uniqueName}
 			onBeforeLoad={handleBeforeLoad}
-			onDestroyed={handleDestroyed}
+			onDestroy={handleDestroyed}
 			onInstanceReady={handleInstanceReady}
 			onNamespaceLoaded={handleNamespaceLoaded}
 			onLoaded={handleLoaded}
+			onFocus={handleFocus}
+			onBlur={handleBlur}
 		/>
 	);
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { CKEditorEventAction } from 'ckeditor4-react';
 import TextAreaEditor from './TextAreaEditor';
 import CKEditor from './CKEditor';
 
@@ -7,7 +8,7 @@ const { useReducer } = React;
 function App() {
 	const [ state, dispatch ] = useReducer( reducer, {
 		data: '',
-		editorType: undefined
+		currentEditor: undefined
 	} );
 
 	return (
@@ -22,8 +23,11 @@ function App() {
 			</section>
 			<section className="container">
 				<div className="paper flex-grow-1">
-					<h4>{`Current editor: ${ state.editorType || '' }`}</h4>
-					<div className="preview" dangerouslySetInnerHTML={{ __html: state.data }} />
+					<h4>{`Current editor: ${ state.currentEditor || '' }`}</h4>
+					<div
+						className="preview"
+						dangerouslySetInnerHTML={{ __html: state.data }}
+					/>
 				</div>
 			</section>
 			<footer>{`Running React v${ React.version }`}</footer>
@@ -33,28 +37,43 @@ function App() {
 
 function reducer( state, action ) {
 	switch ( action.type ) {
-		case 'blur': {
+		case 'textareaBlur': {
 			return {
 				...state,
-				editorType: undefined
+				currentEditor: undefined
 			};
 		}
-		case 'CKEditor': {
+		case 'textareaData': {
 			return {
-				...state,
-				editorType: 'CKEditor'
-			};
-		}
-		case 'data': {
-			return {
-				...state,
+				currentEditor: 'textarea',
 				data: action.payload
 			};
 		}
-		case 'textarea': {
+		case 'textareaFocus': {
 			return {
 				...state,
-				editorType: 'textarea'
+				currentEditor: 'textarea'
+			};
+		}
+		case CKEditorEventAction.blur: {
+			return {
+				...state,
+				currentEditor:
+					state.currentEditor !== 'textarea' ?
+						undefined :
+						state.currentEditor
+			};
+		}
+		case CKEditorEventAction.change: {
+			return {
+				...state,
+				data: action.payload.editor.getData()
+			};
+		}
+		case CKEditorEventAction.focus: {
+			return {
+				...state,
+				currentEditor: 'CKEditor'
 			};
 		}
 		default: {

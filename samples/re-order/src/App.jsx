@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CKEditor } from 'ckeditor4-react';
 
-const { version, useCallback, useState } = React;
+const { version, useState } = React;
 
 const config = { height: 50, toolbar: [ [ 'Bold' ] ] };
 
@@ -30,19 +30,16 @@ function App() {
 		setOrder( current => shuffle( [ ...current ] ) );
 	};
 
-	const handleInstanceReady = useCallback(
-		( { editor } ) => {
-			editor.setData( cache[ editor.name ] );
-		},
-		[ cache ]
-	);
+	const handleInstanceReady = ( { editor } ) => {
+		editor.setData( cache[ editor.name ] );
+	};
 
-	const handleDestroyed = useCallback( ( { editor } ) => {
+	const handleDestroy = ( { editor } ) => {
 		setCache( current => ( {
 			...current,
 			[ editor.name ]: editor.getData()
 		} ) );
-	}, [] );
+	};
 
 	return (
 		<div>
@@ -61,7 +58,7 @@ function App() {
 										debug={true}
 										type="classic"
 										config={config}
-										onDestroyed={handleDestroyed}
+										onDestroy={handleDestroy}
 										onInstanceReady={handleInstanceReady}
 									/>
 								</div>

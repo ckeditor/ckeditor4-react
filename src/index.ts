@@ -5,11 +5,10 @@
 
 export * from './types';
 
+export { CKEditorEventAction } from './events';
+
 export * from './registerEditorEventHandler';
 export { default as registerEditorEventHandler } from './registerEditorEventHandler';
-
-export * from './useCKEditorEvent';
-export { default as useCKEditorEvent } from './useCKEditorEvent';
 
 export * from './useCKEditor';
 export { default as useCKEditor } from './useCKEditor';

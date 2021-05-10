@@ -2,34 +2,31 @@ import * as React from 'react';
 import Sidebar from './Sidebar';
 import CKEditor from './CKEditor';
 
-const { version, useCallback, useMemo, useState } = React;
+const { version, useRef, useState } = React;
 
 function App() {
 	const [ events, setEvents ] = useState( [] );
 	const [ uniqueName, setUniqueName ] = useState( getUniqueName() );
-	const start = useMemo( () => new Date(), [] );
+	const start = useRef( new Date() );
 
 	const handleRemountClick = () => {
 		setUniqueName( getUniqueName() );
 	};
 
-	const pushEvent = useCallback(
-		evtName => {
-			setEvents( events =>
-				events.concat( {
-					evtName,
-					editor: uniqueName,
-					date: new Date()
-				} )
-			);
-		},
-		[ uniqueName ]
-	);
+	const pushEvent = evtName => {
+		setEvents( events =>
+			events.concat( {
+				evtName,
+				editor: uniqueName,
+				date: new Date()
+			} )
+		);
+	};
 
 	return (
 		<div>
 			<section className="container">
-				<Sidebar events={events} start={start} />
+				<Sidebar events={events} start={start.current} />
 				<div className="paper flex-grow-3">
 					<CKEditor
 						key={uniqueName}

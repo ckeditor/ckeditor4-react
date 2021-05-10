@@ -1,40 +1,30 @@
 import * as React from 'react';
+import { CKEditorEventAction } from 'ckeditor4-react';
 import Sidebar from './Sidebar';
 import CKEditor from './CKEditor';
 
-const { version, useCallback, useMemo, useState } = React;
+const { version, useReducer, useRef } = React;
 
 function App() {
-	const [ events, setEvents ] = useState( [] );
-	const [ uniqueName, setUniqueName ] = useState( getUniqueName() );
-	const start = useMemo( () => new Date(), [] );
+	const [ { events, uniqueName }, dispatch ] = useReducer( reducer, {
+		events: [],
+		uniqueName: getUniqueName()
+	} );
+	const start = useRef( new Date() );
 
 	const handleRemountClick = () => {
-		setUniqueName( getUniqueName() );
+		dispatch( { type: 'reMount', payload: getUniqueName() } );
 	};
-
-	const pushEvent = useCallback(
-		evtName => {
-			setEvents( events =>
-				events.concat( {
-					evtName,
-					editor: uniqueName,
-					date: new Date()
-				} )
-			);
-		},
-		[ uniqueName ]
-	);
 
 	return (
 		<div>
 			<section className="container">
-				<Sidebar events={events} start={start} />
+				<Sidebar events={events} start={start.current} />
 				<div className="paper flex-grow-3">
 					<CKEditor
 						key={uniqueName}
-						pushEvent={pushEvent}
 						uniqueName={uniqueName}
+						dispatchEvent={dispatch}
 					/>
 					<button className="btn" onClick={handleRemountClick}>
 						{'Re-mount editor'}
@@ -44,6 +34,33 @@ function App() {
 			<footer>{`Running React v${ version }`}</footer>
 		</div>
 	);
+}
+
+function reducer( state, action ) {
+	switch ( action.type ) {
+		case 'reMount':
+			return {
+				...state,
+				uniqueName: action.payload
+			};
+		case CKEditorEventAction.namespaceLoaded:
+		case CKEditorEventAction.beforeLoad:
+		case CKEditorEventAction.loaded:
+		case CKEditorEventAction.instanceReady:
+		case CKEditorEventAction.destroy:
+		case CKEditorEventAction.focus:
+		case CKEditorEventAction.blur:
+			return {
+				...state,
+				events: state.events.concat( {
+					evtName: action.type,
+					editor: state.uniqueName,
+					date: new Date()
+				} )
+			};
+		default:
+			return state;
+	}
 }
 
 function getUniqueName() {

@@ -3,18 +3,19 @@
  * For licensing, see LICENSE.md.
  */
 
+import { uniqueName } from './utils';
+
 import {
 	CKEditorEventHandler,
 	CKEditorEventPayload,
 	CKEditorRegisterEventArgs
 } from './types';
-import { uniqueName } from './utils';
 
 /**
  * Registers editor event.
  *
  * @param editor instance of editor
- * @param debug turns on debugger
+ * @param debug toggles debugger
  */
 function registerEditorEventHandler( {
 	debug,
@@ -24,18 +25,20 @@ function registerEditorEventHandler( {
 	listenerData,
 	priority
 }: CKEditorRegisterEventArgs ) {
-	const handlerId = uniqueName();
+	const handlerId = debug && uniqueName();
 
 	let _handler: CKEditorEventHandler | undefined | null;
 
 	if ( handler ) {
 		if ( debug ) {
 			_handler = function( args: CKEditorEventPayload ) {
-				console.log( 'Invoked: ', {
+				console.log( {
+					operation: 'invoke',
 					editor: editor.name,
 					evtName,
 					handlerId,
-					data: args.data
+					data: args.data,
+					listenerData: args.listenerData
 				} );
 				handler( args );
 			};
@@ -45,13 +48,22 @@ function registerEditorEventHandler( {
 	}
 
 	if ( editor && _handler ) {
+		if ( debug ) {
+			console.log( {
+				operation: 'register',
+				editor: editor.name,
+				evtName,
+				handlerId
+			} );
+		}
 		editor.on( evtName, _handler, null, listenerData, priority );
 	}
 
 	return () => {
 		if ( editor && _handler ) {
 			if ( debug ) {
-				console.log( 'Removed: ', {
+				console.log( {
+					operation: 'unregister',
 					editor: editor.name,
 					evtName,
 					handlerId

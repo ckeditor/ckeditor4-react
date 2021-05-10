@@ -4,7 +4,6 @@ import JasmineDOM from '@testing-library/jasmine-dom';
 import { configure } from '@testing-library/react';
 import initCommonTests from './common.test';
 import initUseCKEditorTests from './useCKEditor.test';
-import initUseCKEditorEventTests from './useCKEditorEvent.test';
 import initCKEditorTests from './CKEditor.test';
 import initRegisterEditorEventHandler from './registerEditorEventHandler.test';
 import initUtilsTests from './utils.test';
@@ -45,7 +44,6 @@ describe( 'CKEditor4 React', () => {
 	initCommonTests();
 	initUseCKEditorTests();
 	initRegisterEditorEventHandler();
-	initUseCKEditorEventTests();
 	initCKEditorTests();
 	initUtilsTests();
 } );

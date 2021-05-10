@@ -148,27 +148,6 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that new instance of editor is created after passing new `editorUrl`.
-		 */
-		it( 're-initializes editor on url change', async () => {
-			const { rerender } = render( <CKEditor initData="Hello world!" /> );
-			expect( queryClassicEditor() ).toBeNull();
-			expect(
-				await findByClassicEditorContent( 'Hello world!' )
-			).toBeVisible();
-			rerender(
-				<CKEditor
-					initData="Hello new editor url!"
-					editorUrl="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"
-				/>
-			);
-			expect( queryClassicEditor() ).toBeNull();
-			expect(
-				await findByClassicEditorContent( 'Hello new editor url!' )
-			).toBeVisible();
-		} );
-
-		/**
 		 * Ensures that new instance of editor is created after passing new `type`.
 		 */
 		it( 're-initializes editor on type change', async () => {
@@ -209,7 +188,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that `onBeforeLoad` callback is passed and invoked.
+		 * Ensures that namespace event handler `onBeforeLoad` is invoked.
 		 */
 		it( 'invokes `onBeforeLoad` callback', async () => {
 			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
@@ -219,42 +198,29 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that `onDestroyed` callback is registered.
+		 * Ensures that editor event handlers are invoked.
 		 */
-		it( 'invokes `onDestroyed` callback', async () => {
-			const onDestroyed = jasmine.createSpy( 'onDestroyed' );
-			const { unmount } = render( <CKEditor onDestroyed={onDestroyed} /> );
-			expect( await findClassicEditor() ).toBeVisible();
-			unmount();
-			expect( queryClassicEditor() ).toBeNull();
-			expect( onDestroyed ).toHaveBeenCalledTimes( 1 );
-		} );
-
-		/**
-		 * Ensures that `onInstanceReady` callback is registered.
-		 */
-		it( 'invokes `onInstanceReady` callback', async () => {
+		it( 'invokes editor handlers', async () => {
+			const onDestroy = jasmine.createSpy( 'onDestroy' );
+			const onLoaded = jasmine.createSpy( 'onLoaded' );
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
-			render(
+			const { unmount } = render(
 				<CKEditor
-					onInstanceReady={onInstanceReady}
 					initData="Hello world!"
+					onDestroy={onDestroy}
+					onInstanceReady={onInstanceReady}
+					onLoaded={onLoaded}
 				/>
 			);
+			expect( await findClassicEditor() ).toBeVisible();
+			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
 			expect(
 				await findByClassicEditorContent( 'Hello world!' )
 			).toBeVisible();
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
-		} );
-
-		/**
-		 * Ensures that `onLoaded` callback is registered.
-		 */
-		it( 'invokes `onLoaded` callback', async () => {
-			const onLoaded = jasmine.createSpy( 'onLoaded' );
-			render( <CKEditor onLoaded={onLoaded} /> );
-			expect( await findClassicEditor() ).toBeVisible();
-			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
+			unmount();
+			expect( queryClassicEditor() ).toBeNull();
+			expect( onDestroy ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		/**
@@ -264,13 +230,16 @@ function init() {
 			render(
 				<CKEditor
 					onInstanceReady={( { editor } ) => {
-						editor.setData( 'Hello from callback!' );
+						setTimeout(
+							() => editor.setData( 'Hello from callback!' ),
+							0
+						);
 					}}
 					initData="Hello world!"
 				/>
 			);
 			expect(
-				await findByClassicEditorContent( 'Hello world!' )
+				await findByClassicEditorContent( 'Hello from callback!' )
 			).toBeVisible();
 		} );
 

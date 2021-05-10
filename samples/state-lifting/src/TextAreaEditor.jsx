@@ -10,22 +10,22 @@ function TextAreaEditor( { dispatch, state } ) {
 	const handleTextAreaChange = evt => {
 		const value = evt.currentTarget.value;
 		setValue( value );
-		dispatch( { type: 'data', payload: value } );
+		dispatch( { type: 'textareaData', payload: value } );
 	};
 
 	const handleBlur = () => {
-		dispatch( { type: 'blur' } );
+		dispatch( { type: 'textareaBlur' } );
 	};
 
 	const handleFocus = () => {
-		// CKEditor's blur kicks in later that `textarea` focus is invoked.
-		setTimeout( () => {
-			dispatch( { type: 'textarea' } );
-		}, [ 250 ] );
+		dispatch( { type: 'textareaFocus' } );
 	};
 
+	/**
+	 * Sets text area value if it comes from a different source.
+	 */
 	useEffect( () => {
-		if ( state.editorType === 'CKEditor' ) {
+		if ( state.currentEditor === 'CKEditor' ) {
 			setValue( state.data );
 		}
 	}, [ state ] );

@@ -1,24 +1,29 @@
 import { renderHook } from '@testing-library/react-hooks/dom';
-import { createDivRef } from './utils';
-import { useCKEditor } from '../../src';
+import { createDivRef, queryClassicEditor } from './utils';
+import { useCKEditor, CKEditorEventAction } from '../../src';
 
 function init() {
 	describe( 'useCKEditor', () => {
 		/**
-		 * Ensures that `onNamespaceLoaded` callback is called once during lifetime of CKEDITOR namespace.
+		 * Ensures that `namespaceLoaded` event is dispatched once during lifetime of CKEDITOR namespace.
 		 *
 		 * !!! IMPORTANT !!!
 		 *
 		 * This test must run first!
 		 *
 		 */
-		it( 'invokes `onNamespaceLoaded` callback', async () => {
+		it( 'dispatches `namespaceLoaded` event', async () => {
 			const onNamespaceLoaded = jasmine.createSpy( 'onNamespaceLoaded' );
 			const ref = createDivRef();
+			const dispatchEvent = ( { type, payload } ) => {
+				if ( type === CKEditorEventAction.namespaceLoaded ) {
+					onNamespaceLoaded( payload );
+				}
+			};
 			const { result, unmount, waitForValueToChange } = renderHook( () =>
 				useCKEditor( {
 					element: ref.current,
-					onNamespaceLoaded
+					dispatchEvent
 				} )
 			);
 			// Timeout is increased so that slower CI environment has a chance to catch-up.
@@ -34,7 +39,7 @@ function init() {
 			} = renderHook( () =>
 				useCKEditor( {
 					element: ref.current,
-					onNamespaceLoaded
+					dispatchEvent
 				} )
 			);
 			await waitForValueToChangeNext(
@@ -114,9 +119,9 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that editor instance is re-created on url change.
+		 * Ensures that editor instance memoizes initial url.
 		 */
-		it( 're-initializes editor on url change', async () => {
+		it( 'does not re-initialize editor on url change', async () => {
 			const ref = createDivRef();
 			const { result, rerender, waitForValueToChange } = renderHook(
 				( props: any ) =>
@@ -130,9 +135,8 @@ function init() {
 				editorUrl:
 					'https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js'
 			} );
-			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			expect( result.current.editor ).toBeDefined();
+			expect( result.current.loading ).toBeFalse();
 		} );
 
 		/**
@@ -200,15 +204,19 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that `onBeforeLoad` callback is called once during lifetime of an editor instance.
+		 * Ensures that `beforeLoad` event is dispatched.
 		 */
-		it( 'invokes `onBeforeLoad` callback', async () => {
+		it( 'dispatches `beforeLoad` event', async () => {
 			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
 			const ref = createDivRef();
 			const { result, waitForValueToChange } = renderHook( () =>
 				useCKEditor( {
 					element: ref.current,
-					onBeforeLoad
+					dispatchEvent: ( { type, payload } ) => {
+						if ( type === CKEditorEventAction.beforeLoad ) {
+							onBeforeLoad( payload );
+						}
+					}
 				} )
 			);
 			await waitForValueToChange(
@@ -217,6 +225,73 @@ function init() {
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
 			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		/**
+		 * Dispatches all editor events (`subscribeTo` list is not passed).
+		 */
+		it( 'dispatches editor events', async () => {
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
+			const onLoaded = jasmine.createSpy( 'onLoaded' );
+			const onDestroy = jasmine.createSpy( 'onDestroy' );
+			const ref = createDivRef();
+			const { result, unmount, waitForValueToChange } = renderHook( () =>
+				useCKEditor( {
+					element: ref.current,
+					dispatchEvent: ( { type, payload } ) => {
+						if ( type === CKEditorEventAction.instanceReady ) {
+							onInstanceReady( payload );
+						} else if ( type === CKEditorEventAction.loaded ) {
+							onLoaded( payload );
+						} else if ( type === CKEditorEventAction.destroy ) {
+							onDestroy( payload );
+						}
+					}
+				} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'loaded'
+			);
+			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
+			await waitForValueToChange( () => result.current.status === 'ready' );
+			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
+			unmount();
+			expect( queryClassicEditor() ).toBeNull();
+			expect( onDestroy ).toHaveBeenCalledTimes( 1 );
+		} );
+
+		/**
+		 * Dispatches all editor events. Limits events to those specified in `subscribeTo` list.
+		 */
+		it( 'dispatches limited number of editor events', async () => {
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
+			const onLoaded = jasmine.createSpy( 'onLoaded' );
+			const onDestroy = jasmine.createSpy( 'onDestroy' );
+			const ref = createDivRef();
+			const { result, unmount, waitForValueToChange } = renderHook( () =>
+				useCKEditor( {
+					element: ref.current,
+					dispatchEvent: ( { type, payload } ) => {
+						if ( type === CKEditorEventAction.instanceReady ) {
+							onInstanceReady( payload );
+						} else if ( type === CKEditorEventAction.loaded ) {
+							onLoaded( payload );
+						} else if ( type === CKEditorEventAction.destroy ) {
+							onDestroy( payload );
+						}
+					},
+					subscribeTo: [ 'loaded' ]
+				} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'loaded'
+			);
+			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
+			await waitForValueToChange( () => result.current.status === 'ready' );
+			expect( onInstanceReady ).toHaveBeenCalledTimes( 0 );
+			unmount();
+			expect( queryClassicEditor() ).toBeNull();
+			expect( onDestroy ).toHaveBeenCalledTimes( 0 );
 		} );
 	} );
 }

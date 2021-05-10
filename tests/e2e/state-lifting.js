@@ -29,12 +29,15 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 		await browser.assert.visible( '.cke_1' );
 	} );
 
-	test( 'editor sets data from outside', async browser => {
+	test( 'editor sets data from outside - text area to editor', async browser => {
 		await browser.setValue( 'xpath', '//textarea', 'textarea' );
 		await browser.assert.containsText( '.preview', 'textarea' );
 		await browser.frame( 0 );
 		await browser.assert.containsText( '.cke_editable', 'textarea' );
-		await browser.clearValue( 'xpath', '//body[@contenteditable="true"]' );
+	} );
+
+	test( 'editor sets data from outside - editor to text area', async browser => {
+		await browser.frame( 0 );
 		await browser.setValue(
 			'xpath',
 			'//body[@contenteditable="true"]',

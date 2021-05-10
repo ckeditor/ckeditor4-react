@@ -50,7 +50,7 @@ function init() {
 			await waitForValueToChange(
 				() => result.current.status === 'loaded'
 			);
-			const unregister = registerEditorEventHandler( {
+			registerEditorEventHandler( {
 				editor: result.current.editor,
 				evtName: 'instanceReady',
 				handler: onInstanceReady,
@@ -58,9 +58,7 @@ function init() {
 			} );
 			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
-			expect( windw.console.log ).toHaveBeenCalledTimes( 1 );
-			unregister();
-			expect( windw.console.log ).toHaveBeenCalledTimes( 2 );
+			expect( windw.console.log ).toHaveBeenCalled();
 		} );
 
 		/**

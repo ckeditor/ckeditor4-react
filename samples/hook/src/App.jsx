@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useCKEditor, useCKEditorEvent } from 'ckeditor4-react';
+import { registerEditorEventHandler, useCKEditor } from 'ckeditor4-react';
 import Sidebar from './Sidebar';
 
-const { version, useCallback, useEffect, useState } = React;
+const { version, useEffect, useState } = React;
 
 const config = {
 	title: 'My classic editor'
@@ -34,30 +34,28 @@ function App() {
 		setType( value );
 	};
 
-	const handleInstanceReady = useCallback(
-		( { editor } ) => {
-			editor.setData( `<p>Hello from ${ currentType } editor!</p>` );
-		},
-		[ currentType ]
-	);
+	useEffect( () => {
+		return registerEditorEventHandler( {
+			editor,
+			evtName: 'instanceReady',
+			handler: ( { editor } ) => {
+				editor.setData( `<p>Hello from ${ currentType } editor!</p>` );
+			},
+			priority: -1
+		} );
+	}, [ editor, currentType ] );
 
 	useEffect( () => {
-		if ( editor && status === 'ready' ) {
+		if ( editor && editor.status === 'ready' ) {
 			editor.setReadOnly( readOnly );
 		}
-	}, [ editor, status, readOnly ] );
+	}, [ editor, readOnly ] );
 
 	useEffect( () => {
 		if ( editor && status === 'ready' ) {
 			editor.container.setStyles( getStyle( currentStyle ) );
 		}
 	}, [ editor, status, currentStyle ] );
-
-	useCKEditorEvent( {
-		editor,
-		evtName: 'instanceReady',
-		handler: handleInstanceReady
-	} );
 
 	return (
 		<div>
