@@ -15,6 +15,31 @@
 	</head>
 	<body>
 		<div id="root"></div>
+		<script>
+			/**
+			 * Object.entries() polyfill
+			 */
+			if (!Object.entries) {
+				Object.entries = function (obj) {
+					var ownProps = Object.keys(obj),
+						i = ownProps.length,
+						resArray = new Array(i);
+
+					while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+
+					return resArray;
+				};
+			}
+
+			/**
+			 * Array.includes() polyfill
+			 */
+			if (!Array.prototype.includes) {
+				Array.prototype.includes = function (search) {
+					return !!~this.indexOf(search);
+				};
+			}
+		</script>
 		<script src="react.production.min.js"></script>
 		<script src="react-dom.production.min.js"></script>
 		<script src="index.umd.development.js"></script>

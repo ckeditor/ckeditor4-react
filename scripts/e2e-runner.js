@@ -141,7 +141,7 @@ async function runNightwatchTests( sample ) {
 
 	if ( sample === 'ssr' ) {
 		server = execCmd( 'node dist/server.js', TESTS_TMP_PATH );
-		await waitFor( 3000 );
+		await waitFor( 5000 );
 		testSuite = execCmd(
 			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:3000 --test-sample ${ sample }`,
 			PACKAGE_PATH
