@@ -37,6 +37,8 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 	} );
 
 	test( 'editor sets data from outside - editor to text area', async browser => {
+		// For the sake of IE11 set fake value on textarea. Otherwise `setValue` on iframe won't work.
+		await browser.setValue( 'xpath', '//textarea', '' );
 		await browser.frame( 0 );
 		await browser.setValue(
 			'xpath',
