@@ -70,13 +70,21 @@ function useCKEditor( {
 	} );
 
 	/**
-	 * Main effect.
+	 * Main effect. It takes care of:
+	 * - fetching CKEditor from remote source
+	 * - creating new instances of editor
+	 * - registering event handlers
+	 * - destroying editor instances
+	 *
+	 * New instance of editor will be created whenever new config is passed, new DOM element is passed, or editor type is changed.
 	 */
 	useEffect( () => {
-		// console.log( type, editor?.name )
 		if ( element && !editor ) {
 			dispatch( { type: 'loading' } );
 
+			/**
+			 * Helper callback that dispatches `namespaceLoaded` event.
+			 */
 			const onNamespaceLoaded = ( CKEDITOR: CKEditorNamespace ) => {
 				dispatchEventRef.current?.( {
 					type: CKEditorEventAction.namespaceLoaded,
@@ -85,6 +93,9 @@ function useCKEditor( {
 			};
 
 			const initEditor = ( CKEDITOR: CKEditorNamespace ) => {
+				/**
+				 * Dispatches `beforeLoad` event.
+				 */
 				dispatchEventRef.current?.( {
 					type: CKEditorEventAction.beforeLoad,
 					payload: CKEDITOR
@@ -102,6 +113,9 @@ function useCKEditor( {
 					);
 				}
 
+				/**
+				 * Registers all subscribed events.
+				 */
 				subscribed.forEach( evtName => {
 					registerEditorEventHandler( {
 						debug: debugRef.current,
@@ -119,6 +133,9 @@ function useCKEditor( {
 				const isInline = type === 'inline';
 				const isReadOnly = configInit.readOnly;
 
+				/**
+				 * Registers `loaded` event for the sake of hook lifecycle.
+				 */
 				registerEditorEventHandler( {
 					debug: debugRef.current,
 					editor,
@@ -129,6 +146,9 @@ function useCKEditor( {
 					priority: -1
 				} );
 
+				/**
+				 * Registers `instanceReady` event for the sake of hook lifecycle.
+				 */
 				registerEditorEventHandler( {
 					debug: debugRef.current,
 					editor,
@@ -146,6 +166,9 @@ function useCKEditor( {
 					priority: -1
 				} );
 
+				/**
+				 * Registers `destroy` event for the sake of hook lifecycle.
+				 */
 				registerEditorEventHandler( {
 					debug: debugRef.current,
 					editor,

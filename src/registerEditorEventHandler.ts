@@ -12,7 +12,7 @@ import {
 } from './types';
 
 /**
- * Registers editor event.
+ * Registers editor event. Allows to toggle debugging mode.
  *
  * @param editor instance of editor
  * @param debug toggles debugger

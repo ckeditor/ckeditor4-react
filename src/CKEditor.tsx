@@ -11,6 +11,7 @@ import useCKEditor from './useCKEditor';
 import { camelToKebab } from './utils';
 
 import type {
+	CKEditorEditorEventName,
 	CKEditorEventDispatcher,
 	CKEditorEventHandlerName,
 	CKEditorEventHandlersProps,
@@ -71,6 +72,14 @@ function CKEditor( {
 		debug,
 		editorUrl,
 		element,
+
+		/**
+		 * Subscribe only to those events for which handler was supplied.
+		 */
+		subscribeTo: Object.keys( handlers ).map( key => {
+			const evtName = key.substr( 2, 1 ).toLowerCase() + key.substr( 3 );
+			return evtName as CKEditorEditorEventName;
+		} ),
 		type
 	} );
 
