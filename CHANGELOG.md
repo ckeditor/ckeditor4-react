@@ -1,6 +1,6 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
-## ckeditor4-react 1.5.0
+## ckeditor4-react 1.4.1
 
 Fixed Issues:
 

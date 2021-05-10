@@ -4,10 +4,15 @@ on:
     pull_request:
         branches:
             - master
+            - stable
             - major
     push:
         tags:
             - v*
+        branches:
+            - master
+            - stable
+            - major
 
 jobs:
     # Runs unit tests for all configured React version
@@ -30,9 +35,11 @@ jobs:
 
             # Set variables required for further steps.
             # CHROME_BIN is required by Karma.
+            # REACT_VERSION is set to "current" for pull request events and "all" for other events.
             - name: Set test variables
               run: |
                   export CHROME_BIN=$(which chrome);
+                  if [ -z ${GITHUB_HEAD_REF} ]; then echo "REACT_VERSION=all"; else echo "REACT_VERSION=current"; fi >> $GITHUB_ENV;
 
             - name: Install dependencies
               run: npm install
@@ -41,7 +48,7 @@ jobs:
             - name: Run tests
               uses: GabrielBB/xvfb-action@v1
               with:
-                  run: npm run test:units:all
+                  run: npm run test:units -- react ${{ env.REACT_VERSION }}
 
     # Runs E2E tests for all configured React version and all environments
     test-e2e:
@@ -61,10 +68,12 @@ jobs:
                   node-version: 14
 
             # Set variables required for further steps.
+            # REACT_VERSION is set to "current" for pull request events and "all" for other events.
             # BUILD_SLUG is a combination of repo name and short SHA.
             - name: Set test variables
               run: |
                   echo "BUILD_SLUG=$(echo $GITHUB_REPOSITORY | cut -d '/' -f2) $(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV;
+                  if [ -z ${GITHUB_HEAD_REF} ]; then echo "REACT_VERSION=last-two"; else echo "REACT_VERSION=current"; fi >> $GITHUB_ENV;
 
             - name: Install dependencies
               run: npm install
@@ -78,4 +87,4 @@ jobs:
                   BROWSER_STACK_BUILD_NAME: ${{ env.BUILD_SLUG }}
                   BROWSER_STACK_BROWSER: ${{ matrix.browser }}
               with:
-                  run: npm run test:e2e -- --react last-two
+                  run: npm run test:e2e -- --react ${{ env.REACT_VERSION }}
