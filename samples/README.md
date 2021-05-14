@@ -15,4 +15,4 @@ Each sample is a self-contained app.
 | [re-order](re-order)                 | Example of handling multiple instances of `CKEditor` component (re-ordering case).              | Insert link |
 | [ssr](ssr)                           | Showcase of using `CKEditor` with React server-side rendering.                                  | Insert link |
 | [state-lifting](state-lifting)       | Editor's state is lifted higher up React tree to establish connection with a custom `textarea`. | Insert link |
-| [umd](umd)                           | Showcase of how `umd` build of `ckeditor4-react` package can be used.                          | Insert link |
+| [umd](umd)                           | Showcase of how `umd` build of `ckeditor4-react` package can be used.                           | Insert link |
