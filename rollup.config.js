@@ -11,9 +11,9 @@ import pkg from './package.json';
 const input = 'src/index.ts';
 const external = Object.keys( pkg.peerDependencies || {} );
 const banner = `/**
-* @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
-* For licensing, see LICENSE.md.
-*/`;
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */`;
 
 export default [
 	// Creates `umd` build that can be directly consumed via <script /> tag (development mode).
