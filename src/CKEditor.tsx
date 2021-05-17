@@ -134,7 +134,7 @@ function CKEditor( {
 						noSnapshot: true,
 
 						/**
-						 * Actually resets undo stack.
+						 * Resets undo stack.
 						 */
 						callback: () => {
 							editor.resetUndo();

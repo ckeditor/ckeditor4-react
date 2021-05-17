@@ -11,6 +11,10 @@ function App() {
 	const [ currentType, setType ] = useState( 'classic' );
 	const [ currentStyle, setStyle ] = useState( 'initial' );
 
+	/**
+	 * New instance of editor is created whenever new instance of config is created.
+	 * Use combination of `useState` and `useEffect` to memoize it across renders.
+	 */
 	useEffect( () => {
 		setConfig( {
 			title: 'My classic editor',
@@ -36,7 +40,7 @@ function App() {
 	};
 
 	/**
-	 * Please notice that a new instance of editor is created on toggling between `classic` and `inline` type.
+	 * New instance of editor is created on toggling between `classic` and `inline` type.
 	 */
 	const handleTypeChange = evt => {
 		const value = evt.currentTarget.value;

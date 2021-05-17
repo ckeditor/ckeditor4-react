@@ -43,6 +43,11 @@ function reducer( state, action ) {
 				...state,
 				uniqueName: action.payload
 			};
+
+		/**
+		 * Event names are prefixed in order to facilitate integration with dispatch from `useReducer`.
+		 * Access them via `CKEditorEventAction`.
+		 */
 		case CKEditorEventAction.namespaceLoaded:
 		case CKEditorEventAction.beforeLoad:
 			return {

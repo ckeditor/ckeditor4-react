@@ -12,6 +12,9 @@ function App() {
 	const [ currentType, setType ] = useState( 'classic' );
 	const [ currentStyle, setStyle ] = useState( 'initial' );
 
+	/**
+	 * Sets initial value of `readOnly`.
+	 */
 	if ( config && readOnly ) {
 		config.readOnly = readOnly;
 	}
@@ -42,6 +45,10 @@ function App() {
 		setType( value );
 	};
 
+	/**
+	 * New instance of editor is created whenever new instance of config is created.
+	 * Use combination of `useState` and `useEffect` to memoize it across renders.
+	 */
 	useEffect( () => {
 		setConfig( {
 			title: 'My classic editor',
@@ -51,6 +58,9 @@ function App() {
 		} );
 	}, [ currentToolbar ] );
 
+	/**
+	 * Sets initial data once the editor is in `ready` status.
+	 */
 	useEffect( () => {
 		return registerEditorEventHandler( {
 			editor,
@@ -63,7 +73,7 @@ function App() {
 					noSnapshot: true,
 
 					/**
-					 * Actually resets undo stack.
+					 * Resets undo stack.
 					 */
 					callback: () => {
 						editor.resetUndo();
@@ -74,12 +84,18 @@ function App() {
 		} );
 	}, [ editor, currentType ] );
 
+	/**
+	 * Toggles `readOnly` on runtime.
+	 */
 	useEffect( () => {
 		if ( editor && editor.status === 'ready' ) {
 			editor.setReadOnly( readOnly );
 		}
 	}, [ editor, readOnly ] );
 
+	/**
+	 * Updates editor container's style on runtime.
+	 */
 	useEffect( () => {
 		if ( editor && status === 'ready' ) {
 			editor.container.setStyles( getStyle( currentStyle ) );

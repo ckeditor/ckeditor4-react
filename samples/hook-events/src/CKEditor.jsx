@@ -6,15 +6,7 @@ import { useCKEditor } from 'ckeditor4-react';
 const { useState } = React;
 
 /**
- * `useCKEditor` hook supports lifecycle event handlers:
- *
- * - onBeforeLoad
- * - onNamespaceLoaded
- *
- * All other event handlers can be registered with help of `useCKEditorEvent`.
- *
- * Please notice how each handler is wrapped with `useCallback`. This is required to avoid endless render loop.
- *
+ * Pass `dispatch` from `useReducer` in order to listen to editor's events and derive state of your components as needed.
  */
 function CKEditorCmp( { dispatchEvent, uniqueName } ) {
 	const [ element, setElement ] = useState();
@@ -22,7 +14,16 @@ function CKEditorCmp( { dispatchEvent, uniqueName } ) {
 	useCKEditor( {
 		element,
 		debug: true,
-		dispatchEvent
+		dispatchEvent,
+		subscribeTo: [
+			'namespaceLoaded',
+			'beforeLoad',
+			'instanceReady',
+			'focus',
+			'blur',
+			'loaded',
+			'destroy'
+		]
 	} );
 
 	return <div id={uniqueName} ref={setElement} />;

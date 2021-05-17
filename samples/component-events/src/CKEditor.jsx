@@ -8,7 +8,6 @@ import { CKEditor } from 'ckeditor4-react';
  *
  * `CKEditor` component ensures referential equality between renders for event handlers.
  * This means that first value of an event handler will be memoized and used through the lifecycle of `CKEditor` component.
- * If this behavior is not expected, then use `useCKEditor` hook directly.
  */
 function CKEditorCmp( { pushEvent, uniqueName } ) {
 	const handleBeforeLoad = () => {
