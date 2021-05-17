@@ -45,6 +45,14 @@ function reducer( state, action ) {
 			};
 		case CKEditorEventAction.namespaceLoaded:
 		case CKEditorEventAction.beforeLoad:
+			return {
+				...state,
+				events: state.events.concat( {
+					evtName: action.type.substr( 7 ),
+					editor: '--',
+					date: new Date()
+				} )
+			};
 		case CKEditorEventAction.loaded:
 		case CKEditorEventAction.instanceReady:
 		case CKEditorEventAction.destroy:
@@ -53,8 +61,8 @@ function reducer( state, action ) {
 			return {
 				...state,
 				events: state.events.concat( {
-					evtName: action.type,
-					editor: state.uniqueName,
+					evtName: action.type.substr( 7 ),
+					editor: action.payload.editor.name,
 					date: new Date()
 				} )
 			};

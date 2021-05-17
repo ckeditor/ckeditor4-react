@@ -11,7 +11,6 @@ module.exports = {
 		path: path.resolve( __dirname, './public' ),
 		filename: 'bundle.js'
 	},
-	target: [ 'web', 'es5' ],
 	resolve: {
 		extensions: [ '.js', '.jsx' ],
 		alias: {

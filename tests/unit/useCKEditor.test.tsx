@@ -43,7 +43,8 @@ function init() {
 				} )
 			);
 			await waitForValueToChangeNext(
-				() => resultNext.current.status === 'unloaded'
+				() => resultNext.current.status === 'unloaded',
+				{ timeout: 5000 }
 			);
 			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
 		} );
@@ -57,7 +58,7 @@ function init() {
 				useCKEditor( { element: ref.current } )
 			);
 			expect( result.current.editor ).toBeUndefined();
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
 		} );
 
@@ -69,7 +70,7 @@ function init() {
 			const { result, unmount, waitForNextUpdate } = renderHook( () =>
 				useCKEditor( { element: ref.current } )
 			);
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
 			const windw = window as any;
 			expect( Object.keys( windw.CKEDITOR.instances ).length ).toEqual( 1 );
@@ -87,14 +88,14 @@ function init() {
 			);
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
 			expect( result.current.status ).toEqual( 'unloaded' );
 			expect( result.current.loading ).toBeFalse();
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
 			expect( result.current.status ).toEqual( 'loaded' );
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
 			expect( result.current.status ).toEqual( 'ready' );
 		} );
@@ -113,7 +114,7 @@ function init() {
 			);
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForNextUpdate();
+			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.error ).toBeTrue();
 		} );
@@ -130,7 +131,10 @@ function init() {
 						...props
 					} )
 			);
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			rerender( {
 				editorUrl:
 					'https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js'
@@ -151,13 +155,19 @@ function init() {
 						...props
 					} )
 			);
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			rerender( {
 				type: 'inline'
 			} );
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 		} );
 
 		/**
@@ -172,13 +182,19 @@ function init() {
 						...props
 					} )
 			);
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			rerender( {
 				config: { skin: 'myskin' }
 			} );
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 		} );
 
 		/**
@@ -193,14 +209,20 @@ function init() {
 						...props
 					} )
 			);
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			const nextRef = createDivRef();
 			rerender( {
 				element: nextRef.current
 			} );
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 		} );
 
 		/**
@@ -220,10 +242,14 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'unloaded'
+				() => result.current.status === 'unloaded',
+				{ timeout: 5000 }
 			);
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
 		} );
 
@@ -250,10 +276,14 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded'
+				() => result.current.status === 'loaded',
+				{ timeout: 5000 }
 			);
 			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
 			unmount();
 			expect( queryClassicEditor() ).toBeNull();
@@ -284,10 +314,14 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded'
+				() => result.current.status === 'loaded',
+				{ timeout: 5000 }
 			);
 			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 0 );
 			unmount();
 			expect( queryClassicEditor() ).toBeNull();

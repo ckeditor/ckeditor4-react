@@ -97,14 +97,14 @@ export default [
 			format: 'esm',
 			file: 'dist/index.esm.js'
 		},
-		plugins: [ typescript( { target: 'es6' } ), cleanupPlugin() ]
+		plugins: [ typescript(), cleanupPlugin() ]
 	}
 ];
 
 /**
  * Prepares `cleanup` plugin to remove unnecessary 3rd party licenses, e.g.
  *
- * - `tslib` BSD0 license (3rd parties are not required to include it)
+ * - `tslib` 0BSD license (3rd parties are not required to include it)
  * - CKSource licenses from dependencies
  *
  * https://github.com/microsoft/tslib/blob/master/LICENSE.txt

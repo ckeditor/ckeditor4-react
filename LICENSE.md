@@ -25,6 +25,9 @@ The following libraries are included in CKEditor 4 WYSIWYG editor component for 
 - load-script
 - prop-types (c) 2013-present, Facebook, Inc.
 
+The following libraries are included in CKEditor 4 WYSIWYG editor component for React under the [0BSD license](https://opensource.org/licenses/0BSD):
+- tslib (c) Microsoft Corporation
+
 Trademarks
 ----------
 

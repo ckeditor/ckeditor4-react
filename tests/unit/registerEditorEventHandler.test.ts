@@ -16,7 +16,8 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded'
+				() => result.current.status === 'loaded',
+				{ timeout: 5000 }
 			);
 			const unregister = registerEditorEventHandler( {
 				editor: result.current.editor,
@@ -26,7 +27,10 @@ function init() {
 			expect(
 				result.current.editor.hasListeners( 'instanceReady' )
 			).toBeTrue();
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
 			unregister();
 			expect(
@@ -48,7 +52,8 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded'
+				() => result.current.status === 'loaded',
+				{ timeout: 5000 }
 			);
 			registerEditorEventHandler( {
 				editor: result.current.editor,
@@ -56,7 +61,10 @@ function init() {
 				handler: onInstanceReady,
 				debug: true
 			} );
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
 			expect( windw.console.log ).toHaveBeenCalled();
 		} );
@@ -81,7 +89,10 @@ function init() {
 				handler: onInstanceReady,
 				listenerData: { hello: 'hello' }
 			} );
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onInstanceReady ).toHaveBeenCalledWith(
 				jasmine.objectContaining( {
 					listenerData: { hello: 'hello' }
@@ -102,7 +113,8 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded'
+				() => result.current.status === 'loaded',
+				{ timeout: 5000 }
 			);
 			registerEditorEventHandler( {
 				editor: result.current.editor,
@@ -116,7 +128,10 @@ function init() {
 				handler: onInstanceReady2,
 				priority: 0
 			} );
-			await waitForValueToChange( () => result.current.status === 'ready' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
 			expect( onInstanceReady2 ).toHaveBeenCalledBefore( onInstanceReady1 );
 		} );
 	} );

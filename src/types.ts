@@ -147,7 +147,7 @@ export interface CKEditorRegisterEventArgs {
 	/**
 	 * Event handler to register.
 	 */
-	handler?: CKEditorEventHandler | null;
+	handler: CKEditorEventHandler;
 
 	/**
 	 * Editor's event name.

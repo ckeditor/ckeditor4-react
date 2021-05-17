@@ -27,27 +27,23 @@ function registerEditorEventHandler( {
 }: CKEditorRegisterEventArgs ) {
 	const handlerId = debug && uniqueName();
 
-	let _handler: CKEditorEventHandler | undefined | null;
+	let _handler: CKEditorEventHandler = handler;
 
-	if ( handler ) {
-		if ( debug ) {
-			_handler = function( args: CKEditorEventPayload ) {
-				console.log( {
-					operation: 'invoke',
-					editor: editor.name,
-					evtName,
-					handlerId,
-					data: args.data,
-					listenerData: args.listenerData
-				} );
-				handler( args );
-			};
-		} else {
-			_handler = handler;
-		}
+	if ( debug ) {
+		_handler = function( args: CKEditorEventPayload ) {
+			console.log( {
+				operation: 'invoke',
+				editor: editor.name,
+				evtName,
+				handlerId,
+				data: args.data,
+				listenerData: args.listenerData
+			} );
+			handler( args );
+		};
 	}
 
-	if ( editor && _handler ) {
+	if ( editor ) {
 		if ( debug ) {
 			console.log( {
 				operation: 'register',
@@ -60,7 +56,7 @@ function registerEditorEventHandler( {
 	}
 
 	return () => {
-		if ( editor && _handler ) {
+		if ( editor ) {
 			if ( debug ) {
 				console.log( {
 					operation: 'unregister',

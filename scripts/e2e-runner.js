@@ -2,6 +2,7 @@
 
 const path = require( 'path' );
 const shell = require( 'shelljs' );
+const kill = require( 'tree-kill' );
 const {
 	execCmd,
 	execCmdSync,
@@ -12,6 +13,10 @@ const {
 
 const PACKAGE_PATH = path.resolve( __dirname, '..' );
 const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-e2e-react-tests' );
+
+const bsUser = process.env.BROWSER_STACK_USERNAME;
+const bsKey = process.env.BROWSER_STACK_ACCESS_KEY;
+const bsBrowser = process.env.BROWSER_STACK_BROWSER;
 
 /**
  * Runs E2E tests.
@@ -30,6 +35,13 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-e2e-react-tests' );
 	const argv = require( 'minimist' )( process.argv.slice( 2 ) );
 	const reactVersion = argv.react || 'current';
 	const requestedSample = argv.sample;
+
+	if ( !bsUser || !bsKey || !bsBrowser ) {
+		console.log(
+			'Following environment variables must be set: BROWSER_STACK_USERNAME, BROWSER_STACK_ACCESS_KEY, BROWSER_STACK_BROWSER'
+		);
+		process.exit( 0 );
+	}
 
 	try {
 		log.header( 'Running E2E Tests...' );
@@ -134,8 +146,6 @@ function executeReactTestSuite( sample ) {
  * @returns {Promise} async callback
  */
 async function runNightwatchTests( sample ) {
-	const assets = path.resolve( TESTS_TMP_PATH, './public' );
-
 	let server;
 	let testSuite;
 
@@ -147,6 +157,7 @@ async function runNightwatchTests( sample ) {
 			PACKAGE_PATH
 		);
 	} else {
+		const assets = path.resolve( TESTS_TMP_PATH, './public' );
 		testSuite = execCmd(
 			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-folder-path ${ assets } --test-sample ${ sample }`,
 			PACKAGE_PATH
@@ -159,8 +170,7 @@ async function runNightwatchTests( sample ) {
 
 		testSuite.on( 'exit', code => {
 			if ( server ) {
-				process.kill( server.pid );
-				process.kill( server.pid + 1 );
+				kill( server.pid, 'SIGINT' );
 			}
 
 			if ( code > 0 ) {

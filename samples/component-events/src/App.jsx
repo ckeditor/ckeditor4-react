@@ -13,11 +13,11 @@ function App() {
 		setUniqueName( getUniqueName() );
 	};
 
-	const pushEvent = evtName => {
+	const pushEvent = ( evtName, editorName ) => {
 		setEvents( events =>
 			events.concat( {
 				evtName,
-				editor: uniqueName,
+				editor: editorName,
 				date: new Date()
 			} )
 		);

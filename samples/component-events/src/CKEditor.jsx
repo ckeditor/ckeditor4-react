@@ -12,31 +12,31 @@ import { CKEditor } from 'ckeditor4-react';
  */
 function CKEditorCmp( { pushEvent, uniqueName } ) {
 	const handleBeforeLoad = () => {
-		pushEvent( 'beforeLoad' );
+		pushEvent( 'beforeLoad', '--' );
 	};
 
 	const handleDestroyed = () => {
-		pushEvent( 'destroy' );
+		pushEvent( 'destroy', uniqueName );
 	};
 
 	const handleInstanceReady = () => {
-		pushEvent( 'instanceReady' );
+		pushEvent( 'instanceReady', uniqueName );
 	};
 
 	const handleLoaded = () => {
-		pushEvent( 'loaded' );
+		pushEvent( 'loaded', uniqueName );
 	};
 
 	const handleNamespaceLoaded = () => {
-		pushEvent( 'namespaceLoaded' );
+		pushEvent( 'namespaceLoaded', '--' );
 	};
 
 	const handleBlur = () => {
-		pushEvent( 'blur' );
+		pushEvent( 'blur', uniqueName );
 	};
 
 	const handleFocus = () => {
-		pushEvent( 'focus' );
+		pushEvent( 'focus', uniqueName );
 	};
 
 	return (

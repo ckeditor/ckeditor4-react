@@ -127,7 +127,19 @@ function CKEditor( {
 				editor,
 				evtName: 'instanceReady',
 				handler: ( { editor } ) => {
-					editor.setData( initData );
+					editor.setData( initData, {
+						/**
+						 * Prevents undo icon flickering.
+						 */
+						noSnapshot: true,
+
+						/**
+						 * Actually resets undo stack.
+						 */
+						callback: () => {
+							editor.resetUndo();
+						}
+					} );
 				},
 				priority: -1
 			} );
@@ -213,8 +225,13 @@ const propTypes = {
 	 *
 	 * Each event handler's name corresponds to its respective event, e.g. `instanceReady` -> `onInstanceReady`.
 	 */
-	...Object.entries( CKEditorEventAction ).reduce( ( acc, [ , value ] ) => {
-		return { ...acc, [ eventNameToHandlerName( value ) ]: PropTypes.func };
+	...Object.keys( CKEditorEventAction ).reduce( ( acc, key ) => {
+		return {
+			...acc,
+			[ eventNameToHandlerName(
+				CKEditorEventAction[ key as keyof typeof CKEditorEventAction ]
+			) ]: PropTypes.func
+		};
 	}, {} as Record<CKEditorEventHandlerName, typeof PropTypes.func> )
 };
 

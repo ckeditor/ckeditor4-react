@@ -5,6 +5,11 @@
 		"start": "http-server",
 		"prestart": "npm run build"
 	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not op_mini all"
+	],
 	"dependencies": {
 		"babel-standalone": "^6.26.0",
 		"ckeditor4-react": "latest",

@@ -108,8 +108,9 @@ function useCKEditor( {
 				let subscribed = [ ...events ];
 
 				if ( subscribeToRef.current ) {
-					subscribed = events.filter( evtName =>
-						subscribeToRef.current?.includes( evtName )
+					subscribed = events.filter(
+						evtName =>
+							subscribeToRef.current?.indexOf( evtName ) !== -1
 					);
 				}
 

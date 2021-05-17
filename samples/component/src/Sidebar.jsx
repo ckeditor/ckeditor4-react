@@ -3,11 +3,13 @@
 import * as React from 'react';
 
 function Sidebar( {
+	currentToolbar,
 	currentStyle,
 	currentType,
-	onTypeChange,
+	onToolbarChange,
 	onReadOnlyChange,
 	onStyleChange,
+	onTypeChange,
 	readOnly
 } ) {
 	return (
@@ -25,6 +27,22 @@ function Sidebar( {
 							onChange={onTypeChange}
 						/>
 						<label htmlFor={type}>{type}</label>
+					</div>
+				) )}
+			</div>
+			<div className="option">
+				<div>{'Toolbar:'}</div>
+				{[ 'standard', 'bold only' ].map( toolbar => (
+					<div key={toolbar}>
+						<input
+							id={toolbar}
+							type="radio"
+							name={toolbar}
+							checked={toolbar === currentToolbar}
+							value={toolbar}
+							onChange={onToolbarChange}
+						/>
+						<label htmlFor={toolbar}>{toolbar}</label>
 					</div>
 				) )}
 			</div>

@@ -1,6 +1,3 @@
-// IE11 polyfills
-import 'core-js/stable';
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './App';

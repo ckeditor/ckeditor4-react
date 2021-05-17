@@ -4,20 +4,28 @@ import Sidebar from './Sidebar';
 
 const { version, useEffect, useState } = React;
 
-const config = {
-	title: 'My classic editor'
-};
-
 function App() {
+	const [ config, setConfig ] = useState( undefined );
 	const [ element, setElement ] = useState();
 	const [ readOnly, setReadOnly ] = useState( false );
+	const [ currentToolbar, setToolbar ] = useState( 'standard' );
 	const [ currentType, setType ] = useState( 'classic' );
 	const [ currentStyle, setStyle ] = useState( 'initial' );
+
+	if ( config && readOnly ) {
+		config.readOnly = readOnly;
+	}
+
 	const { editor, status } = useCKEditor( {
 		config,
 		element,
 		type: currentType
 	} );
+
+	const handleToolbarChange = evt => {
+		const value = evt.currentTarget.value;
+		setToolbar( value );
+	};
 
 	const handleReadOnlyChange = evt => {
 		const checked = evt.currentTarget.checked;
@@ -35,11 +43,32 @@ function App() {
 	};
 
 	useEffect( () => {
+		setConfig( {
+			title: 'My classic editor',
+			...( currentToolbar === 'bold only' ?
+				{ toolbar: [ [ 'Bold' ] ] } :
+				undefined )
+		} );
+	}, [ currentToolbar ] );
+
+	useEffect( () => {
 		return registerEditorEventHandler( {
 			editor,
 			evtName: 'instanceReady',
 			handler: ( { editor } ) => {
-				editor.setData( `<p>Hello from ${ currentType } editor!</p>` );
+				editor.setData( `<p>Hello from ${ currentType } editor!</p>`, {
+					/**
+					 * Prevents undo icon flickering.
+					 */
+					noSnapshot: true,
+
+					/**
+					 * Actually resets undo stack.
+					 */
+					callback: () => {
+						editor.resetUndo();
+					}
+				} );
 			},
 			priority: -1
 		} );
@@ -61,15 +90,19 @@ function App() {
 		<div>
 			<section className="container">
 				<Sidebar
+					currentToolbar={currentToolbar}
 					currentStyle={currentStyle}
 					currentType={currentType}
 					onReadOnlyChange={handleReadOnlyChange}
 					onStyleChange={handleStyleChange}
 					onTypeChange={handleTypeChange}
+					onToolbarChange={handleToolbarChange}
 					readOnly={readOnly}
 				/>
 				<div className="paper flex-grow-3">
-					<div style={getStyle( currentStyle )} ref={setElement} />
+					{config && (
+						<div style={getStyle( currentStyle )} ref={setElement} />
+					)}
 				</div>
 			</section>
 			<footer>{`Running React v${ version }`}</footer>
