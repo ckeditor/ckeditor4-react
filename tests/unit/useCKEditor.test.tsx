@@ -120,7 +120,81 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that editor instance memoizes initial url.
+		 * Ensures that hook memoizes initial `debug` value.
+		 */
+		it( 'does not re-initialize editor on `debug` value change', async () => {
+			const ref = createDivRef();
+			const { result, rerender, waitForValueToChange } = renderHook(
+				( props: any ) =>
+					useCKEditor( {
+						element: ref.current,
+						debug: false,
+						...props
+					} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
+			rerender( {
+				debug: true
+			} );
+			expect( result.current.editor ).toBeDefined();
+			expect( result.current.loading ).toBeFalse();
+		} );
+
+		/**
+		 * Ensures that hook memoizes initial `dispatchEvent` value.
+		 */
+		it( 'does not re-initialize editor on `dispatchEvent` value change', async () => {
+			const ref = createDivRef();
+			const dispatchEvent = jasmine.createSpy( 'dispatchEvent' );
+			const dispatchEvent2 = jasmine.createSpy( 'dispatchEvent2' );
+			const { result, rerender, waitForValueToChange } = renderHook(
+				( props: any ) =>
+					useCKEditor( {
+						element: ref.current,
+						dispatchEvent,
+						...props
+					} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
+			rerender( {
+				dispatchEvent: dispatchEvent2
+			} );
+			expect( result.current.editor ).toBeDefined();
+			expect( result.current.loading ).toBeFalse();
+		} );
+
+		/**
+		 * Ensures that hook memoizes initial `subscribeTo` value.
+		 */
+		it( 'does not re-initialize editor on `subscribeTo` value change', async () => {
+			const ref = createDivRef();
+			const { result, rerender, waitForValueToChange } = renderHook(
+				( props: any ) =>
+					useCKEditor( {
+						element: ref.current,
+						subscribeTo: [ 'instanceReady' ],
+						...props
+					} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
+			rerender( {
+				subscribeTo: [ 'loaded' ]
+			} );
+			expect( result.current.editor ).toBeDefined();
+			expect( result.current.loading ).toBeFalse();
+		} );
+
+		/**
+		 * Ensures that hook memoizes initial url.
 		 */
 		it( 'does not re-initialize editor on url change', async () => {
 			const ref = createDivRef();
@@ -144,9 +218,9 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that editor instance is re-created on editor type change.
+		 * Ensures that editor instance is not re-created on editor type change.
 		 */
-		it( 're-initializes editor on type change', async () => {
+		it( 'does not re-initialize editor on type change', async () => {
 			const ref = createDivRef();
 			const { result, rerender, waitForValueToChange } = renderHook(
 				( props: any ) =>
@@ -162,18 +236,14 @@ function init() {
 			rerender( {
 				type: 'inline'
 			} );
-			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			expect( result.current.editor ).toBeDefined();
+			expect( result.current.loading ).toBeFalse();
 		} );
 
 		/**
-		 * Ensures that editor instance is re-created on config change.
+		 * Ensures that editor instance is not re-created on config change.
 		 */
-		it( 're-initializes editor on config change', async () => {
+		it( 'does not re-initialize editor on config change', async () => {
 			const ref = createDivRef();
 			const { result, rerender, waitForValueToChange } = renderHook(
 				( props: any ) =>
@@ -189,12 +259,8 @@ function init() {
 			rerender( {
 				config: { skin: 'myskin' }
 			} );
-			expect( result.current.editor ).toBeUndefined();
-			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			expect( result.current.editor ).toBeDefined();
+			expect( result.current.loading ).toBeFalse();
 		} );
 
 		/**

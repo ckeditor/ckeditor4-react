@@ -121,7 +121,7 @@ function CKEditor( {
 	 * `initData` can be set only once during lifecycle of an editor instance.
 	 */
 	useEffect( () => {
-		if ( initData ) {
+		if ( initData && editor ) {
 			return registerEditorEventHandler( {
 				debug,
 				editor,

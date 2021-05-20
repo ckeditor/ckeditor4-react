@@ -56,10 +56,14 @@ function useCKEditor( {
 	const dispatchEventRef = useRef( dispatchEvent );
 
 	/**
-	 * Stable referential equality of `config` is not necessary.
-	 * It should be possible to re-initialize editor on config changes.
+	 * Ensures referential stability of editor config.
 	 */
-	const configInit = config || defConfig;
+	const configRef = useRef( config || defConfig );
+
+	/**
+	 * Ensures referential stability of editor type.
+	 */
+	const typeRef = useRef( type );
 
 	/**
 	 * Holds current editor instance and hook status.
@@ -93,6 +97,9 @@ function useCKEditor( {
 			};
 
 			const initEditor = ( CKEDITOR: CKEditorNamespace ) => {
+				const isInline = typeRef.current === 'inline';
+				const isReadOnly = configRef.current.readOnly;
+
 				/**
 				 * Dispatches `beforeLoad` event.
 				 */
@@ -101,9 +108,10 @@ function useCKEditor( {
 					payload: CKEDITOR
 				} );
 
-				const editor = CKEDITOR[
-					type === 'inline' ? 'inline' : 'replace'
-				]( element, configInit );
+				const editor = CKEDITOR[ isInline ? 'inline' : 'replace' ](
+					element,
+					configRef.current
+				);
 
 				let subscribed = [ ...events ];
 
@@ -130,9 +138,6 @@ function useCKEditor( {
 						}
 					} );
 				} );
-
-				const isInline = type === 'inline';
-				const isReadOnly = configInit.readOnly;
 
 				/**
 				 * Registers `loaded` event for the sake of hook lifecycle.
@@ -201,7 +206,7 @@ function useCKEditor( {
 				editor.destroy();
 			}
 		};
-	}, [ configInit, editor, element, type ] );
+	}, [ editor, element ] );
 
 	return {
 		editor,

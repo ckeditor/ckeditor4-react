@@ -9,8 +9,7 @@ import {
 	findByInlineEditorEditable,
 	findClassicEditor,
 	findInlineEditor,
-	queryClassicEditor,
-	queryInlineEditor
+	queryClassicEditor
 } from './utils';
 import { CKEditor } from '../../src';
 
@@ -148,43 +147,77 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that new instance of editor is created after passing new `type`.
+		 * Ensures that new instance of editor is not created after passing new value of `editorUrl`.
 		 */
-		it( 're-initializes editor on type change', async () => {
+		it( 'does not re-initialize editor on `editorUrl` change', async () => {
 			const { rerender } = render( <CKEditor initData="Hello world!" /> );
 			expect( queryClassicEditor() ).toBeNull();
 			expect(
 				await findByClassicEditorContent( 'Hello world!' )
 			).toBeVisible();
-			rerender(
-				<CKEditor initData="Hello inline editor!" type="inline" />
-			);
-			expect( queryClassicEditor() ).toBeNull();
-			expect( queryInlineEditor() ).toBeNull();
-			expect(
-				await findByInlineEditorContent( 'Hello inline editor!' )
-			).toBeVisible();
+			rerender( <CKEditor editorUrl="https://some.url.org" /> );
+			expect( queryClassicEditor() ).not.toBeNull();
 		} );
 
 		/**
-		 * Ensures that new instance of editor is created after passing new `config`.
+		 * Ensures that new instance of editor is not created after passing new value of event handler.
 		 */
-		it( 're-initializes editor on config change', async () => {
-			const { rerender } = render( <CKEditor initData="Hello world!" /> );
-			expect( queryClassicEditor() ).toBeNull();
-			expect(
-				await findByClassicEditorContent( 'Hello world!' )
-			).toBeVisible();
-			rerender(
+		it( 'does not re-initialize editor on `onInstanceReady` change', async () => {
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
+			const onInstanceReady2 = jasmine.createSpy( 'onInstanceReady2' );
+			const { rerender } = render(
 				<CKEditor
-					initData="Hello new editor url!"
-					config={{ skin: 'myskin' }}
+					initData="Hello world!"
+					onInstanceReady={onInstanceReady}
 				/>
 			);
 			expect( queryClassicEditor() ).toBeNull();
 			expect(
 				await findByClassicEditorContent( 'Hello world!' )
 			).toBeVisible();
+			rerender( <CKEditor onInstanceReady={onInstanceReady2} /> );
+			expect( queryClassicEditor() ).not.toBeNull();
+		} );
+
+		/**
+		 * Ensures that new instance of editor is not created after passing new value of `debug`.
+		 */
+		it( 'does not re-initialize editor on `debug` change', async () => {
+			const { rerender } = render(
+				<CKEditor initData="Hello world!" debug={false} />
+			);
+			expect( queryClassicEditor() ).toBeNull();
+			expect(
+				await findByClassicEditorContent( 'Hello world!' )
+			).toBeVisible();
+			rerender( <CKEditor debug={true} /> );
+			expect( queryClassicEditor() ).not.toBeNull();
+		} );
+
+		/**
+		 * Ensures that new instance of editor is not created after passing new value of `type`.
+		 */
+		it( 'does not re-initialize editor on `type` change', async () => {
+			const { rerender } = render( <CKEditor initData="Hello world!" /> );
+			expect( queryClassicEditor() ).toBeNull();
+			expect(
+				await findByClassicEditorContent( 'Hello world!' )
+			).toBeVisible();
+			rerender( <CKEditor type="inline" /> );
+			expect( queryClassicEditor() ).not.toBeNull();
+		} );
+
+		/**
+		 * Ensures that new instance of editor is not created after passing new `config`.
+		 */
+		it( 'does not re-initialize editor on `config` change', async () => {
+			const { rerender } = render( <CKEditor initData="Hello world!" /> );
+			expect( queryClassicEditor() ).toBeNull();
+			expect(
+				await findByClassicEditorContent( 'Hello world!' )
+			).toBeVisible();
+			rerender( <CKEditor config={{ skin: 'myskin' }} /> );
+			expect( queryClassicEditor() ).not.toBeNull();
 		} );
 
 		/**

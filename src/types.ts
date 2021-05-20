@@ -142,7 +142,7 @@ export interface CKEditorRegisterEventArgs {
 	/**
 	 * Editor instance.
 	 */
-	editor?: CKEditorInstance;
+	editor: CKEditorInstance;
 
 	/**
 	 * Event handler to register.
