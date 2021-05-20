@@ -29,7 +29,7 @@ module.exports = function( config ) {
 		files: [
 			// (#185)
 			// Added as dependency here, so that script is preloaded before tests start.
-			'https://cdn.ckeditor.com/4.16.0/standard-all/ckeditor.js',
+			'https://cdn.ckeditor.com/4.16.1/standard-all/ckeditor.js',
 			'tests/utils/**/*.js',
 			'tests/browser/**/*.jsx'
 		],
