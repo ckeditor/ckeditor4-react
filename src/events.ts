@@ -105,6 +105,11 @@ export const events = [
 export const namespaceEvents = [ 'beforeLoad', 'namespaceLoaded' ] as const;
 
 /**
+ * Combines `editor` and `namespace` events.
+ */
+export const defaultEvents = [ ...events, ...namespaceEvents ];
+
+/**
  * Events as action types should be prefixed to allow easier consumption by downstream reducers.
  */
 export const EVENT_PREFIX = '__CKE__';

@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { getEditorNamespace } from 'ckeditor4-integrations-common';
 import registerEditorEventHandler from './registerEditorEventHandler';
-import { CKEditorEventAction, events } from './events';
+import { CKEditorEventAction, defaultEvents, namespaceEvents } from './events';
 
 import type {
 	CKEditorConfig,
@@ -30,7 +30,7 @@ function useCKEditor( {
 	config,
 	debug,
 	dispatchEvent,
-	subscribeTo,
+	subscribeTo = defaultEvents,
 	editorUrl,
 	element,
 	type = 'classic'
@@ -90,10 +90,12 @@ function useCKEditor( {
 			 * Helper callback that dispatches `namespaceLoaded` event.
 			 */
 			const onNamespaceLoaded = ( CKEDITOR: CKEditorNamespace ) => {
-				dispatchEventRef.current?.( {
-					type: CKEditorEventAction.namespaceLoaded,
-					payload: CKEDITOR
-				} );
+				if ( subscribeToRef.current.indexOf( 'namespaceLoaded' ) !== -1 ) {
+					dispatchEventRef.current?.( {
+						type: CKEditorEventAction.namespaceLoaded,
+						payload: CKEDITOR
+					} );
+				}
 			};
 
 			const initEditor = ( CKEDITOR: CKEditorNamespace ) => {
@@ -103,29 +105,26 @@ function useCKEditor( {
 				/**
 				 * Dispatches `beforeLoad` event.
 				 */
-				dispatchEventRef.current?.( {
-					type: CKEditorEventAction.beforeLoad,
-					payload: CKEDITOR
-				} );
+				if ( subscribeToRef.current.indexOf( 'beforeLoad' ) !== -1 ) {
+					dispatchEventRef.current?.( {
+						type: CKEditorEventAction.beforeLoad,
+						payload: CKEDITOR
+					} );
+				}
 
 				const editor = CKEDITOR[ isInline ? 'inline' : 'replace' ](
 					element,
 					configRef.current
 				);
 
-				let subscribed = [ ...events ];
-
-				if ( subscribeToRef.current ) {
-					subscribed = events.filter(
-						evtName =>
-							subscribeToRef.current?.indexOf( evtName ) !== -1
-					);
-				}
+				const subscribedEditorEvents = subscribeToRef.current.filter(
+					evtName => namespaceEvents.indexOf( evtName as any ) === -1
+				);
 
 				/**
 				 * Registers all subscribed events.
 				 */
-				subscribed.forEach( evtName => {
+				subscribedEditorEvents.forEach( evtName => {
 					registerEditorEventHandler( {
 						debug: debugRef.current,
 						editor,

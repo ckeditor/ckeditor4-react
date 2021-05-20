@@ -236,21 +236,21 @@ function init() {
 		it( 'invokes editor handlers', async () => {
 			const onDestroy = jasmine.createSpy( 'onDestroy' );
 			const onLoaded = jasmine.createSpy( 'onLoaded' );
-			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
+			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
 			const { unmount } = render(
 				<CKEditor
 					initData="Hello world!"
 					onDestroy={onDestroy}
-					onInstanceReady={onInstanceReady}
+					onBeforeLoad={onBeforeLoad}
 					onLoaded={onLoaded}
 				/>
 			);
 			expect( await findClassicEditor() ).toBeVisible();
 			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
+			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
 			expect(
 				await findByClassicEditorContent( 'Hello world!' )
 			).toBeVisible();
-			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
 			unmount();
 			expect( queryClassicEditor() ).toBeNull();
 			expect( onDestroy ).toHaveBeenCalledTimes( 1 );
@@ -281,7 +281,9 @@ function init() {
 		 */
 		it( 'renders as string', async () => {
 			const result = ReactDOMServer.renderToString( <CKEditor /> );
-			expect( result ).toEqual( '<div data-reactroot=""></div>' );
+			expect( result ).toEqual(
+				'<div style="visibility:hidden" data-reactroot=""></div>'
+			);
 		} );
 	} );
 }

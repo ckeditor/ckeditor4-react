@@ -6,9 +6,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { eventNameToHandlerName, CKEditorEventAction } from './events';
-import registerEditorEventHandler from './registerEditorEventHandler';
 import useCKEditor from './useCKEditor';
-import { camelToKebab } from './utils';
+import { camelToKebab, getRootStyle } from './utils';
 
 import type {
 	CKEditorEditorEventName,
@@ -116,42 +115,14 @@ function CKEditor( {
 		}
 	}, [ editor, status, readOnly ] );
 
-	/**
-	 * Registers listener to `instanceReady` event with high priority.
-	 * `initData` can be set only once during lifecycle of an editor instance.
-	 */
-	useEffect( () => {
-		if ( initData && editor ) {
-			return registerEditorEventHandler( {
-				debug,
-				editor,
-				evtName: 'instanceReady',
-				handler: ( { editor } ) => {
-					editor.setData( initData, {
-						/**
-						 * Prevents undo icon flickering.
-						 */
-						noSnapshot: true,
-
-						/**
-						 * Resets undo stack.
-						 */
-						callback: () => {
-							editor.resetUndo();
-						}
-					} );
-				},
-				priority: -1
-			} );
-		}
-	}, [ debug, editor, initData ] );
-
 	return (
 		<div
 			id={name ?? undefined}
 			ref={setElement}
-			style={style ?? undefined}
-		/>
+			style={getRootStyle( style, status )}
+		>
+			{initData}
+		</div>
 	);
 }
 
