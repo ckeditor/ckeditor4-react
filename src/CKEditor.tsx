@@ -152,12 +152,10 @@ const propTypes = {
 	editorUrl: PropTypes.string,
 
 	/**
-	 * Initial data. It will be passed to editor once it's in `ready` state.
-	 *
 	 * Initial data will be set only once during editor instance's lifecycle.
 	 *
 	 */
-	initData: PropTypes.string,
+	initData: PropTypes.node,
 
 	/**
 	 * A unique identifier of editor instance.

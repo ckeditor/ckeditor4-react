@@ -2,60 +2,46 @@ import * as React from 'react';
 import { CKEditor } from 'ckeditor4-react';
 import Sidebar from './Sidebar';
 
-const { version, useEffect, useState } = React;
+const { version, useReducer } = React;
 
 function App() {
-	const [ config, setConfig ] = useState( undefined );
-	const [ readOnly, setReadOnly ] = useState( false );
-	const [ currentToolbar, setToolbar ] = useState( 'standard' );
-	const [ currentType, setType ] = useState( 'classic' );
-	const [ currentStyle, setStyle ] = useState( 'initial' );
-
-	/**
-	 * New instance of editor is created whenever new instance of config is created.
-	 * Use combination of `useState` and `useEffect` to memoize it across renders.
-	 */
-	useEffect( () => {
-		setConfig( {
-			title: 'My classic editor',
-			...( currentToolbar === 'bold only' ?
-				{ toolbar: [ [ 'Bold' ] ] } :
-				undefined )
+	const [ { config, readOnly, type, style, toolbar, name }, dispatch ] =
+		useReducer( reducer, {
+			config: getConfig(),
+			readOnly: false,
+			type: 'classic',
+			style: 'initial',
+			toolbar: 'standard',
+			name: getUniqueName()
 		} );
-	}, [ currentToolbar ] );
 
 	const handleToolbarChange = evt => {
 		const value = evt.currentTarget.value;
-		setToolbar( value );
+		dispatch( { type: 'toolbar', payload: value } );
 	};
 
 	const handleReadOnlyChange = evt => {
 		const checked = evt.currentTarget.checked;
-		setReadOnly( checked );
+		dispatch( { type: 'readOnly', payload: checked } );
 	};
 
 	const handleStyleChange = evt => {
 		const value = evt.currentTarget.value;
-		setStyle( value );
+		dispatch( { type: 'style', payload: value } );
 	};
 
-	/**
-	 * New instance of editor is created on toggling between `classic` and `inline` type.
-	 */
 	const handleTypeChange = evt => {
 		const value = evt.currentTarget.value;
-		setType( value );
+		dispatch( { type: 'type', payload: value } );
 	};
-
-	const initData = `<p>Hello from ${ currentType } editor!</p>`;
 
 	return (
 		<div>
 			<section className="container">
 				<Sidebar
-					currentToolbar={currentToolbar}
-					currentStyle={currentStyle}
-					currentType={currentType}
+					toolbar={toolbar}
+					style={style}
+					type={type}
 					onToolbarChange={handleToolbarChange}
 					onReadOnlyChange={handleReadOnlyChange}
 					onStyleChange={handleStyleChange}
@@ -63,22 +49,63 @@ function App() {
 					readOnly={readOnly}
 				/>
 				<div className="paper flex-grow-3">
-					{config && (
-						<CKEditor
-							debug={true}
-							config={config}
-							initData={initData}
-							name={`my-classic-editor-${ currentType }`}
-							readOnly={readOnly}
-							style={getStyle( currentStyle )}
-							type={currentType}
-						/>
-					)}
+					<CKEditor
+						key={name}
+						debug={true}
+						config={config}
+						initData={<p>{`Hello from ${ type } editor!`}</p>}
+						name={name}
+						readOnly={readOnly}
+						style={getStyle( style )}
+						type={type}
+						lol="lol"
+					/>
 				</div>
 			</section>
 			<footer>{`Running React v${ version }`}</footer>
 		</div>
 	);
+}
+
+function reducer( state, action ) {
+	switch ( action.type ) {
+		case 'toolbar':
+			return action.payload === state.toolbar ?
+				state :
+				{
+					...state,
+					toolbar: action.payload,
+					config: getConfig( action.payload === 'bold only' ),
+					name: getUniqueName()
+				};
+		case 'type':
+			return action.payload === state.type ?
+				state :
+				{
+					...state,
+					type: action.payload,
+					name: getUniqueName()
+				};
+		case 'readOnly':
+			return {
+				...state,
+				readOnly: action.payload
+			};
+		case 'style':
+			return {
+				...state,
+				style: action.payload
+			};
+		default:
+			return state;
+	}
+}
+
+function getConfig( boldOnly ) {
+	return {
+		title: 'CKEditor component',
+		...( boldOnly ? { toolbar: [ [ 'Bold' ] ] } : undefined )
+	};
 }
 
 function getStyle( style ) {
@@ -101,6 +128,13 @@ function getStyle( style ) {
 		default:
 			return undefined;
 	}
+}
+
+function getUniqueName() {
+	return Math.random()
+		.toString( 36 )
+		.replace( /[^a-z]+/g, '' )
+		.substr( 0, 5 );
 }
 
 export default App;

@@ -16,13 +16,16 @@ function CKEditorCmp( { dispatchEvent, uniqueName } ) {
 		debug: true,
 		dispatchEvent,
 		subscribeTo: [
+			// Subscribed default events
 			'namespaceLoaded',
 			'beforeLoad',
 			'instanceReady',
 			'focus',
 			'blur',
 			'loaded',
-			'destroy'
+			'destroy',
+			// Custom events
+			'myCustomEvent'
 		]
 	} );
 

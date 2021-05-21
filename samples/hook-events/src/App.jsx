@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { CKEditorEventAction } from 'ckeditor4-react';
+import {
+	prefixEventName,
+	stripPrefix,
+	CKEditorEventAction
+} from 'ckeditor4-react';
 import Sidebar from './Sidebar';
 import CKEditor from './CKEditor';
 
@@ -11,6 +15,10 @@ function App() {
 		uniqueName: getUniqueName()
 	} );
 	const start = useRef( new Date() );
+
+	const handleCustomEvent = () => {
+		window.CKEDITOR.instances[ uniqueName ].fire( 'myCustomEvent' );
+	};
 
 	const handleRemountClick = () => {
 		dispatch( { type: 'reMount', payload: getUniqueName() } );
@@ -29,6 +37,11 @@ function App() {
 					<button className="btn" onClick={handleRemountClick}>
 						{'Re-mount editor'}
 					</button>
+					<div>
+						<button className="btn" onClick={handleCustomEvent}>
+							{'Send custom event'}
+						</button>
+					</div>
 				</div>
 			</section>
 			<footer>{`Running React v${ version }`}</footer>
@@ -53,7 +66,7 @@ function reducer( state, action ) {
 			return {
 				...state,
 				events: state.events.concat( {
-					evtName: action.type.substr( 7 ),
+					evtName: stripPrefix( action.type ),
 					editor: '--',
 					date: new Date()
 				} )
@@ -63,10 +76,11 @@ function reducer( state, action ) {
 		case CKEditorEventAction.destroy:
 		case CKEditorEventAction.focus:
 		case CKEditorEventAction.blur:
+		case prefixEventName( 'myCustomEvent' ):
 			return {
 				...state,
 				events: state.events.concat( {
-					evtName: action.type.substr( 7 ),
+					evtName: stripPrefix( action.type ),
 					editor: action.payload.editor.name,
 					date: new Date()
 				} )

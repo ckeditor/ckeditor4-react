@@ -13,6 +13,10 @@ function App() {
 		setUniqueName( getUniqueName() );
 	};
 
+	const handleCustomEvent = () => {
+		window.CKEDITOR.instances[ uniqueName ].fire( 'myCustomEvent' );
+	};
+
 	const pushEvent = ( evtName, editorName ) => {
 		setEvents( events =>
 			events.concat( {
@@ -36,6 +40,11 @@ function App() {
 					<button className="btn" onClick={handleRemountClick}>
 						{'Re-mount editor'}
 					</button>
+					<div>
+						<button className="btn" onClick={handleCustomEvent}>
+							{'Send custom event'}
+						</button>
+					</div>
 				</div>
 			</section>
 			<footer>{`Running React v${ version }`}</footer>

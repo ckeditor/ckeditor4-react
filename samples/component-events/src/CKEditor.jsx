@@ -38,6 +38,10 @@ function CKEditorCmp( { pushEvent, uniqueName } ) {
 		pushEvent( 'focus', uniqueName );
 	};
 
+	const handleCustomEvent = () => {
+		pushEvent( 'myCustomEvent', uniqueName );
+	};
+
 	return (
 		<CKEditor
 			debug={true}
@@ -49,6 +53,7 @@ function CKEditorCmp( { pushEvent, uniqueName } ) {
 			onLoaded={handleLoaded}
 			onFocus={handleFocus}
 			onBlur={handleBlur}
+			onMyCustomEvent={handleCustomEvent}
 		/>
 	);
 }
