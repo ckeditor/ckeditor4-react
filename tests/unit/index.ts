@@ -7,6 +7,7 @@ import initUseCKEditorTests from './useCKEditor.test';
 import initCKEditorTests from './CKEditor.test';
 import initRegisterEditorEventHandler from './registerEditorEventHandler.test';
 import initUtilsTests from './utils.test';
+import initEventsTests from './events.test';
 
 describe( 'CKEditor4 React', () => {
 	// Increases timeout so that CI can have a chance to capture changes.
@@ -46,4 +47,5 @@ describe( 'CKEditor4 React', () => {
 	initRegisterEditorEventHandler();
 	initCKEditorTests();
 	initUtilsTests();
+	initEventsTests();
 } );

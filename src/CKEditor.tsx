@@ -5,15 +5,18 @@
 
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { eventNameToHandlerName, CKEditorEventAction } from './events';
+import {
+	eventNameToHandlerName,
+	defaultEvents,
+	stripPrefix,
+	handlerNameToEventName
+} from './events';
 import useCKEditor from './useCKEditor';
 import { camelToKebab, getRootStyle } from './utils';
 
 import type {
-	CKEditorEditorEventName,
 	CKEditorEventDispatcher,
-	CKEditorEventHandlerName,
-	CKEditorEventHandlersProps,
+	CKEditorEventHandlerProp,
 	CKEditorProps,
 	CKEditorType
 } from './types';
@@ -24,7 +27,7 @@ const { useEffect, useRef, useState } = React;
  * `CKEditor` component is a convenient wrapper around low-level hooks.
  * It's useful for simpler use cases. For advanced usage see `useCKEditor` hook.
  */
-function CKEditor( {
+function CKEditor<EventHandlerProp>( {
 	config,
 	debug,
 	editorUrl,
@@ -38,7 +41,7 @@ function CKEditor( {
 	 * `handlers` object must contain event handlers props only!
 	 */
 	...handlers
-}: CKEditorProps ): JSX.Element {
+}: CKEditorProps<EventHandlerProp> ): JSX.Element {
 	/**
 	 * Uses `useState` instead of `useRef` to force re-render.
 	 */
@@ -47,10 +50,12 @@ function CKEditor( {
 	/**
 	 * Ensures referential equality of event handlers.
 	 */
-	const refs = useRef<CKEditorEventHandlersProps>( handlers );
+	const refs = useRef( handlers );
 
 	const dispatchEvent: CKEditorEventDispatcher = ( { type, payload } ) => {
-		const handlerName = eventNameToHandlerName( type );
+		const handlerName = eventNameToHandlerName(
+			stripPrefix( type )
+		) as keyof CKEditorEventHandlerProp;
 		const handler = refs.current[ handlerName ];
 
 		if ( handler ) {
@@ -75,10 +80,9 @@ function CKEditor( {
 		/**
 		 * Subscribe only to those events for which handler was supplied.
 		 */
-		subscribeTo: Object.keys( handlers ).map( key => {
-			const evtName = key.substr( 2, 1 ).toLowerCase() + key.substr( 3 );
-			return evtName as CKEditorEditorEventName;
-		} ),
+		subscribeTo: Object.keys( handlers )
+			.filter( key => key.indexOf( 'on' ) === 0 )
+			.map( handlerNameToEventName ),
 		type
 	} );
 
@@ -196,14 +200,12 @@ const propTypes = {
 	 *
 	 * Each event handler's name corresponds to its respective event, e.g. `instanceReady` -> `onInstanceReady`.
 	 */
-	...Object.keys( CKEditorEventAction ).reduce( ( acc, key ) => {
+	...defaultEvents.reduce( ( acc, key ) => {
 		return {
 			...acc,
-			[ eventNameToHandlerName(
-				CKEditorEventAction[ key as keyof typeof CKEditorEventAction ]
-			) ]: PropTypes.func
+			[ eventNameToHandlerName( key ) ]: PropTypes.func
 		};
-	}, {} as Record<CKEditorEventHandlerName, typeof PropTypes.func> )
+	}, {} as Record<keyof CKEditorEventHandlerProp, typeof PropTypes.func> )
 };
 
 CKEditor.propTypes = propTypes;

@@ -320,9 +320,9 @@ function init() {
 		} );
 
 		/**
-		 * Dispatches all editor events (`subscribeTo` list is not passed).
+		 * Dispatches default editor events (`subscribeTo` list is not passed).
 		 */
-		it( 'dispatches editor events', async () => {
+		it( 'dispatches default editor events', async () => {
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
 			const onLoaded = jasmine.createSpy( 'onLoaded' );
 			const onDestroy = jasmine.createSpy( 'onDestroy' );
@@ -357,23 +357,20 @@ function init() {
 		} );
 
 		/**
-		 * Dispatches all editor events. Limits events to those specified in `subscribeTo` list.
+		 * Dispatches only those events that are specified in `subscribeTo` list.
 		 */
 		it( 'dispatches limited number of editor events', async () => {
-			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
 			const onLoaded = jasmine.createSpy( 'onLoaded' );
-			const onDestroy = jasmine.createSpy( 'onDestroy' );
+			const onOtherEvent = jasmine.createSpy( 'onOtherEvent' );
 			const ref = createDivRef();
-			const { result, unmount, waitForValueToChange } = renderHook( () =>
+			const { result, waitForValueToChange } = renderHook( () =>
 				useCKEditor( {
 					element: ref.current,
 					dispatchEvent: ( { type, payload } ) => {
-						if ( type === CKEditorEventAction.instanceReady ) {
-							onInstanceReady( payload );
-						} else if ( type === CKEditorEventAction.loaded ) {
+						if ( type === CKEditorEventAction.loaded ) {
 							onLoaded( payload );
-						} else if ( type === CKEditorEventAction.destroy ) {
-							onDestroy( payload );
+						} else {
+							onOtherEvent();
 						}
 					},
 					subscribeTo: [ 'loaded' ]
@@ -388,10 +385,39 @@ function init() {
 				() => result.current.status === 'ready',
 				{ timeout: 5000 }
 			);
-			expect( onInstanceReady ).toHaveBeenCalledTimes( 0 );
-			unmount();
-			expect( queryClassicEditor() ).toBeNull();
-			expect( onDestroy ).toHaveBeenCalledTimes( 0 );
+			expect( onOtherEvent ).toHaveBeenCalledTimes( 0 );
+		} );
+
+		/**
+		 * Dispatches custom `editor` events that are specified in `subscribeTo` list.
+		 */
+		it( 'dispatches custom `editor` events', async () => {
+			const onCustomEvent = jasmine.createSpy( 'onCustomEvent' );
+			const onOtherEvent = jasmine.createSpy( 'onOtherEvent' );
+			const ref = createDivRef();
+			const { result, waitForValueToChange } = renderHook( () =>
+				useCKEditor<'customEvent'>( {
+					element: ref.current,
+					dispatchEvent: ( { type, payload } ) => {
+						if ( type === '__CKE__customEvent' ) {
+							onCustomEvent( payload );
+						} else {
+							onOtherEvent();
+						}
+					},
+					subscribeTo: [ 'customEvent' ]
+				} )
+			);
+			await waitForValueToChange( () => !!result.current.editor, {
+				timeout: 5000
+			} );
+			result.current.editor?.fire( 'customEvent' );
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
+			expect( onCustomEvent ).toHaveBeenCalledTimes( 1 );
+			expect( onOtherEvent ).toHaveBeenCalledTimes( 0 );
 		} );
 	} );
 }

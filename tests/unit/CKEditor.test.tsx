@@ -11,7 +11,7 @@ import {
 	findInlineEditor,
 	queryClassicEditor
 } from './utils';
-import { CKEditor } from '../../src';
+import { CKEditor, CKEditorEventHandler } from '../../src';
 
 function init() {
 	describe( 'CKEditor', () => {
@@ -221,7 +221,7 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that namespace event handler `onBeforeLoad` is invoked.
+		 * Ensures that `namespace` event handler `onBeforeLoad` is invoked.
 		 */
 		it( 'invokes `onBeforeLoad` callback', async () => {
 			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
@@ -231,49 +231,46 @@ function init() {
 		} );
 
 		/**
-		 * Ensures that editor event handlers are invoked.
+		 * Ensures that default `editor` event handlers are invoked.
 		 */
-		it( 'invokes editor handlers', async () => {
+		it( 'invokes editor handlers for default events', async () => {
 			const onDestroy = jasmine.createSpy( 'onDestroy' );
 			const onLoaded = jasmine.createSpy( 'onLoaded' );
-			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
 			const { unmount } = render(
 				<CKEditor
 					initData="Hello world!"
 					onDestroy={onDestroy}
-					onBeforeLoad={onBeforeLoad}
+					onInstanceReady={onInstanceReady}
 					onLoaded={onLoaded}
 				/>
 			);
-			expect( await findClassicEditor() ).toBeVisible();
-			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
-			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
-			expect(
-				await findByClassicEditorContent( 'Hello world!' )
-			).toBeVisible();
+			expect( await findByClassicEditorEditable( true ) ).toBeVisible();
 			unmount();
 			expect( queryClassicEditor() ).toBeNull();
+			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
+			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
 			expect( onDestroy ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		/**
-		 * Ensures that built-in callbacks are registered with high priority.
+		 * Ensures that custom `editor` event handlers are invoked.
 		 */
-		it( 'invokes built-in `instanceReady` handler with high prio', async () => {
+		it( 'invokes editor handlers for custom events', async () => {
+			const windw = window as any;
+			const onCustomEvent = jasmine.createSpy( 'onCustomEvent' );
 			render(
-				<CKEditor
-					onInstanceReady={( { editor } ) => {
-						setTimeout(
-							() => editor.setData( 'Hello from callback!' ),
-							0
-						);
-					}}
-					initData="Hello world!"
+				<CKEditor<{
+					onCustomEvent: CKEditorEventHandler<'customEvent'>;
+				}>
+					name="test"
+					onCustomEvent={onCustomEvent}
 				/>
 			);
-			expect(
-				await findByClassicEditorContent( 'Hello from callback!' )
-			).toBeVisible();
+			expect( await findClassicEditor() ).toBeVisible();
+			windw.CKEDITOR.instances.test.fire( 'customEvent' );
+			// expect( await findClassicEditor() ).toBeVisible();
+			expect( onCustomEvent ).toHaveBeenCalledTimes( 1 );
 		} );
 
 		/**

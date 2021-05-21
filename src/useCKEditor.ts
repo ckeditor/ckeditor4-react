@@ -6,10 +6,16 @@
 import * as React from 'react';
 import { getEditorNamespace } from 'ckeditor4-integrations-common';
 import registerEditorEventHandler from './registerEditorEventHandler';
-import { CKEditorEventAction, defaultEvents, namespaceEvents } from './events';
+import {
+	CKEditorEventAction,
+	defaultEvents,
+	EVENT_PREFIX,
+	namespaceEvents
+} from './events';
 
 import type {
 	CKEditorConfig,
+	CKEditorDefaultEvent,
 	CKEditorHookProps,
 	CKEditorHookResult,
 	CKEditorInstance,
@@ -26,7 +32,7 @@ const defConfig: CKEditorConfig = {};
  * `useCKEditor` is a low-level hook that holds core logic for editor lifecycle.
  * It is responsible for initializing and destroying editor instance.
  */
-function useCKEditor( {
+function useCKEditor<EditorEvent extends string>( {
 	config,
 	debug,
 	dispatchEvent,
@@ -34,7 +40,7 @@ function useCKEditor( {
 	editorUrl,
 	element,
 	type = 'classic'
-}: CKEditorHookProps ): CKEditorHookResult {
+}: CKEditorHookProps<EditorEvent | CKEditorDefaultEvent> ): CKEditorHookResult {
 	/**
 	 * Ensures stable value of `editorUrl` between renders.
 	 */
@@ -43,7 +49,7 @@ function useCKEditor( {
 	/**
 	 * Ensures stable value of `subscribeTo` between renders.
 	 */
-	const subscribeToRef = useRef( subscribeTo );
+	const subscribeToRef = useRef( subscribeTo ?? defaultEvents );
 
 	/**
 	 * Ensures stable value of `debug` between renders.
@@ -118,7 +124,7 @@ function useCKEditor( {
 				);
 
 				const subscribedEditorEvents = subscribeToRef.current.filter(
-					evtName => namespaceEvents.indexOf( evtName as any ) === -1
+					( evtName: any ) => namespaceEvents.indexOf( evtName ) === -1
 				);
 
 				/**
@@ -131,7 +137,7 @@ function useCKEditor( {
 						evtName,
 						handler: payload => {
 							dispatchEventRef.current?.( {
-								type: CKEditorEventAction[ evtName ],
+								type: `${ EVENT_PREFIX }${ evtName }`,
 								payload
 							} );
 						}

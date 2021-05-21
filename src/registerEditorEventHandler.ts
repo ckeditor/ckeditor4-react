@@ -6,6 +6,7 @@
 import { uniqueName } from './utils';
 
 import {
+	CKEditorDefaultEvent,
 	CKEditorEventHandler,
 	CKEditorEventPayload,
 	CKEditorRegisterEventArgs
@@ -17,20 +18,20 @@ import {
  * @param editor instance of editor
  * @param debug toggles debugger
  */
-function registerEditorEventHandler( {
+function registerEditorEventHandler<EditorEvent>( {
 	debug,
 	editor,
 	evtName,
 	handler,
 	listenerData,
 	priority
-}: CKEditorRegisterEventArgs ) {
+}: CKEditorRegisterEventArgs<EditorEvent | CKEditorDefaultEvent> ) {
 	const handlerId = debug && uniqueName();
 
-	let _handler: CKEditorEventHandler = handler;
+	let _handler: CKEditorEventHandler<EditorEvent> = handler;
 
 	if ( debug ) {
-		_handler = function( args: CKEditorEventPayload ) {
+		_handler = function( args: CKEditorEventPayload<EditorEvent> ) {
 			console.log( {
 				operation: 'invoke',
 				editor: editor.name,

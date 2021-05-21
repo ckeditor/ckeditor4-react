@@ -6,12 +6,29 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import CKEditor from './CKEditor';
-import { events, namespaceEvents, EVENT_PREFIX } from './events';
+import { events, namespaceEvents } from './events';
 
 /**
- * Eitor event handler's payload.
+ * Event names associated with `editor` events.
  */
-export interface CKEditorEventPayload {
+export type CKEditorEditorEventName = typeof events[number];
+
+/**
+ * Event names associated with `namespace` events.
+ */
+export type CKEditorNamespaceEventName = typeof namespaceEvents[number];
+
+/**
+ * Combined `editor` and `namespace` events.
+ */
+export type CKEditorDefaultEvent =
+	| CKEditorEditorEventName
+	| CKEditorNamespaceEventName;
+
+/**
+ * Payload passed to `editor` event handlers.
+ */
+export interface CKEditorEventPayload<EventName> {
 
 	/**
 	 * Additional event data.
@@ -31,7 +48,7 @@ export interface CKEditorEventPayload {
 	/**
 	 * Event name.
 	 */
-	name: CKEditorEditorEventName;
+	name: EventName;
 
 	/**
 	 * Object that publishes event.
@@ -55,14 +72,16 @@ export interface CKEditorEventPayload {
 }
 
 /**
- * Signature of editor event handler.
+ * Signature of `editor` event handler.
  */
-export type CKEditorEventHandler = ( evt: CKEditorEventPayload ) => void;
+export type CKEditorEventHandler<EventName> = (
+	evt: CKEditorEventPayload<EventName>
+) => void;
 
 /**
- * Signature of namespace event handler.
+ * Signature of `namespace` event handler.
  */
-export type CKEditorNamespaceCb = ( CKEDITOR: CKEditorNamespace ) => void;
+export type CKEditorNamespaceHandler = ( CKEDITOR: CKEditorNamespace ) => void;
 
 /**
  * Editor instance.
@@ -82,7 +101,7 @@ export type CKEditorNamespace = any;
 /**
  * `useCKEditor` hook arguments.
  */
-export interface CKEditorHookProps {
+export interface CKEditorHookProps<EventName extends string> {
 
 	/**
 	 * Config object passed to editor's constructor.
@@ -100,14 +119,14 @@ export interface CKEditorHookProps {
 	debug?: boolean | null;
 
 	/**
-	 * Dispatches editor / namespace events.
+	 * Dispatches `editor` / `namespace` events.
 	 */
 	dispatchEvent?: CKEditorEventDispatcher;
 
 	/**
 	 * List of editor events that will be dispatched. Omit if all events are to be dispatched.
 	 */
-	subscribeTo?: readonly CKEditorEventName[];
+	subscribeTo?: readonly EventName[];
 
 	/**
 	 * Url with editor's source code. Uses https://cdn.ckeditor.com domain by default.
@@ -132,7 +151,7 @@ export interface CKEditorHookProps {
 /**
  * Arguments passed to event registeration helper.
  */
-export interface CKEditorRegisterEventArgs {
+export interface CKEditorRegisterEventArgs<EventName> {
 
 	/**
 	 * Toggles debugging. Logs info related to editor lifecycle events.
@@ -147,12 +166,12 @@ export interface CKEditorRegisterEventArgs {
 	/**
 	 * Event handler to register.
 	 */
-	handler: CKEditorEventHandler;
+	handler: CKEditorEventHandler<EventName>;
 
 	/**
 	 * Editor's event name.
 	 */
-	evtName: CKEditorEventName;
+	evtName: EventName;
 
 	/**
 	 * Custom data passed to listener.
@@ -195,8 +214,8 @@ export type CKEditorEventDispatcher = ( {
 	type,
 	payload
 }: {
-	type: CKEditorPrefixedEventName;
-	payload: CKEditorEventPayload | CKEditorNamespace;
+	type: string;
+	payload: any;
 } ) => void;
 
 /**
@@ -216,133 +235,203 @@ export type CKEditorStatus = 'unloaded' | 'loaded' | 'ready' | 'destroyed';
  *
  * Some prop types are overriden to provide better typings than `PropTypes.InferProps` has to offer.
  */
-export type CKEditorProps = PropTypes.InferProps<
+export type CKEditorProps<EventHandlerProp> = PropTypes.InferProps<
 	Omit<
 		typeof CKEditor.propTypes,
-		'config' | 'style' | CKEditorEventHandlerName
+		'config' | 'style' | keyof CKEditorEventHandlerProp
 	>
 > & {
 	config?: CKEditorConfig | null;
 	style?: React.CSSProperties | null;
-} & CKEditorEventHandlersProps;
+} & Partial<CKEditorEventHandlerProp> &
+	EventHandlerProp;
 
 /**
- * Event handlers props of `CKEditor` component.
+ * Event handler props.
  */
-export type CKEditorEventHandlersProps = Partial<
-	Record<CKEditorEventHandlerName, CKEditorEventHandler | null>
->;
+export interface CKEditorEventHandlerProp {
+
+	/**
+	 * Namespace events.
+	 */
+	onBeforeLoad: CKEditorNamespaceHandler;
+	onNamespaceLoaded: CKEditorNamespaceHandler;
+
+	/**
+	 * Editor events.
+	 */
+	onActiveEnterModeChange: CKEditorEventHandler<'activeEnterModeChange'>;
+	onActiveFilterChange: CKEditorEventHandler<'activeFilterChange'>;
+	onAfterCommandExec: CKEditorEventHandler<'afterCommandExec'>;
+	onAfterInsertHtml: CKEditorEventHandler<'afterInsertHtml'>;
+	onAfterPaste: CKEditorEventHandler<'afterPaste'>;
+	onAfterPasteFromWord: CKEditorEventHandler<'afterPasteFromWord'>;
+	onAfterSetData: CKEditorEventHandler<'afterSetData'>;
+	onAfterUndoImage: CKEditorEventHandler<'afterUndoImage'>;
+	onAriaEditorHelpLabel: CKEditorEventHandler<'ariaEditorHelpLabel'>;
+	onAriaWidget: CKEditorEventHandler<'ariaWidget'>;
+	onAutogrow: CKEditorEventHandler<'autogrow'>;
+	onBeforeCommandExec: CKEditorEventHandler<'beforeCommandExec'>;
+	onBeforeDestroy: CKEditorEventHandler<'beforeDestroy'>;
+	onBeforeGetData: CKEditorEventHandler<'beforeGetData'>;
+	onBeforeModeUnload: CKEditorEventHandler<'beforeModeUnload'>;
+	onBeforeSetMode: CKEditorEventHandler<'beforeSetMode'>;
+	onBeforeUndoImage: CKEditorEventHandler<'beforeUndoImage'>;
+	onBlur: CKEditorEventHandler<'blur'>;
+	onChange: CKEditorEventHandler<'change'>;
+	onConfigLoaded: CKEditorEventHandler<'configLoaded'>;
+	onContentDirChanged: CKEditorEventHandler<'contentDirChanged'>;
+	onContentDom: CKEditorEventHandler<'contentDom'>;
+	onContentDomInvalidated: CKEditorEventHandler<'contentDomInvalidated'>;
+	onContentDomUnload: CKEditorEventHandler<'contentDomUnload'>;
+	onContentPreview: CKEditorEventHandler<'contentPreview'>;
+	onCustomConfigLoaded: CKEditorEventHandler<'customConfigLoaded'>;
+	onDataFiltered: CKEditorEventHandler<'dataFiltered'>;
+	onDataReady: CKEditorEventHandler<'dataReady'>;
+	onDestroy: CKEditorEventHandler<'destroy'>;
+	onDialogHide: CKEditorEventHandler<'dialogHide'>;
+	onDialogShow: CKEditorEventHandler<'dialogShow'>;
+	onDirChanged: CKEditorEventHandler<'dirChanged'>;
+	onDoubleclick: CKEditorEventHandler<'doubleclick'>;
+	onDragend: CKEditorEventHandler<'dragend'>;
+	onDragstart: CKEditorEventHandler<'dragstart'>;
+	onDrop: CKEditorEventHandler<'drop'>;
+	onElementsPathUpdate: CKEditorEventHandler<'elementsPathUpdate'>;
+	onExportPdf: CKEditorEventHandler<'exportPdf'>;
+	onFileUploadRequest: CKEditorEventHandler<'fileUploadRequest'>;
+	onFileUploadResponse: CKEditorEventHandler<'fileUploadResponse'>;
+	onFloatingSpaceLayout: CKEditorEventHandler<'floatingSpaceLayout'>;
+	onFocus: CKEditorEventHandler<'focus'>;
+	onGetData: CKEditorEventHandler<'getData'>;
+	onGetSnapshot: CKEditorEventHandler<'getSnapshot'>;
+	onInsertElement: CKEditorEventHandler<'insertElement'>;
+	onInsertHtml: CKEditorEventHandler<'insertHtml'>;
+	onInsertText: CKEditorEventHandler<'insertText'>;
+	onInstanceReady: CKEditorEventHandler<'instanceReady'>;
+	onKey: CKEditorEventHandler<'key'>;
+	onLangLoaded: CKEditorEventHandler<'langLoaded'>;
+	onLoadSnapshot: CKEditorEventHandler<'loadSnapshot'>;
+	onLoaded: CKEditorEventHandler<'loaded'>;
+	onLockSnapshot: CKEditorEventHandler<'lockSnapshot'>;
+	onMaximize: CKEditorEventHandler<'maximize'>;
+	onMenuShow: CKEditorEventHandler<'menuShow'>;
+	onMode: CKEditorEventHandler<'mode'>;
+	onNotificationHide: CKEditorEventHandler<'notificationHide'>;
+	onNotificationShow: CKEditorEventHandler<'notificationShow'>;
+	onNotificationUpdate: CKEditorEventHandler<'notificationUpdate'>;
+	onPaste: CKEditorEventHandler<'paste'>;
+	onPasteFromWord: CKEditorEventHandler<'pasteFromWord'>;
+	onPluginsLoaded: CKEditorEventHandler<'pluginsLoaded'>;
+	onReadOnly: CKEditorEventHandler<'readOnly'>;
+	onRemoveFormatCleanup: CKEditorEventHandler<'removeFormatCleanup'>;
+	onRequired: CKEditorEventHandler<'required'>;
+	onResize: CKEditorEventHandler<'resize'>;
+	onSave: CKEditorEventHandler<'save'>;
+	onSaveSnapshot: CKEditorEventHandler<'saveSnapshot'>;
+	onSelectionChange: CKEditorEventHandler<'selectionChange'>;
+	onSetData: CKEditorEventHandler<'setData'>;
+	onStylesRemove: CKEditorEventHandler<'stylesRemove'>;
+	onStylesSet: CKEditorEventHandler<'stylesSet'>;
+	onTemplate: CKEditorEventHandler<'template'>;
+	onToDataFormat: CKEditorEventHandler<'toDataFormat'>;
+	onToHtml: CKEditorEventHandler<'toHtml'>;
+	onUiSpace: CKEditorEventHandler<'uiSpace'>;
+	onUnlockSnapshot: CKEditorEventHandler<'unlockSnapshot'>;
+	onUpdateSnapshot: CKEditorEventHandler<'updateSnapshot'>;
+	onWidgetDefinition: CKEditorEventHandler<'widgetDefinition'>;
+}
 
 /**
- * Combined editor and namespace event names.
- */
-export type CKEditorEditorEventName = typeof events[number];
-
-/**
- * Combined editor and namespace event names.
- */
-export type CKEditorEventName =
-	| CKEditorEditorEventName
-	| typeof namespaceEvents[number];
-
-/**
- * Combined editor and namespace handler names.
- */
-export type CKEditorEventHandlerName = `on${ Capitalize<CKEditorEventName> }`;
-
-export type CKEditorPrefixedEventName = `${ typeof EVENT_PREFIX }${ CKEditorEventName }`;
-
-/**
- * Action types associated with both editor and namespace events.
+ * Event action types.
  */
 export interface CKEditorAction {
 
 	/**
 	 * Namespace events.
 	 */
-	beforeLoad: `${ typeof EVENT_PREFIX }beforeLoad`;
-	namespaceLoaded: `${ typeof EVENT_PREFIX }namespaceLoaded`;
+	beforeLoad: '__CKE__beforeLoad';
+	namespaceLoaded: '__CKE__namespaceLoaded';
 
 	/**
 	 * Editor events.
 	 */
-	activeEnterModeChange: `${ typeof EVENT_PREFIX }activeEnterModeChange`;
-	activeFilterChange: `${ typeof EVENT_PREFIX }activeFilterChange`;
-	afterCommandExec: `${ typeof EVENT_PREFIX }afterCommandExec`;
-	afterInsertHtml: `${ typeof EVENT_PREFIX }afterInsertHtml`;
-	afterPaste: `${ typeof EVENT_PREFIX }afterPaste`;
-	afterPasteFromWord: `${ typeof EVENT_PREFIX }afterPasteFromWord`;
-	afterSetData: `${ typeof EVENT_PREFIX }afterSetData`;
-	afterUndoImage: `${ typeof EVENT_PREFIX }afterUndoImage`;
-	ariaEditorHelpLabel: `${ typeof EVENT_PREFIX }ariaEditorHelpLabel`;
-	ariaWidget: `${ typeof EVENT_PREFIX }ariaWidget`;
-	autogrow: `${ typeof EVENT_PREFIX }autogrow`;
-	beforeCommandExec: `${ typeof EVENT_PREFIX }beforeCommandExec`;
-	beforeDestroy: `${ typeof EVENT_PREFIX }beforeDestroy`;
-	beforeGetData: `${ typeof EVENT_PREFIX }beforeGetData`;
-	beforeModeUnload: `${ typeof EVENT_PREFIX }beforeModeUnload`;
-	beforeSetMode: `${ typeof EVENT_PREFIX }beforeSetMode`;
-	beforeUndoImage: `${ typeof EVENT_PREFIX }beforeUndoImage`;
-	blur: `${ typeof EVENT_PREFIX }blur`;
-	change: `${ typeof EVENT_PREFIX }change`;
-	configLoaded: `${ typeof EVENT_PREFIX }configLoaded`;
-	contentDirChanged: `${ typeof EVENT_PREFIX }contentDirChanged`;
-	contentDom: `${ typeof EVENT_PREFIX }contentDom`;
-	contentDomInvalidated: `${ typeof EVENT_PREFIX }contentDomInvalidated`;
-	contentDomUnload: `${ typeof EVENT_PREFIX }contentDomUnload`;
-	contentPreview: `${ typeof EVENT_PREFIX }contentPreview`;
-	customConfigLoaded: `${ typeof EVENT_PREFIX }customConfigLoaded`;
-	dataFiltered: `${ typeof EVENT_PREFIX }dataFiltered`;
-	dataReady: `${ typeof EVENT_PREFIX }dataReady`;
-	destroy: `${ typeof EVENT_PREFIX }destroy`;
-	dialogHide: `${ typeof EVENT_PREFIX }dialogHide`;
-	dialogShow: `${ typeof EVENT_PREFIX }dialogShow`;
-	dirChanged: `${ typeof EVENT_PREFIX }dirChanged`;
-	doubleclick: `${ typeof EVENT_PREFIX }doubleclick`;
-	dragend: `${ typeof EVENT_PREFIX }dragend`;
-	dragstart: `${ typeof EVENT_PREFIX }dragstart`;
-	drop: `${ typeof EVENT_PREFIX }drop`;
-	elementsPathUpdate: `${ typeof EVENT_PREFIX }elementsPathUpdate`;
-	exportPdf: `${ typeof EVENT_PREFIX }exportPdf`;
-	fileUploadRequest: `${ typeof EVENT_PREFIX }fileUploadRequest`;
-	fileUploadResponse: `${ typeof EVENT_PREFIX }fileUploadResponse`;
-	floatingSpaceLayout: `${ typeof EVENT_PREFIX }floatingSpaceLayout`;
-	focus: `${ typeof EVENT_PREFIX }focus`;
-	getData: `${ typeof EVENT_PREFIX }getData`;
-	getSnapshot: `${ typeof EVENT_PREFIX }getSnapshot`;
-	insertElement: `${ typeof EVENT_PREFIX }insertElement`;
-	insertHtml: `${ typeof EVENT_PREFIX }insertHtml`;
-	insertText: `${ typeof EVENT_PREFIX }insertText`;
-	instanceReady: `${ typeof EVENT_PREFIX }instanceReady`;
-	key: `${ typeof EVENT_PREFIX }key`;
-	langLoaded: `${ typeof EVENT_PREFIX }langLoaded`;
-	loadSnapshot: `${ typeof EVENT_PREFIX }loadSnapshot`;
-	loaded: `${ typeof EVENT_PREFIX }loaded`;
-	lockSnapshot: `${ typeof EVENT_PREFIX }lockSnapshot`;
-	maximize: `${ typeof EVENT_PREFIX }maximize`;
-	menuShow: `${ typeof EVENT_PREFIX }menuShow`;
-	mode: `${ typeof EVENT_PREFIX }mode`;
-	notificationHide: `${ typeof EVENT_PREFIX }notificationHide`;
-	notificationShow: `${ typeof EVENT_PREFIX }notificationShow`;
-	notificationUpdate: `${ typeof EVENT_PREFIX }notificationUpdate`;
-	paste: `${ typeof EVENT_PREFIX }paste`;
-	pasteFromWord: `${ typeof EVENT_PREFIX }pasteFromWord`;
-	pluginsLoaded: `${ typeof EVENT_PREFIX }pluginsLoaded`;
-	readOnly: `${ typeof EVENT_PREFIX }readOnly`;
-	removeFormatCleanup: `${ typeof EVENT_PREFIX }removeFormatCleanup`;
-	required: `${ typeof EVENT_PREFIX }required`;
-	resize: `${ typeof EVENT_PREFIX }resize`;
-	save: `${ typeof EVENT_PREFIX }save`;
-	saveSnapshot: `${ typeof EVENT_PREFIX }saveSnapshot`;
-	selectionChange: `${ typeof EVENT_PREFIX }selectionChange`;
-	setData: `${ typeof EVENT_PREFIX }setData`;
-	stylesRemove: `${ typeof EVENT_PREFIX }stylesRemove`;
-	stylesSet: `${ typeof EVENT_PREFIX }stylesSet`;
-	template: `${ typeof EVENT_PREFIX }template`;
-	toDataFormat: `${ typeof EVENT_PREFIX }toDataFormat`;
-	toHtml: `${ typeof EVENT_PREFIX }toHtml`;
-	uiSpace: `${ typeof EVENT_PREFIX }uiSpace`;
-	unlockSnapshot: `${ typeof EVENT_PREFIX }unlockSnapshot`;
-	updateSnapshot: `${ typeof EVENT_PREFIX }updateSnapshot`;
-	widgetDefinition: `${ typeof EVENT_PREFIX }widgetDefinition`;
+	activeEnterModeChange: '__CKE__activeEnterModeChange';
+	activeFilterChange: '__CKE__activeFilterChange';
+	afterCommandExec: '__CKE__afterCommandExec';
+	afterInsertHtml: '__CKE__afterInsertHtml';
+	afterPaste: '__CKE__afterPaste';
+	afterPasteFromWord: '__CKE__afterPasteFromWord';
+	afterSetData: '__CKE__afterSetData';
+	afterUndoImage: '__CKE__afterUndoImage';
+	ariaEditorHelpLabel: '__CKE__ariaEditorHelpLabel';
+	ariaWidget: '__CKE__ariaWidget';
+	autogrow: '__CKE__autogrow';
+	beforeCommandExec: '__CKE__beforeCommandExec';
+	beforeDestroy: '__CKE__beforeDestroy';
+	beforeGetData: '__CKE__beforeGetData';
+	beforeModeUnload: '__CKE__beforeModeUnload';
+	beforeSetMode: '__CKE__beforeSetMode';
+	beforeUndoImage: '__CKE__beforeUndoImage';
+	blur: '__CKE__blur';
+	change: '__CKE__change';
+	configLoaded: '__CKE__configLoaded';
+	contentDirChanged: '__CKE__contentDirChanged';
+	contentDom: '__CKE__contentDom';
+	contentDomInvalidated: '__CKE__contentDomInvalidated';
+	contentDomUnload: '__CKE__contentDomUnload';
+	contentPreview: '__CKE__contentPreview';
+	customConfigLoaded: '__CKE__customConfigLoaded';
+	dataFiltered: '__CKE__dataFiltered';
+	dataReady: '__CKE__dataReady';
+	destroy: '__CKE__destroy';
+	dialogHide: '__CKE__dialogHide';
+	dialogShow: '__CKE__dialogShow';
+	dirChanged: '__CKE__dirChanged';
+	doubleclick: '__CKE__doubleclick';
+	dragend: '__CKE__dragend';
+	dragstart: '__CKE__dragstart';
+	drop: '__CKE__drop';
+	elementsPathUpdate: '__CKE__elementsPathUpdate';
+	exportPdf: '__CKE__exportPdf';
+	fileUploadRequest: '__CKE__fileUploadRequest';
+	fileUploadResponse: '__CKE__fileUploadResponse';
+	floatingSpaceLayout: '__CKE__floatingSpaceLayout';
+	focus: '__CKE__focus';
+	getData: '__CKE__getData';
+	getSnapshot: '__CKE__getSnapshot';
+	insertElement: '__CKE__insertElement';
+	insertHtml: '__CKE__insertHtml';
+	insertText: '__CKE__insertText';
+	instanceReady: '__CKE__instanceReady';
+	key: '__CKE__key';
+	langLoaded: '__CKE__langLoaded';
+	loadSnapshot: '__CKE__loadSnapshot';
+	loaded: '__CKE__loaded';
+	lockSnapshot: '__CKE__lockSnapshot';
+	maximize: '__CKE__maximize';
+	menuShow: '__CKE__menuShow';
+	mode: '__CKE__mode';
+	notificationHide: '__CKE__notificationHide';
+	notificationShow: '__CKE__notificationShow';
+	notificationUpdate: '__CKE__notificationUpdate';
+	paste: '__CKE__paste';
+	pasteFromWord: '__CKE__pasteFromWord';
+	pluginsLoaded: '__CKE__pluginsLoaded';
+	readOnly: '__CKE__readOnly';
+	removeFormatCleanup: '__CKE__removeFormatCleanup';
+	required: '__CKE__required';
+	resize: '__CKE__resize';
+	save: '__CKE__save';
+	saveSnapshot: '__CKE__saveSnapshot';
+	selectionChange: '__CKE__selectionChange';
+	setData: '__CKE__setData';
+	stylesRemove: '__CKE__stylesRemove';
+	stylesSet: '__CKE__stylesSet';
+	template: '__CKE__template';
+	toDataFormat: '__CKE__toDataFormat';
+	toHtml: '__CKE__toHtml';
+	uiSpace: '__CKE__uiSpace';
+	unlockSnapshot: '__CKE__unlockSnapshot';
+	updateSnapshot: '__CKE__updateSnapshot';
+	widgetDefinition: '__CKE__widgetDefinition';
 }

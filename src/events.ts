@@ -3,14 +3,17 @@
  * For licensing, see LICENSE.md.
  */
 
-import type {
-	CKEditorAction,
-	CKEditorEventHandlerName,
-	CKEditorPrefixedEventName
-} from './types';
+import type { CKEditorAction } from './types';
 
 /**
- * Available editor events.
+ * Two types of events are discerned:
+ *
+ * - `editor` events are associated with native editor events. In addition, custom events can be specified.
+ * - `namespace` events are additional events provided by React integration.
+ */
+
+/**
+ * Available `editor` events.
  *
  * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html
  */
@@ -97,7 +100,7 @@ export const events = [
 ] as const;
 
 /**
- * Additional events related to CKEDITOR namespace. These are provided by the React integration, not CKEditor itself.
+ * Available `namespace` events.
  *
  * - `beforeLoad`: fired before an editor instance is created
  * - `namespaceLoaded`: fired after CKEDITOR namespace is created; fired only once regardless of number of editor instances
@@ -115,28 +118,55 @@ export const defaultEvents = [ ...events, ...namespaceEvents ];
 export const EVENT_PREFIX = '__CKE__';
 
 /**
- * Transforms event name to a handler name, e.g. `instanceReady` -> `onInstanceReady`.
+ * Prefixes event name: `instanceReady` -> `__CKE__instanceReady`.
+ *
+ * @param evtName event name
+ * @returns prefixed event name
+ */
+export function prefixEventName( evtName: string ) {
+	return `${ EVENT_PREFIX }${ evtName }`;
+}
+
+/**
+ * Strips prefix from event name. `__CKE__instanceReady` -> `instanceReady`.
+ *
+ * @param evtName prefixed event name
+ * @returns event name
+ */
+export function stripPrefix( prefixedEventName: string ) {
+	return prefixedEventName.substr( EVENT_PREFIX.length );
+}
+
+/**
+ * Transforms prefixed event name to a handler name, e.g. `instanceReady` -> `onInstanceReady`.
  *
  * @param evtName event name
  * @returns handler name
  */
-export function eventNameToHandlerName( evtName: CKEditorPrefixedEventName ) {
-	const cap =
-		evtName.substr( EVENT_PREFIX.length, 1 ).toUpperCase() +
-		evtName.substr( EVENT_PREFIX.length + 1 );
-	return `on${ cap }` as CKEditorEventHandlerName;
+export function eventNameToHandlerName( evtName: string ) {
+	const cap = evtName.substr( 0, 1 ).toUpperCase() + evtName.substr( 1 );
+	return `on${ cap }`;
+}
+
+/**
+ * Transforms handler name to event name, e.g. `onInstanceReady` -> `instanceReady`.
+ *
+ * @param evtName event name
+ * @returns handler name
+ */
+export function handlerNameToEventName( handlerName: string ) {
+	return handlerName.substr( 2, 1 ).toLowerCase() + handlerName.substr( 3 );
 }
 
 /**
  * Provides an object with event names as keys and prefixed names as values, e.g. `{ instanceReady: __CKE__instanceReady }`.
- *
- * It allows to easily mix editor event actions and own actions in downstream reducers.
+ * This allows to easily mix editor event actions and own actions in downstream reducers.
  */
 export const CKEditorEventAction = [ ...events, ...namespaceEvents ].reduce(
 	( acc, evtName ) => {
 		return {
 			...acc,
-			[ evtName ]: `${ EVENT_PREFIX }${ evtName }`
+			[ evtName ]: prefixEventName( evtName )
 		};
 	},
 	{} as CKEditorAction
