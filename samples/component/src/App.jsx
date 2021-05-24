@@ -4,6 +4,13 @@ import Sidebar from './Sidebar';
 
 const { version, useReducer } = React;
 
+/**
+ * `App` component manages state of underlying `CKEditor` and `Sidebar` components.
+ *
+ * `CKEditor` component memoizes certain props and it will ignore any new values. For instance, this is true for `config` and `type.
+ * In order to force new `config` or `type` values, use keyed component.
+ * This way `CKEditor` component is re-mounted and new instance of editor is created.
+ */
 function App() {
 	const [ { config, readOnly, type, style, toolbar, name }, dispatch ] =
 		useReducer( reducer, {
@@ -58,7 +65,6 @@ function App() {
 						readOnly={readOnly}
 						style={getStyle( style )}
 						type={type}
-						lol="lol"
 					/>
 				</div>
 			</section>

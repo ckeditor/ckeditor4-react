@@ -3,9 +3,9 @@
 import * as React from 'react';
 
 function Sidebar( {
-	currentToolbar,
-	currentStyle,
-	currentType,
+	toolbar,
+	style,
+	type,
 	onToolbarChange,
 	onReadOnlyChange,
 	onStyleChange,
@@ -16,33 +16,33 @@ function Sidebar( {
 		<aside className="paper flex-grow-1">
 			<div className="option">
 				<div>{'Type:'}</div>
-				{[ 'classic', 'inline' ].map( type => (
-					<div key={type}>
+				{[ 'classic', 'inline' ].map( typeDef => (
+					<div key={typeDef}>
 						<input
-							id={type}
+							id={typeDef}
 							type="radio"
-							name={type}
-							checked={type === currentType}
-							value={type}
+							name={typeDef}
+							checked={typeDef === type}
+							value={typeDef}
 							onChange={onTypeChange}
 						/>
-						<label htmlFor={type}>{type}</label>
+						<label htmlFor={typeDef}>{typeDef}</label>
 					</div>
 				) )}
 			</div>
 			<div className="option">
 				<div>{'Toolbar:'}</div>
-				{[ 'standard', 'bold only' ].map( toolbar => (
-					<div key={toolbar}>
+				{[ 'standard', 'bold only' ].map( toolbarDef => (
+					<div key={toolbarDef}>
 						<input
-							id={toolbar}
+							id={toolbarDef}
 							type="radio"
-							name={toolbar}
-							checked={toolbar === currentToolbar}
-							value={toolbar}
+							name={toolbarDef}
+							checked={toolbarDef === toolbar}
+							value={toolbarDef}
 							onChange={onToolbarChange}
 						/>
-						<label htmlFor={toolbar}>{toolbar}</label>
+						<label htmlFor={toolbarDef}>{toolbarDef}</label>
 					</div>
 				) )}
 			</div>
@@ -59,17 +59,17 @@ function Sidebar( {
 			</div>
 			<div className="option">
 				<div>{'Border color:'}</div>
-				{[ 'initial', 'blue', 'green' ].map( style => (
-					<div key={style}>
+				{[ 'initial', 'blue', 'green' ].map( styleDef => (
+					<div key={styleDef}>
 						<input
-							id={style}
+							id={styleDef}
 							type="radio"
-							name={style}
-							checked={style === currentStyle}
-							value={style}
+							name={styleDef}
+							checked={styleDef === style}
+							value={styleDef}
 							onChange={onStyleChange}
 						/>
-						<label htmlFor={style}>{style}</label>
+						<label htmlFor={styleDef}>{styleDef}</label>
 					</div>
 				) )}
 			</div>
