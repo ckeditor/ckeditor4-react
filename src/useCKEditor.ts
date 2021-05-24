@@ -13,7 +13,7 @@ import {
 	namespaceEvents
 } from './events';
 
-import type {
+import {
 	CKEditorConfig,
 	CKEditorDefaultEvent,
 	CKEditorHookProps,

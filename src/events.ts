@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-import type { CKEditorAction } from './types';
+import { CKEditorAction } from './types';
 
 /**
  * Two types of events are discerned:

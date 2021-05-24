@@ -14,7 +14,7 @@ import {
 import useCKEditor from './useCKEditor';
 import { camelToKebab, getRootStyle } from './utils';
 
-import type {
+import {
 	CKEditorEventDispatcher,
 	CKEditorEventHandlerProp,
 	CKEditorProps,

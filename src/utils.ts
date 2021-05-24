@@ -3,7 +3,7 @@
  * For licensing, see LICENSE.md.
  */
 
-import type { CKEditorStatus } from './types';
+import { CKEditorStatus } from './types';
 
 /**
  * Transforms `camelCaseValue` into `kebab-case-value`.
