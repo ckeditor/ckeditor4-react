@@ -153,7 +153,7 @@ async function runNightwatchTests( sample ) {
 		server = execCmd( 'node dist/server.js', TESTS_TMP_PATH );
 		await waitFor( 5000 );
 		testSuite = execCmd(
-			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:3000 --test-sample ${ sample }`,
+			`node scripts/nightwatch-runner.js -t tests/e2e/${ sample }.js --bs-server http://localhost:8080 --test-sample ${ sample }`,
 			PACKAGE_PATH
 		);
 	} else {
