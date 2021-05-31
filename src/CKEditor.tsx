@@ -28,7 +28,7 @@ const { useEffect, useRef, useState } = React;
  * It's useful for simpler use cases. For advanced usage see `useCKEditor` hook.
  */
 function CKEditor<EventHandlerProp>( {
-	config,
+	config = {},
 	debug,
 	editorUrl,
 	initData,
