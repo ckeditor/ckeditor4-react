@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope, react/jsx-no-undef */
+
 const { useState, useEffect } = React;
 const { HashRouter, Switch, Route, Link } = ReactRouterDOM;
 
@@ -19,6 +21,7 @@ function Navigation() {
 				<Link to="/events">Component Events</Link>
 				<Link to="/binding">Two-way Data Binding</Link>
 				<Link to="/data-prop">Data Prop Changes</Link>
+				<Link to="/re-order">List re-order</Link>
 			</li>
 		</ul>
 	);
@@ -38,6 +41,9 @@ function Router() {
 			</Route>
 			<Route path="/data-prop">
 				<EditorDataPropChanges />
+			</Route>
+			<Route path="/re-order">
+				<EditorReOrder />
 			</Route>
 		</Switch>
 	);
@@ -258,6 +264,74 @@ function EditorDataPropChanges() {
 			</section>
 		</main>
 	);
+}
+
+function EditorReOrder() {
+	const config = { height: 50, toolbar: [ [ 'Bold' ] ] };
+
+	const [ order, setOrder ] = useState(
+		Object.keys( {
+			toast: 'toast',
+			bagel: 'bagel',
+			taco: 'taco',
+			avocado: 'avocado'
+		} )
+	);
+
+	const handleReorderClick = () => {
+		setOrder( current => shuffle( [ ...current ] ) );
+	};
+
+	return (
+		<div>
+			<button onClick={handleReorderClick}>{'Click to re-order'}</button>
+			<div>
+				<h4>{'Classic editors'}</h4>
+				{order.map( value => (
+					<div key={value}>
+						<CKEditor
+							name={value}
+							data={value}
+							debug={true}
+							type="classic"
+							config={config}
+						/>
+					</div>
+				) )}
+			</div>
+			<div>
+				<h4>{'Inline editors'}</h4>
+				{order.map( value => (
+					<div key={value}>
+						<CKEditor
+							name={`${ value }-inline`}
+							data={value}
+							debug={true}
+							type="inline"
+							config={config}
+						/>
+					</div>
+				) )}
+			</div>
+		</div>
+	);
+}
+
+function shuffle( array ) {
+	let currentIndex = array.length;
+	let temporaryValue;
+	let randomIndex;
+
+	while ( currentIndex !== 0 ) {
+		randomIndex = Math.floor( Math.random() * currentIndex );
+		currentIndex -= 1;
+
+		temporaryValue = array[ currentIndex ];
+		array[ currentIndex ] = array[ randomIndex ];
+		array[ randomIndex ] = temporaryValue;
+	}
+
+	return array;
 }
 
 function debounce( fn, wait ) {

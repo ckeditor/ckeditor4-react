@@ -86,6 +86,33 @@ describe( 'CKEditor Component', () => {
 		}
 	} );
 
+	describe( 'getEditorNamespace', () => {
+		it( 'called once for multiply editor instances', () => {
+			const spy = sinon.spy();
+
+			const editor1 = createEditor( { name: 'editor-name-one', onNamespaceLoaded: spy } );
+			const editor2 = createEditor( { name: 'editor-name-two', onNamespaceLoaded: spy } );
+			const editor3 = createEditor( { name: 'editor-name-three', onNamespaceLoaded: spy } );
+
+			return Promise.all( [
+				waitForEditors( [ editor1, editor2, editor3 ] )
+			] ).then( () => {
+				expect( spy.calledOnce ).to.be.equal( true );
+			} );
+		} );
+
+		it( 'after resolve allows to change CKEDITOR namespace', () => {
+			const language = 'custom';
+			const editor = createEditor( { name: 'editor-name', onNamespaceLoaded: namespace => {
+				namespace.config.lang = language;
+			} } );
+
+			waitForEditor( editor ).then( () => {
+				expect( CKEDITOR.config.lang ).to.be.equal( language );
+			} );
+		} );
+	} );
+
 	describe( 'mounting and types', () => {
 		// This test must run as the first one, as it depends on resolving
 		// the CKEditor namespace (#57)!
@@ -558,37 +585,6 @@ describe( 'CKEditor Component', () => {
 				expect( window.CKEDITOR.instances[ 'editor-with-a-name' ] ).to.not.be.undefined;
 				expect( window.CKEDITOR.instances[ 'editor-with-another-name' ] ).to.not.be.undefined;
 			} );
-		} );
-	} );
-} );
-
-describe( 'getEditorNamespace', () => {
-	beforeEach( () => {
-		delete window.CKEDITOR;
-	} );
-
-	it( 'called once for multiply editor instances', () => {
-		const spy = sinon.spy();
-
-		const editor1 = createEditor( { name: 'editor-name-one', onNamespaceLoaded: spy } );
-		const editor2 = createEditor( { name: 'editor-name-two', onNamespaceLoaded: spy } );
-		const editor3 = createEditor( { name: 'editor-name-three', onNamespaceLoaded: spy } );
-
-		return Promise.all( [
-			waitForEditors( [ editor1, editor2, editor3 ] )
-		] ).then( () => {
-			expect( spy.calledOnce ).to.be.equal( true );
-		} );
-	} );
-
-	it( 'after resolve allows to change CKEDITOR namespace', () => {
-		const language = 'custom';
-		const editor = createEditor( { name: 'editor-name', onNamespaceLoaded: namespace => {
-			namespace.config.lang = language;
-		} } );
-
-		waitForEditor( editor ).then( () => {
-			expect( CKEDITOR.config.lang ).to.be.equal( language );
 		} );
 	} );
 } );
