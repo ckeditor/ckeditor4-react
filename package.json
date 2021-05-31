@@ -82,6 +82,7 @@
 		"mocha": "^8.4.0",
 		"react": "^16.5.2",
 		"react-dom": "^16.5.2",
+		"react-modal": "^3.13.1",
 		"react-router-dom": "^5.0.0",
 		"semver": "^7.3.5",
 		"shelljs": "^0.8.3",

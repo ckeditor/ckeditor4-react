@@ -2,6 +2,9 @@
 
 const { useState, useEffect } = React;
 const { HashRouter, Switch, Route, Link } = ReactRouterDOM;
+const Modal = ReactModal;
+
+Modal.setAppElement( '#app' );
 
 const startingData = '<p>This is a CKEditor 4 WYSIWYG editor instance created by ️⚛️ React.</p>';
 
@@ -22,6 +25,7 @@ function Navigation() {
 				<Link to="/binding">Two-way Data Binding</Link>
 				<Link to="/data-prop">Data Prop Changes</Link>
 				<Link to="/re-order">List re-order</Link>
+				<Link to="/modal">Editor in modal</Link>
 			</li>
 		</ul>
 	);
@@ -44,6 +48,9 @@ function Router() {
 			</Route>
 			<Route path="/re-order">
 				<EditorReOrder />
+			</Route>
+			<Route path="/modal">
+				<EditorModal />
 			</Route>
 		</Switch>
 	);
@@ -269,14 +276,7 @@ function EditorDataPropChanges() {
 function EditorReOrder() {
 	const config = { height: 50, toolbar: [ [ 'Bold' ] ] };
 
-	const [ order, setOrder ] = useState(
-		Object.keys( {
-			toast: 'toast',
-			bagel: 'bagel',
-			taco: 'taco',
-			avocado: 'avocado'
-		} )
-	);
+	const [ order, setOrder ] = useState( [ 'toast', 'bagel', 'taco', 'avocado' ] );
 
 	const handleReorderClick = () => {
 		setOrder( current => shuffle( [ ...current ] ) );
@@ -313,6 +313,28 @@ function EditorReOrder() {
 					</div>
 				) )}
 			</div>
+		</div>
+	);
+}
+
+function EditorModal() {
+	const [ modalIsOpen, setIsOpen ] = useState( false );
+	const toggleModal = () => {
+		setIsOpen( open => !open );
+	};
+
+	return (
+		<div>
+			<button onClick={toggleModal}>Open Modal</button>
+			<Modal
+				isOpen={modalIsOpen}
+			>
+				<CKEditor
+					data="<p>Hello from modal!</p>"
+					type="classic"
+				/>
+				<button onClick={toggleModal}>Close Modal</button>
+			</Modal>
 		</div>
 	);
 }
