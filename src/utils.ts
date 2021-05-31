@@ -3,6 +3,9 @@
  * For licensing, see LICENSE.md.
  */
 
+import * as React from 'react';
+import { CKEditorStatus, CKEditorType } from './types';
+
 /**
  * Transforms `camelCaseValue` into `kebab-case-value`.
  *
@@ -26,4 +29,26 @@ export function uniqueName() {
 		.toString( 36 )
 		.replace( /[^a-z]+/g, '' )
 		.substr( 0, 5 );
+}
+
+/**
+ * Returns style for the root element.
+ *
+ * @param type editor type
+ * @param status editor status
+ * @param style custom style
+ * @returns style
+ */
+export function getStyle(
+	type: CKEditorType,
+	status?: CKEditorStatus,
+	style?: React.CSSProperties | null
+) {
+	const hidden = { display: 'none', visibility: 'hidden' } as const;
+
+	if ( type === 'classic' ) {
+		return hidden;
+	}
+
+	return status === 'ready' ? style ?? undefined : hidden;
 }

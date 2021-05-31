@@ -279,7 +279,7 @@ function init() {
 		it( 'renders as string', async () => {
 			const result = ReactDOMServer.renderToString( <CKEditor /> );
 			expect( result ).toEqual(
-				'<div data-reactroot=""></div>'
+				'<div style="display:none;visibility:hidden" data-reactroot=""></div>'
 			);
 		} );
 	} );

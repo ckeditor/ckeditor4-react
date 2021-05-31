@@ -12,7 +12,7 @@ import {
 	handlerNameToEventName
 } from './events';
 import useCKEditor from './useCKEditor';
-import { camelToKebab } from './utils';
+import { camelToKebab, getStyle } from './utils';
 
 import {
 	CKEditorEventDispatcher,
@@ -120,10 +120,12 @@ function CKEditor<EventHandlerProp>( {
 	}, [ editor, status, readOnly ] );
 
 	return (
-		<div id={name ?? undefined} ref={setElement} style={style ?? undefined}>
-			{initData ? (
-				<div style={{ display: 'none' }}>{initData}</div>
-			) : null}
+		<div
+			id={name ?? undefined}
+			ref={setElement}
+			style={getStyle( type ?? 'classic', status, style )}
+		>
+			{initData}
 		</div>
 	);
 }
