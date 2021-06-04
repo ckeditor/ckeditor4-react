@@ -1,5 +1,11 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 1.4.2
+
+Other Changes:
+
+* Updated default CDN CKEditor 4 dependency to [4.16.1](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-4161).
+
 ## ckeditor4-react 1.4.1
 
 Fixed Issues:
