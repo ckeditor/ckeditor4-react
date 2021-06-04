@@ -1,15 +1,29 @@
 {
+	"parser": "@typescript-eslint/parser",
 	"extends": [
 		"eslint-config-ckeditor5",
-		"plugin:react/recommended"
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:react-hooks/recommended"
 	],
-
 	"settings": {
 		"react": {
-			"version": "16.x"
+			"version": "detect"
 		}
 	},
-
+	"rules": {
+		"@typescript-eslint/explicit-module-boundary-types": "off",
+		"@typescript-eslint/no-explicit-any": "off",
+		"no-use-before-define": "off",
+		"@typescript-eslint/no-use-before-define": [
+			"error",
+			{
+				"functions": false
+			}
+		],
+		"@typescript-eslint/ban-ts-comment": "off",
+		"@typescript-eslint/no-var-requires": "off"
+	},
 	"env": {
 		"browser": true
 	}
