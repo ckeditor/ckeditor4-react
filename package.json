@@ -51,7 +51,7 @@
 	},
 	"homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
 	"peerDependencies": {
-		"ckeditor4": "^4.16.0",
+		"ckeditor4": "^4.16.1",
 		"react": "^16.8.3 || ^17"
 	},
 	"peerDependenciesMeta": {
@@ -79,7 +79,7 @@
 		"@typescript-eslint/parser": "^4.22.0",
 		"browserstack-local": "^1.4.8",
 		"chalk": "^4.1.1",
-		"ckeditor4": "^4.16.0",
+		"ckeditor4": "^4.16.1",
 		"eslint": "^7.21.0",
 		"eslint-config-ckeditor5": "^3.1.0",
 		"eslint-plugin-react": "^7.22.0",
