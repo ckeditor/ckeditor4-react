@@ -5,7 +5,7 @@
 
 export * from './types';
 
-export * from './events';
+export { prefixEventName, stripPrefix, CKEditorEventAction } from './events';
 
 export * from './registerEditorEventHandler';
 export { default as registerEditorEventHandler } from './registerEditorEventHandler';

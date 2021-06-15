@@ -19,9 +19,9 @@ We are looking forward to your feedback! You can report any issues, ideas or fea
 ## Usage
 
 ```jsx
-import CKEditor from 'ckeditor4-react';
+import { CKEditor } from 'ckeditor4-react';
 
-<CKEditor data="<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>" />
+<CKEditor initData={<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>} />
 ```
 
 ## Documentation and examples

@@ -5,7 +5,6 @@
 const reactVersion = process.env.REQUESTED_REACT_VERSION;
 const localServer = process.env.NIGHTWATCH_LOCAL_SERVER;
 const testSample = process.env.NIGHTWATCH_TEST_SAMPLE;
-const bsBrowser = process.env.BROWSER_STACK_BROWSER;
 
 /**
  * Test suite for `samples/re-order` example.
@@ -42,23 +41,6 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 
 				// Checks classic editor
 				await browser.assert.visible( `#cke_${ value }` );
-
-				/**
-				 * Asserting content of randomly ordered iframes seems to be non-trivial task in Nightwatch.
-				 * The code below works fine on some browsers only.
-				 */
-
-				if ( bsBrowser === 'chrome' ) {
-					const {
-						value: { ELEMENT }
-					} = await browser.element(
-						'xpath',
-						`//div[@id='cke_${ value }']//iframe`
-					);
-					await browser.frame( { ELEMENT } );
-					await browser.assert.containsText( '.cke_editable', value );
-					await browser.frame( null );
-				}
 			}
 		}
 	} );
