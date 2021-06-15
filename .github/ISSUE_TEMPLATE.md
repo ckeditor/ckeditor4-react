@@ -17,7 +17,7 @@ decrease the time needed to reproduce the issue by our team, which means it can 
 You can use one of our samples to create the reproduction sample:
 
 * CodeSandbox: https://codesandbox.io/s/kjqil
-* StackBlitz: https://stackblitz.com/edit/react-kedrzm
+* StackBlitz: https://stackblitz.com/edit/ckeditor4-react-bug-report
 -->
 
 1. …
