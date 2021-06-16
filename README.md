@@ -14,7 +14,7 @@ Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component
 
 We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
 
-**This is the RC version (Release Candidate) of the upcoming `major` version which provides support for React 17 and React hooks.** See [`stable` version here](https://www.npmjs.com/package/ckeditor4-react).
+**This is the RC version (Release Candidate) of the upcoming `major` version that provides support for React 17 and React hooks.** See [`stable` version here](https://www.npmjs.com/package/ckeditor4-react/v/1.4.2).
 
 ![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
 
