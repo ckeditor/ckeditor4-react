@@ -17,7 +17,7 @@ New Features:
 
 * [#159](https://github.com/ckeditor/ckeditor4-react/issues/159): Introduced support for React 17+ versions.
 * [#82](https://github.com/ckeditor/ckeditor4-react/issues/82): Introduced TypeScript support.
-* [#180](https://github.com/ckeditor/ckeditor4-react/issues/180): Introduced support for consumption of a "non-webpacked" package version.
+* [#180](https://github.com/ckeditor/ckeditor4-react/issues/180): Introduced support for consumption of a not bundled package version by providing package in ESM, CJS and UMD formats.
 
 ## ckeditor4-react 1.4.2
 
