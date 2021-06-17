@@ -2,4 +2,4 @@
 
 Showcase of using `CKEditor` with React server-side rendering
 
-See on CodeSandbox (insert link here).
+Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/ssr).

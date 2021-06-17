@@ -2,4 +2,4 @@
 
 Showcase of how `umd` build of `ckeditor4-react` package can be used.
 
-See on CodeSandbox (insert link here).
+Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/umd).

@@ -2,4 +2,4 @@
 
 Showcase of using editor events when using `CKEditor` component.
 
-See on CodeSandbox (insert link here).
+Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/component-events).
