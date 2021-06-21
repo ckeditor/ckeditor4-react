@@ -106,7 +106,7 @@
 		"typescript": "^4.2.4"
 	},
 	"dependencies": {
-		"ckeditor4-integrations-common": "^0.2.0",
+		"ckeditor4-integrations-common": "^1.0.0",
 		"prop-types": "^15.7.2"
 	}
 }

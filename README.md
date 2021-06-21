@@ -40,7 +40,7 @@ The CKEditor 4 React component works with React starting from 16.8.3 version inc
 
 ## Browser support
 
-The CKEditor 4 React component works with all the [supported browsers](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_browsers.html#officially-supported-browsers) except for Internet Explorer 8-10.
+The CKEditor 4 React component works with all the [supported browsers](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_browsers.html#officially-supported-browsers) except for Internet Explorer 8-10. For Internet Explorer 11 the component requires additional polyfill for `Promise`.
 
 ## Contributing
 
