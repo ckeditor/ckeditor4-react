@@ -1,5 +1,11 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 2.0.0-rc.2
+
+BREAKING CHANGES:
+
+* [#226](https://github.com/ckeditor/ckeditor4-react/issues/226): Updated `ckeditor4-integrations-common` dependency to version `1.0.0`.
+
 ## ckeditor4-react 2.0.0-rc.1
 
 Other Changes:
