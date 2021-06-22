@@ -2,4 +2,4 @@
 
 Showcase of `useCKEditor` hook.
 
-Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/hook).
+Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/hook).

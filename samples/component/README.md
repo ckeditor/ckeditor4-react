@@ -2,4 +2,4 @@
 
 Advanced showcase of `CKEditor` component.
 
-Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/component).
+Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/component).

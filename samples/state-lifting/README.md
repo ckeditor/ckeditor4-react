@@ -4,4 +4,4 @@ Editor's state is lifted higher up React tree to establish connection between ed
 
 This sample was known as two-way data binding in v1.
 
-Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/state-lifting).
+Demo is available [here](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/state-lifting).
