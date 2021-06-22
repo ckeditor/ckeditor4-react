@@ -139,6 +139,11 @@ export interface CKEditorHookProps<EventName extends string> {
 	element: HTMLElement | null;
 
 	/**
+	 * Initial editor content. Only `string` values are accepted.
+	 */
+	initContent?: string | null;
+
+	/**
 	 * Initializes editor in either `classic` or `inline` mode.
 	 *
 	 * See:

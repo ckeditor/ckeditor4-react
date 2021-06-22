@@ -1,5 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks/dom';
-import { createDivRef, queryClassicEditor } from './utils';
+import {
+	createDivRef,
+	findByClassicEditorContent,
+	queryClassicEditor
+} from './utils';
 import { useCKEditor, CKEditorEventAction } from '../../src';
 
 function init() {
@@ -418,6 +422,26 @@ function init() {
 			);
 			expect( onCustomEvent ).toHaveBeenCalledTimes( 1 );
 			expect( onOtherEvent ).toHaveBeenCalledTimes( 0 );
+		} );
+
+		/**
+		 * Ensures that initial content is set.
+		 */
+		it( 'sets initial content', async () => {
+			const ref = createDivRef();
+			const { result, waitForValueToChange } = renderHook( () =>
+				useCKEditor( {
+					element: ref.current,
+					initContent: '<p>Initial content</p>'
+				} )
+			);
+			await waitForValueToChange(
+				() => result.current.status === 'ready',
+				{ timeout: 5000 }
+			);
+			expect(
+				await findByClassicEditorContent( 'Initial content' )
+			).toBeVisible();
 		} );
 	} );
 }

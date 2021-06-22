@@ -78,6 +78,12 @@ function CKEditor<EventHandlerProp>( {
 		element,
 
 		/**
+		 * String nodes are handled by the hook.
+		 * `initData` as JSX is handled in the component.
+		 */
+		initContent: typeof initData === 'string' ? initData : undefined,
+
+		/**
 		 * Subscribe only to those events for which handler was supplied.
 		 */
 		subscribeTo: Object.keys( handlers )
@@ -125,7 +131,7 @@ function CKEditor<EventHandlerProp>( {
 			ref={setElement}
 			style={getStyle( type ?? 'classic', status, style )}
 		>
-			{initData}
+			{typeof initData === 'string' ? null : initData}
 		</div>
 	);
 }
@@ -153,7 +159,6 @@ const propTypes = {
 
 	/**
 	 * Initial data will be set only once during editor instance's lifecycle.
-	 *
 	 */
 	initData: PropTypes.node,
 

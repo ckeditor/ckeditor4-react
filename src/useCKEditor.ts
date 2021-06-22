@@ -39,6 +39,7 @@ function useCKEditor<EditorEvent extends string>( {
 	subscribeTo = defaultEvents,
 	editorUrl,
 	element,
+	initContent,
 	type = 'classic'
 }: CKEditorHookProps<EditorEvent | CKEditorDefaultEvent> ): CKEditorHookResult {
 	/**
@@ -60,6 +61,11 @@ function useCKEditor<EditorEvent extends string>( {
 	 * Ensures referential stability of `dispatchEvent` between renders.
 	 */
 	const dispatchEventRef = useRef( dispatchEvent );
+
+	/**
+	 * Ensures referential stability of `initContent`.
+	 */
+	const initContentRef = useRef( initContent );
 
 	/**
 	 * Ensures referential stability of editor config.
@@ -158,7 +164,7 @@ function useCKEditor<EditorEvent extends string>( {
 				} );
 
 				/**
-				 * Registers `instanceReady` event for the sake of hook lifecycle.
+				 * Registers handler `instanceReady` event.
 				 */
 				registerEditorEventHandler( {
 					debug: debugRef.current,
@@ -172,6 +178,25 @@ function useCKEditor<EditorEvent extends string>( {
 						 */
 						if ( isInline && !isReadOnly ) {
 							editor.setReadOnly( false );
+						}
+
+						/**
+						 * Sets initial content of editor's instance if provided.
+						 */
+						if ( initContentRef.current ) {
+							editor.setData( initContentRef.current, {
+								/**
+								 * Prevents undo icon flickering.
+								 */
+								noSnapshot: true,
+
+								/**
+								 * Resets undo stack.
+								 */
+								callback: () => {
+									editor.resetUndo();
+								}
+							} );
 						}
 					},
 					priority: -1
