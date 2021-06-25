@@ -1,6 +1,6 @@
 {
 	"name": "ckeditor4-react",
-	"version": "2.0.0-rc.1",
+	"version": "2.0.0-rc.2",
 	"description": "Official React component for CKEditor 4 – the best browser-based rich text editor.",
 	"license": "(GPL-2.0-or-later OR LGPL-2.1 OR MPL-1.1)",
 	"main": "dist/index.cjs.js",
