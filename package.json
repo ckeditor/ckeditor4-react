@@ -52,7 +52,7 @@
 	"homepage": "https://github.com/ckeditor/ckeditor4-react#readme",
 	"peerDependencies": {
 		"ckeditor4": "^4.16.1",
-		"react": "^16.8.3 || ^17"
+		"react": "^16.9 || ^17"
 	},
 	"peerDependenciesMeta": {
 		"ckeditor4": {

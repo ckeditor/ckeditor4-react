@@ -36,7 +36,7 @@ See ready-to-fork examples in `samples` directory. Each sample is a self-contain
 
 ## React support
 
-The CKEditor 4 React component works with React starting from 16.8.3 version including 17+ versions.
+The CKEditor 4 React component works with React starting from 16.9 version including 17+ versions.
 
 ## Browser support
 
