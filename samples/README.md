@@ -10,6 +10,7 @@ Each sample is a self-contained app.
 | [basic-typecript](basic-typecript)   | Basic showcase of `CKEditor` component with example webpack and TypeScript integration.         | Insert link |
 | [component](component)               | Advanced showcase of `CKEditor` component.                                                      | Insert link |
 | [component-events](component-events) | Showcase of using editor events with `CKEditor` component.                                      | Insert link |
+| [editor-url](editor-url)             | Example usage of custom `editorUrl`.                                                            | Insert link |
 | [hook](hook)                         | Showcase of `useCKEditor` hook.                                                                 | Insert link |
 | [hook-events](hook-events)           | Showcase of using editor events with `useCKEditor` hook.                                        | Insert link |
 | [re-order](re-order)                 | Example of handling multiple instances of `CKEditor` component (re-ordering case).              | Insert link |
