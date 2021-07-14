@@ -14,7 +14,7 @@ Replace this comment with your issue type: Bug / Feature request / Other, please
 Including a simple sample reproducing the issue is also a good idea. It can drastically
 decrease the time needed for debugging by our team, which means it can speed up helping you!
 
-You can use one of our samples to create the reproduction sample:
+You can use one of our samples to create the reproduction sample (use those samples for v1.x. For v2.x use ones provided in the repository):
 
 * CodeSandbox: https://codesandbox.io/s/kjqil
 * StackBlitz: https://stackblitz.com/edit/ckeditor4-react-bug-report
