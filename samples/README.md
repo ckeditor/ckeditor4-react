@@ -2,12 +2,27 @@
 
 Each sample is a self-contained app.
 
-### Available samples
+## Running samples
+
+To run any sample you need to perform basic setup steps:
+
+```sh
+cd samples/sample_name
+npm i
+npm run build
+npm run start
+```
+
+The sample will be available under `localhost:8080`.
+
+You may also use forked samples linked below.
+
+## Available samples
 
 | Sample                               | Description                                                                                     | Sample                                                                                     |
 | ------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | [basic](basic)                       | Basic showcase of `CKEditor` component.                                                         | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/basic)            |
-| [basic-typecript](basic-typecript)   | Basic showcase of `CKEditor` component with example webpack and TypeScript integration.         | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/basic-typescript) |
+| [basic-typescript](basic-typecript)   | Basic showcase of `CKEditor` component with example webpack and TypeScript integration.         | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/basic-typescript) |
 | [component](component)               | Advanced showcase of `CKEditor` component.                                                      | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/component)        |
 | [component-events](component-events) | Showcase of using editor events with `CKEditor` component.                                      | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/component-events) |
 | [hook](hook)                         | Showcase of `useCKEditor` hook.                                                                 | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/hook)             |
