@@ -186,9 +186,16 @@ function useCKEditor<EditorEvent extends string>( {
 						if ( initContentRef.current ) {
 							editor.setData( initContentRef.current, {
 								/**
-								 * Do not populate undo stack.
+								 * Prevents undo icon flickering.
 								 */
-								noSnapshot: true
+								noSnapshot: true,
+
+								/**
+								 * Resets undo stack.
+								 */
+								callback: () => {
+									editor.resetUndo();
+								}
 							} );
 						}
 					},
