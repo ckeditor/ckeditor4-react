@@ -32,11 +32,15 @@ See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/
 
 You can also check out [CKEditor 4 WYSIWYG Editor React Integration example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in [CKEditor 4 Examples](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
-See ready-to-fork examples in `samples` directory. Each sample is a self-contained app that can be [easily forked](https://docs.github.com/en/github/getting-started-with-github/splitting-a-subfolder-out-into-a-new-repository) within GitHub. Also, you can fork examples via services such as [CodeSandbox](https://codesandbox.io/).
+For even more examples, check out ready-to-fork samples inside [samples](samples) directory. Each sample is a self-contained app that can be [forked via GitHub](https://docs.github.com/en/github/getting-started-with-github/splitting-a-subfolder-out-into-a-new-repository) or via services such as [CodeSandbox](https://codesandbox.io/). For instance, in order to clone `basic` sample, use [this link](https://githubbox.com/ckeditor/ckeditor4-react/tree/master/samples/basic).
 
 ## React support
 
-The CKEditor 4 React component works with React starting from 16.9 version including 17+ versions.
+The CKEditor 4 React component was tested with React starting from 16.9 version including 17+ versions.
+
+## TypeScript support
+
+TypeScript 3.5+ is supported.
 
 ## Browser support
 
