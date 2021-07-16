@@ -34,6 +34,16 @@ function init() {
 		} );
 
 		/**
+		 * Ensures that initial data is set - JSX.
+		 */
+		it( 'initializes classic editor with initial data as JSX', async () => {
+			render( <CKEditor initData={<p>Hello world!</p>} /> );
+			expect(
+				await findByClassicEditorContent( 'Hello world!' )
+			).toBeVisible();
+		} );
+
+		/**
 		 * Ensures that inline editor is initialized in writable mode.
 		 */
 		it( 'initializes inline editor', async () => {
@@ -46,6 +56,16 @@ function init() {
 		 */
 		it( 'initializes inline editor with initial data', async () => {
 			render( <CKEditor type="inline" initData="Hello world!" /> );
+			expect(
+				await findByInlineEditorContent( 'Hello world!' )
+			).toBeVisible();
+		} );
+
+		/**
+		 * Ensures that initial data is set - JSX.
+		 */
+		it( 'initializes inline editor with initial data as JSX', async () => {
+			render( <CKEditor type="inline" initData={<p>Hello world!</p>} /> );
 			expect(
 				await findByInlineEditorContent( 'Hello world!' )
 			).toBeVisible();
