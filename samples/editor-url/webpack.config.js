@@ -41,7 +41,7 @@ module.exports = {
 			template: 'src/index.html'
 		} ),
 		new CopyPlugin( {
-			patterns: [ { from: './ckeditor/', to: './ckeditor/' } ]
+			patterns: [ { from: './node_modules/ckeditor4/', to: './ckeditor4/' } ]
 		} )
 	]
 };

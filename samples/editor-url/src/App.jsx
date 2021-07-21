@@ -5,7 +5,7 @@ function App() {
 	return (
 		<div>
 			<section>
-				<CKEditor debug={true} initData="Hello world!" editorUrl="/ckeditor/ckeditor.js" />
+				<CKEditor debug={true} initData="Hello world!" editorUrl="/ckeditor4/ckeditor.js" />
 			</section>
 			<footer>{`Running React v${ React.version }`}</footer>
 		</div>
