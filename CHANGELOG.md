@@ -1,6 +1,8 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
-## ckeditor4-react 2.0.0-rc.3
+## ckeditor4-react 2.0.0
+
+New Features:
 
 * [#228](https://github.com/ckeditor/ckeditor4-react/issues/226): Added support for setting editor's initial data as HTML string.
 
