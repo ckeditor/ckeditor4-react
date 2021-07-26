@@ -1,4 +1,4 @@
-# CKEditor 4 WYSIWYG editor component for React (RC version) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20React%20integration&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fckeditor4-react)
+# CKEditor 4 WYSIWYG editor component for React [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Check%20out%20CKEditor%204%20React%20integration&url=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fckeditor4-react)
 
 [![npm version](https://badge.fury.io/js/ckeditor4-react.svg)](https://www.npmjs.com/package/ckeditor4-react)
 [![GitHub tag](https://img.shields.io/github/tag/ckeditor/ckeditor4-react.svg)](https://github.com/ckeditor/ckeditor4-react)
