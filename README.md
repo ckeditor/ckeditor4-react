@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/ckeditor4-react.svg)](https://www.npmjs.com/package/ckeditor4-react)
 [![GitHub tag](https://img.shields.io/github/tag/ckeditor/ckeditor4-react.svg)](https://github.com/ckeditor/ckeditor4-react)
 
-![Build Status](https://github.com/ckeditor/ckeditor4-react/actions/workflows/test-all.yml/badge.svg?branch=master)
+![Build Status](https://github.com/ckeditor/ckeditor4-react/actions/workflows/test-all.yml/badge.svg?branch=v1)
 [![Dependency Status](https://david-dm.org/ckeditor/ckeditor4-react/status.svg)](https://david-dm.org/ckeditor/ckeditor4-react)
 [![devDependency Status](https://david-dm.org/ckeditor/ckeditor4-react/dev-status.svg)](https://david-dm.org/ckeditor/ckeditor4-react?type=dev)
 
@@ -12,7 +12,9 @@
 
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component for React.
 
-We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
+**There is a [newer version of React Integration](https://github.com/ckeditor/ckeditor4-react) available! This version will be receiving important fixes only. We strongly encourage everyone to migrate to v2**.
+
+Any issues regarding this version should be reported on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
 
 ![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
 
@@ -26,9 +28,7 @@ import CKEditor from 'ckeditor4-react';
 
 ## Documentation and examples
 
-See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
-
-You can also check out [CKEditor 4 WYSIWYG Editor React Integration example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in [CKEditor 4 Examples](https://ckeditor.com/docs/ckeditor4/latest/examples/).
+See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react_v1.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
 
 ## Browser support
 
