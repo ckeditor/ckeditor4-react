@@ -2,7 +2,10 @@ node_modules/
 coverage/
 .DS_Store
 dist/
-sample/dist/
+samples-out
 react-tests/
 *debug.log
+.vscode
 local.log
+public
+.tmp*

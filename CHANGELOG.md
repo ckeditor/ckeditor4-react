@@ -1,5 +1,34 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 2.0.0-rc.3
+
+* [#228](https://github.com/ckeditor/ckeditor4-react/issues/226): Added support for setting editor's initial data as HTML string.
+
+## ckeditor4-react 2.0.0-rc.2
+
+BREAKING CHANGES:
+
+* [#226](https://github.com/ckeditor/ckeditor4-react/issues/226): Updated `ckeditor4-integrations-common` dependency to version `1.0.0`.
+
+## ckeditor4-react 2.0.0-rc.1
+
+Other Changes:
+
+* Added CHANGELOG entries for RC versions.
+* Improved project README.
+
+## ckeditor4-react 2.0.0-rc.0
+
+BREAKING CHANGES:
+
+* [#124](https://github.com/ckeditor/ckeditor4-react/issues/124): Introduced support for React hooks and rewrote the component to use hooks internally.
+
+New Features:
+
+* [#159](https://github.com/ckeditor/ckeditor4-react/issues/159): Introduced support for React 17+ versions.
+* [#82](https://github.com/ckeditor/ckeditor4-react/issues/82): Introduced TypeScript support.
+* [#180](https://github.com/ckeditor/ckeditor4-react/issues/180): Introduced support for consumption of a not bundled package version by providing package in ESM, CJS and UMD formats.
+
 ## ckeditor4-react 1.4.2
 
 Other Changes:
