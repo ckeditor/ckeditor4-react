@@ -3,18 +3,16 @@
 [![npm version](https://badge.fury.io/js/ckeditor4-react.svg)](https://www.npmjs.com/package/ckeditor4-react)
 [![GitHub tag](https://img.shields.io/github/tag/ckeditor/ckeditor4-react.svg)](https://github.com/ckeditor/ckeditor4-react)
 
-![Build Status](https://github.com/ckeditor/ckeditor4-react/actions/workflows/test-all.yml/badge.svg?branch=major)
+![Build Status](https://github.com/ckeditor/ckeditor4-react/actions/workflows/test-all.yml/badge.svg)
 [![Dependency Status](https://david-dm.org/ckeditor/ckeditor4-react/status.svg?ref=major)](https://david-dm.org/ckeditor/ckeditor4-react)
 [![devDependency Status](https://david-dm.org/ckeditor/ckeditor4-react/dev-status.svg?ref=major)](https://david-dm.org/ckeditor/ckeditor4-react?type=dev)
 
 [![Join newsletter](https://img.shields.io/badge/join-newsletter-00cc99.svg)](http://eepurl.com/c3zRPr)
 [![Follow Twitter](https://img.shields.io/badge/follow-twitter-00cc99.svg)](https://twitter.com/ckeditor)
 
-Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component for React (RC version).
+Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component for React.
 
 We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
-
-**This is the RC version (Release Candidate) of the upcoming `major` version that provides support for React 17 and React hooks.** See [`stable` version here](https://www.npmjs.com/package/ckeditor4-react/v/1.4.2).
 
 ![CKEditor 4 screenshot](https://c.cksource.com/a/1/img/npm/ckeditor4.png)
 
