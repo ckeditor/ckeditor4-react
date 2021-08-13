@@ -25,7 +25,7 @@ import {
 
 const { useEffect, useReducer, useRef } = React;
 
-const defEditorUrl = 'https://cdn.ckeditor.com/4.16.1/standard-all/ckeditor.js';
+const defEditorUrl = 'https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js';
 const defConfig: CKEditorConfig = {};
 
 /**
