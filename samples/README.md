@@ -19,15 +19,16 @@ You may also use forked samples linked below.
 
 ## Available samples
 
-| Sample                               | Description                                                                                     | Sample                                                                                     |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Sample                               | Description                                                                                     | Sample                                                                                      |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [basic](basic)                       | Basic showcase of `CKEditor` component.                                                         | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/basic)            |
-| [basic-typescript](basic-typecript)   | Basic showcase of `CKEditor` component with example webpack and TypeScript integration.         | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/basic-typescript) |
+| [basic-typescript](basic-typecript)  | Basic showcase of `CKEditor` component with example webpack and TypeScript integration.         | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/basic-typescript) |
 | [component](component)               | Advanced showcase of `CKEditor` component.                                                      | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/component)        |
 | [component-events](component-events) | Showcase of using editor events with `CKEditor` component.                                      | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/component-events) |
-| [editor-url](editor-url)             | Example usage of custom `editorUrl`.                                                            | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/editor-url)             |
+| [editor-url](editor-url)             | Example usage of custom `editorUrl`.                                                            | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/editor-url)       |
 | [hook](hook)                         | Showcase of `useCKEditor` hook.                                                                 | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/hook)             |
 | [hook-events](hook-events)           | Showcase of using editor events with `useCKEditor` hook.                                        | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/hook-events)      |
+| [router](router)                     | Example of using `CKEditor` along with `react-router`.                                          | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/re-order)         |
 | [re-order](re-order)                 | Example of handling multiple instances of `CKEditor` component (re-ordering case).              | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/re-order)         |
 | [ssr](ssr)                           | Showcase of using `CKEditor` with React server-side rendering.                                  | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/ssr)              |
 | [state-lifting](state-lifting)       | Editor's state is lifted higher up React tree to establish connection with a custom `textarea`. | [Link](https://githubbox.com/ckeditor/ckeditor4-react/tree/stable/samples/state-lifting)    |
