@@ -2,7 +2,6 @@
 
 const path = require( 'path' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const ErrorOverlayPlugin = require( 'error-overlay-webpack-plugin' );
 
 module.exports = {
 	entry: './src/index.tsx',
@@ -39,7 +38,6 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new ErrorOverlayPlugin(),
 		new HtmlWebpackPlugin( {
 			title: 'Example',
 			template: 'src/index.html'
