@@ -1,7 +1,6 @@
 /* eslint-env node */
 
 const path = require( 'path' );
-const ErrorOverlayPlugin = require( 'error-overlay-webpack-plugin' );
 
 module.exports = {
 	entry: './src/index.jsx',
@@ -31,8 +30,5 @@ module.exports = {
 				}
 			}
 		]
-	},
-	plugins: [
-		new ErrorOverlayPlugin()
-	]
+	}
 };
