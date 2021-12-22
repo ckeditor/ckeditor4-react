@@ -73,7 +73,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.7.0",
 		"@typescript-eslint/parser": "^5.7.0",
 		"browserstack-local": "^1.4.8",
-		"chalk": "^5.0.0",
+		"chalk": "^4.1.2",
 		"ckeditor4": "^4.17.1",
 		"eslint": "^8.4.1",
 		"eslint-config-ckeditor5": "^3.1.1",
