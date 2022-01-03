@@ -102,6 +102,6 @@
 	},
 	"dependencies": {
 		"ckeditor4-integrations-common": "^1.0.0",
-		"prop-types": "^15.7.2"
+		"prop-types": "^15.8.0"
 	}
 }
