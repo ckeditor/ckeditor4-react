@@ -39,7 +39,7 @@ function init() {
 			} );
 
 			it( 'returns `hidden` styles for inline editor before it is ready', () => {
-				expect( getStyle( 'inline', 'unloaded' ) ).toEqual( {
+				expect( getStyle( 'inline' ) ).toEqual( {
 					visibility: 'hidden',
 					display: 'none'
 				} );

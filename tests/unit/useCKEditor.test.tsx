@@ -24,7 +24,7 @@ function init() {
 					onNamespaceLoaded( payload );
 				}
 			};
-			const { result, unmount, waitForValueToChange } = renderHook( () =>
+			const { waitForValueToChange } = renderHook( () =>
 				useCKEditor( {
 					element: ref.current,
 					dispatchEvent
@@ -32,22 +32,7 @@ function init() {
 			);
 			// Timeout is increased so that slower CI environment has a chance to catch-up.
 			await waitForValueToChange(
-				() => result.current.status === 'unloaded',
-				{ timeout: 5000 }
-			);
-			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
-			unmount();
-			const {
-				result: resultNext,
-				waitForValueToChange: waitForValueToChangeNext
-			} = renderHook( () =>
-				useCKEditor( {
-					element: ref.current,
-					dispatchEvent
-				} )
-			);
-			await waitForValueToChangeNext(
-				() => resultNext.current.status === 'unloaded',
+				() => onNamespaceLoaded.calls.count() === 1,
 				{ timeout: 5000 }
 			);
 			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
@@ -94,10 +79,7 @@ function init() {
 			expect( result.current.loading ).toBeTrue();
 			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
-			expect( result.current.status ).toEqual( 'unloaded' );
 			expect( result.current.loading ).toBeFalse();
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeDefined();
 			expect( result.current.status ).toEqual( 'loaded' );
 			await waitForNextUpdate( { timeout: 5000 } );
 			expect( result.current.editor ).toBeDefined();
@@ -287,7 +269,6 @@ function init() {
 			rerender( {
 				element: nextRef.current
 			} );
-			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
 			await waitForValueToChange(
 				() => result.current.status === 'ready',
@@ -301,7 +282,7 @@ function init() {
 		it( 'dispatches `beforeLoad` event', async () => {
 			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
 			const ref = createDivRef();
-			const { result, waitForValueToChange } = renderHook( () =>
+			const { waitForValueToChange } = renderHook( () =>
 				useCKEditor( {
 					element: ref.current,
 					dispatchEvent: ( { type, payload } ) => {
@@ -312,12 +293,7 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'unloaded',
-				{ timeout: 5000 }
-			);
-			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
+				() => onBeforeLoad.calls.count() === 1,
 				{ timeout: 5000 }
 			);
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );

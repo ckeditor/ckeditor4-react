@@ -10,7 +10,7 @@
 		"not op_mini all"
 	],
 	"dependencies": {
-		"ckeditor4-react": "latest",
+		"ckeditor4-react": "2.1.0",
 		"core-js": "^3.19.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"

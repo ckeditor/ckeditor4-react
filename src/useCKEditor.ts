@@ -26,7 +26,7 @@ import {
 const { useEffect, useReducer, useRef } = React;
 
 const defEditorUrl = 'https://cdn.ckeditor.com/4.17.1/standard-all/ckeditor.js';
-const defConfig: CKEditorConfig = {};
+const defConfig: CKEditorConfig = { on: {}, delayIfDetached: true };
 
 /**
  * `useCKEditor` is a low-level hook that holds core logic for editor lifecycle.
@@ -45,7 +45,7 @@ function useCKEditor<EditorEvent extends string>( {
 	/**
 	 * Ensures stable value of `editorUrl` between renders.
 	 */
-	const editorUrlRef = useRef( editorUrl || defEditorUrl );
+	const editorUrlRef = useRef( editorUrl ?? defEditorUrl );
 
 	/**
 	 * Ensures stable value of `subscribeTo` between renders.
@@ -70,7 +70,7 @@ function useCKEditor<EditorEvent extends string>( {
 	/**
 	 * Ensures referential stability of editor config.
 	 */
-	const configRef = useRef( config || defConfig );
+	const configRef = useRef( { ...defConfig, ...config } );
 
 	/**
 	 * Ensures referential stability of editor type.
@@ -86,20 +86,19 @@ function useCKEditor<EditorEvent extends string>( {
 	} );
 
 	/**
-	 * Main effect. It takes care of:
-	 * - fetching CKEditor from remote source
-	 * - creating new instances of editor
-	 * - registering event handlers
-	 * - destroying editor instances
+	 * Effect that intializes editor anytime a new `element` instance is provided.
+	 * By default, `delayIfDetached` feature is enabled.
 	 *
-	 * New instance of editor will be created whenever new config is passed, new DOM element is passed, or editor type is changed.
+	 * This means that if `element` is no longer present in the DOM during editor instantion,
+	 * editor instance will still be created.
 	 */
 	useEffect( () => {
-		if ( element && !editor ) {
+		if ( element ) {
 			dispatch( { type: 'loading' } );
 
 			/**
 			 * Helper callback that dispatches `namespaceLoaded` event.
+			 * This callback is invoked once for all editor instances.
 			 */
 			const onNamespaceLoaded = ( CKEDITOR: CKEditorNamespace ) => {
 				if ( subscribeToRef.current.indexOf( 'namespaceLoaded' ) !== -1 ) {
@@ -110,12 +109,17 @@ function useCKEditor<EditorEvent extends string>( {
 				}
 			};
 
+			/**
+			 * Initializes editor.
+			 *
+			 * @param CKEDITOR global namespace
+			 */
 			const initEditor = ( CKEDITOR: CKEditorNamespace ) => {
 				const isInline = typeRef.current === 'inline';
-				const isReadOnly = configRef.current.readOnly;
 
 				/**
 				 * Dispatches `beforeLoad` event.
+				 * This event is dispatched before editor initialization.
 				 */
 				if ( subscribeToRef.current.indexOf( 'beforeLoad' ) !== -1 ) {
 					dispatchEventRef.current?.( {
@@ -124,101 +128,10 @@ function useCKEditor<EditorEvent extends string>( {
 					} );
 				}
 
-				const editor = CKEDITOR[ isInline ? 'inline' : 'replace' ](
+				CKEDITOR[ isInline ? 'inline' : 'replace' ](
 					element,
 					configRef.current
 				);
-
-				const subscribedEditorEvents = subscribeToRef.current.filter(
-					( evtName: any ) => namespaceEvents.indexOf( evtName ) === -1
-				);
-
-				/**
-				 * Registers all subscribed events.
-				 */
-				subscribedEditorEvents.forEach( evtName => {
-					registerEditorEventHandler( {
-						debug: debugRef.current,
-						editor,
-						evtName,
-						handler: payload => {
-							dispatchEventRef.current?.( {
-								type: `${ EVENT_PREFIX }${ evtName }`,
-								payload
-							} );
-						}
-					} );
-				} );
-
-				/**
-				 * Registers `loaded` event for the sake of hook lifecycle.
-				 */
-				registerEditorEventHandler( {
-					debug: debugRef.current,
-					editor,
-					evtName: 'loaded',
-					handler: () => {
-						dispatch( { type: 'loaded' } );
-					},
-					priority: -1
-				} );
-
-				/**
-				 * Registers handler `instanceReady` event.
-				 */
-				registerEditorEventHandler( {
-					debug: debugRef.current,
-					editor,
-					evtName: 'instanceReady',
-					handler: ( { editor } ) => {
-						dispatch( { type: 'ready' } );
-
-						/**
-						 * Force editability of inline editor due to an upstream issue (ckeditor/ckeditor4#3866)
-						 */
-						if ( isInline && !isReadOnly ) {
-							editor.setReadOnly( false );
-						}
-
-						/**
-						 * Sets initial content of editor's instance if provided.
-						 */
-						if ( initContentRef.current ) {
-							editor.setData( initContentRef.current, {
-								/**
-								 * Prevents undo icon flickering.
-								 */
-								noSnapshot: true,
-
-								/**
-								 * Resets undo stack.
-								 */
-								callback: () => {
-									editor.resetUndo();
-								}
-							} );
-						}
-					},
-					priority: -1
-				} );
-
-				/**
-				 * Registers `destroy` event for the sake of hook lifecycle.
-				 */
-				registerEditorEventHandler( {
-					debug: debugRef.current,
-					editor,
-					evtName: 'destroy',
-					handler: () => {
-						dispatch( { type: 'destroyed' } );
-					},
-					priority: -1
-				} );
-
-				dispatch( {
-					type: 'unloaded',
-					payload: editor
-				} );
 			};
 
 			getEditorNamespace( editorUrlRef.current, onNamespaceLoaded )
@@ -230,13 +143,120 @@ function useCKEditor<EditorEvent extends string>( {
 					dispatch( { type: 'error' } );
 				} );
 		}
+	}, [ element ] );
 
+	/**
+	 * Effect that is responsible for setting `editor` instance
+	 * and registering event callbacks.
+	 */
+	useEffect( () => {
+		configRef.current.on.loaded = ( payload: any ) => {
+			const editor = payload.editor as CKEditorInstance;
+			const isInline = typeRef.current === 'inline';
+			const isReadOnly = configRef.current.readOnly;
+
+			dispatch( { type: 'loaded', payload: editor } );
+
+			/**
+			 * Dispatches `loaded` event. It's handled as a special case, similarly to namespace events.
+			 */
+			if ( subscribeToRef.current.indexOf( 'loaded' ) !== -1 ) {
+				dispatchEventRef.current?.( {
+					type: CKEditorEventAction.loaded,
+					payload
+				} );
+			}
+
+			/**
+			 * Gets all subscribed events other than namespace events and `loaded` event.
+			 */
+			const subscribedEditorEvents = subscribeToRef.current.filter(
+				( evtName: any ) =>
+					namespaceEvents.indexOf( evtName ) === -1 &&
+					evtName !== 'loaded'
+			);
+
+			/**
+			 * Registers all subscribed events.
+			 */
+			subscribedEditorEvents.forEach( evtName => {
+				registerEditorEventHandler( {
+					debug: debugRef.current,
+					editor,
+					evtName,
+					handler: payload => {
+						dispatchEventRef.current?.( {
+							type: `${ EVENT_PREFIX }${ evtName }`,
+							payload
+						} );
+					}
+				} );
+			} );
+
+			/**
+			 * Registers internal handler for `instanceReady` event.
+			 */
+			registerEditorEventHandler( {
+				debug: debugRef.current,
+				editor,
+				evtName: 'instanceReady',
+				handler: ( { editor } ) => {
+					dispatch( { type: 'ready' } );
+
+					/**
+					 * Forces editability of inline editor due to an upstream issue (ckeditor/ckeditor4#3866)
+					 */
+					if ( isInline && !isReadOnly ) {
+						editor.setReadOnly( false );
+					}
+
+					/**
+					 * Sets initial content of editor's instance if provided.
+					 */
+					if ( initContentRef.current ) {
+						editor.setData( initContentRef.current, {
+							/**
+							 * Prevents undo icon flickering.
+							 */
+							noSnapshot: true,
+
+							/**
+							 * Resets undo stack.
+							 */
+							callback: () => {
+								editor.resetUndo();
+							}
+						} );
+					}
+				},
+				priority: -1
+			} );
+
+			/**
+			 * Registers internal handler for `destroy` event.
+			 */
+			registerEditorEventHandler( {
+				debug: debugRef.current,
+				editor,
+				evtName: 'destroy',
+				handler: () => {
+					dispatch( { type: 'destroyed' } );
+				},
+				priority: -1
+			} );
+		};
+	}, [] );
+
+	/**
+	 * Whenever a new instance of the editor is created, the old one is destroyed.
+	 */
+	useEffect( () => {
 		return () => {
 			if ( editor ) {
 				editor.destroy();
 			}
 		};
-	}, [ editor, element ] );
+	}, [ editor ] );
 
 	return {
 		editor,
@@ -252,14 +272,9 @@ function reducer( state: HookState, action: HookAction ): HookState {
 			return { ...state, hookStatus: 'init' };
 		case 'loading':
 			return { ...state, hookStatus: 'loading' };
-		case 'unloaded':
-			return {
-				editor: action.payload,
-				hookStatus: 'unloaded'
-			};
 		case 'loaded':
 			return {
-				...state,
+				editor: action.payload,
 				hookStatus: 'loaded'
 			};
 		case 'ready':

@@ -233,7 +233,7 @@ export type CKEditorType = 'classic' | 'inline';
  *
  * See: https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_editor.html#property-status
  */
-export type CKEditorStatus = 'unloaded' | 'loaded' | 'ready' | 'destroyed';
+export type CKEditorStatus = 'loaded' | 'ready' | 'destroyed';
 
 /**
  * Props of `CKEditor` component.
