@@ -24,7 +24,7 @@ updateCdnLink( path.resolve( __dirname, '..', 'karma.conf.js' ) );
 pkg.peerDependencies.ckeditor4 = `^${ version }`;
 fs.writeFileSync( path.resolve( __dirname, '..', 'package.json' ), JSON.stringify( pkg, null, '	' ) );
 
-// Update 'devDependency' in the 'package.json' file and the entire 'package-lock.json' file.
+// Update 'devDependency' in the 'package.json' file.
 shell.exec( `npm install ckeditor4@${ version } --save-dev` );
 
 function updateCdnLink( path ) {

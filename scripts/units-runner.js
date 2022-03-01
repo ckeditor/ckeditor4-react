@@ -30,7 +30,6 @@ const TESTS_TMP_PATH = path.resolve( PACKAGE_PATH, '.tmp-units-react-tests' );
 		shell.mkdir( TESTS_TMP_PATH );
 		[
 			'package.json',
-			'package-lock.json',
 			'karma.conf.js',
 			'tsconfig.json',
 			'src',
