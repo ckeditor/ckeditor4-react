@@ -1,5 +1,14 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 3.0.0
+
+Other Changes:
+
+* Updated default CDN CKEditor 4 dependency to [4.18.0](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-4180).
+
+	[Web Spell Checker](https://webspellchecker.com/) ended support for WebSpellChecker Dialog on December 31st, 2021. Therefore, this plugin has been deprecated and removed from the CKEditor 4.18.0 `standard-all` preset.
+	We strongly encourage everyone to choose one of the other available spellchecking solutions - [Spell Check As You Type (SCAYT)](https://ckeditor.com/cke4/addon/scayt) or [WProofreader](https://ckeditor.com/cke4/addon/wproofreader).
+
 ## ckeditor4-react 2.1.1
 
 Other Changes:
