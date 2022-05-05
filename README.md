@@ -4,8 +4,6 @@
 [![GitHub tag](https://img.shields.io/github/tag/ckeditor/ckeditor4-react.svg)](https://github.com/ckeditor/ckeditor4-react)
 
 ![Build Status](https://github.com/ckeditor/ckeditor4-react/actions/workflows/test-all.yml/badge.svg)
-[![Dependency Status](https://david-dm.org/ckeditor/ckeditor4-react/status.svg?ref=major)](https://david-dm.org/ckeditor/ckeditor4-react)
-[![devDependency Status](https://david-dm.org/ckeditor/ckeditor4-react/dev-status.svg?ref=major)](https://david-dm.org/ckeditor/ckeditor4-react?type=dev)
 
 [![Join newsletter](https://img.shields.io/badge/join-newsletter-00cc99.svg)](http://eepurl.com/c3zRPr)
 [![Follow Twitter](https://img.shields.io/badge/follow-twitter-00cc99.svg)](https://twitter.com/ckeditor)
