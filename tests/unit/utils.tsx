@@ -1,22 +1,38 @@
-import * as React from 'react';
-import { getByText, render, waitFor } from '@testing-library/react';
+import { getByText, waitFor } from '@testing-library/react';
 
 /**
- * Creates dummy ref object.
+ * Creates dummy element.
  *
- * @returns ref object
+ * @returns element
  */
-export function createDivRef() {
-	const ref = React.createRef<HTMLDivElement>();
-	render( <div ref={ref} /> );
-	return ref;
+export function createDivElement() {
+	const el = document.createElement( 'div' );
+	document.body.appendChild( el );
+	return el;
+}
+
+/**
+ * Waits for predicate to evaluate to true.
+ *
+ * In a typical use case of `@testing-library/react` we would rely on a combination of `waitFor` and `expect`.
+ * However, such approach fails with Karma / Jasmine setup. Therefore, a custom `waitForValueToChange` is used.
+ *
+ * @param fn predicate
+ * @returns resolved promise if predicate evaluates to true
+ */
+export async function waitForValueToChange( fn: () => boolean ) {
+	return waitFor( () => {
+		if ( !fn() ) {
+			throw new Error();
+		}
+	} );
 }
 
 /**
  * Waits until wysiwyg `iframe` appears and checks if specified content exists within it.
  *
  * @param text editor content to find
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export async function findByClassicEditorContent( text: string ) {
 	return waitFor( () => {
@@ -32,7 +48,7 @@ export async function findByClassicEditorContent( text: string ) {
  * Waits until wysiwyg `iframe` appears and returns it based on `editable` flag.
  *
  * @param editable indicates if editor is editable
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export async function findByClassicEditorEditable( editable: boolean ) {
 	return waitFor( () => {
@@ -51,7 +67,7 @@ export async function findByClassicEditorEditable( editable: boolean ) {
  * Finds editor by its name.
  *
  * @param text editor root element to find
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export async function findByEditorName( name: string ) {
 	return waitFor( () => {
@@ -69,14 +85,14 @@ export async function findByEditorName( name: string ) {
  * Waits until inline editor appears and returns it based on `editable` flag.
  *
  * @param editable indicates if editor is editable
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export async function findByInlineEditorEditable( editable: boolean ) {
 	return waitFor( () => {
 		const editableEl = document.querySelector(
 			`[contenteditable=${ editable }]`
-		);
-		if ( !editableEl ) {
+		) as HTMLElement;
+		if ( !editableEl || editableEl.style.visibility === 'hidden' ) {
 			throw new Error();
 		}
 		return editableEl;
@@ -87,7 +103,7 @@ export async function findByInlineEditorEditable( editable: boolean ) {
  * Waits until inline editor's content appears and checks if specified content exists within it.
  *
  * @param text editor content to find
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export async function findByInlineEditorContent( text: string ) {
 	return waitFor( () => {
@@ -102,7 +118,7 @@ export async function findByInlineEditorContent( text: string ) {
 /**
  * Finds classic editor.
  *
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export function findClassicEditor() {
 	return waitFor( () => {
@@ -117,7 +133,7 @@ export function findClassicEditor() {
 /**
  * Finds inline editor.
  *
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export function findInlineEditor() {
 	return waitFor( () => {
@@ -132,7 +148,7 @@ export function findInlineEditor() {
 /**
  * Queries classic editor. Returns found element, null otherwise.
  *
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export function queryClassicEditor(): HTMLIFrameElement | null {
 	return document.querySelector( '.cke' );
@@ -141,7 +157,7 @@ export function queryClassicEditor(): HTMLIFrameElement | null {
 /**
  * Queries classic editor's content iframe. Returns found element, null otherwise.
  *
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export function queryClassicEditorFrame(): HTMLIFrameElement | null {
 	return document.querySelector( '.cke_wysiwyg_frame' );
@@ -150,7 +166,7 @@ export function queryClassicEditorFrame(): HTMLIFrameElement | null {
 /**
  * Queries inline editor. Returns found element, null otherwise.
  *
- * @returns html element
+ * @returns found html element wrapped in promise
  */
 export function queryInlineEditor(): HTMLElement | null {
 	return document.querySelector( '.cke_editable_inline' );

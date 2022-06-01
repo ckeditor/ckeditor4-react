@@ -36,6 +36,9 @@ module.exports = function( config ) {
 				format: 'iife',
 				name: 'CKEditor4React'
 			},
+			watch: {
+				skipWrite: true
+			},
 			plugins: [
 				!config.silentBuildLogs && progress(),
 				babel( {

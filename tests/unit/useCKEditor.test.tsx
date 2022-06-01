@@ -1,8 +1,9 @@
-import { renderHook } from '@testing-library/react-hooks/dom';
+import { renderHook } from '@testing-library/react';
 import {
-	createDivRef,
+	createDivElement,
 	findByClassicEditorContent,
-	queryClassicEditor
+	queryClassicEditor,
+	waitForValueToChange
 } from './utils';
 import { useCKEditor, CKEditorEventAction } from '../../src';
 
@@ -18,37 +19,31 @@ function init() {
 		 */
 		it( 'dispatches `namespaceLoaded` event', async () => {
 			const onNamespaceLoaded = jasmine.createSpy( 'onNamespaceLoaded' );
-			const ref = createDivRef();
+			const element = createDivElement();
 			const dispatchEvent = ( { type, payload } ) => {
 				if ( type === CKEditorEventAction.namespaceLoaded ) {
 					onNamespaceLoaded( payload );
 				}
 			};
-			const { result, unmount, waitForValueToChange } = renderHook( () =>
+			const { result, unmount } = renderHook( () =>
 				useCKEditor( {
-					element: ref.current,
+					element,
 					dispatchEvent
 				} )
 			);
-			// Timeout is increased so that slower CI environment has a chance to catch-up.
 			await waitForValueToChange(
-				() => result.current.status === 'unloaded',
-				{ timeout: 5000 }
+				() => result.current.status === 'unloaded'
 			);
 			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
 			unmount();
-			const {
-				result: resultNext,
-				waitForValueToChange: waitForValueToChangeNext
-			} = renderHook( () =>
+			const { result: resultNext } = renderHook( () =>
 				useCKEditor( {
-					element: ref.current,
+					element,
 					dispatchEvent
 				} )
 			);
-			await waitForValueToChangeNext(
-				() => resultNext.current.status === 'unloaded',
-				{ timeout: 5000 }
+			await waitForValueToChange(
+				() => resultNext.current.status === 'unloaded'
 			);
 			expect( onNamespaceLoaded ).toHaveBeenCalledTimes( 1 );
 		} );
@@ -57,25 +52,21 @@ function init() {
 		 * Ensures that editor instance is created and returned.
 		 */
 		it( 'creates editor instance', async () => {
-			const ref = createDivRef();
-			const { result, waitForNextUpdate } = renderHook( () =>
-				useCKEditor( { element: ref.current } )
-			);
+			const element = createDivElement();
+			const { result } = renderHook( () => useCKEditor( { element } ) );
 			expect( result.current.editor ).toBeUndefined();
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeDefined();
+			await waitForValueToChange( () => !!result.current.editor );
 		} );
 
 		/**
 		 * Ensures that editor resources are cleaned up after unmount.
 		 */
 		it( 'cleans up after unmount', async () => {
-			const ref = createDivRef();
-			const { result, unmount, waitForNextUpdate } = renderHook( () =>
-				useCKEditor( { element: ref.current } )
+			const element = createDivElement();
+			const { result, unmount } = renderHook( () =>
+				useCKEditor( { element } )
 			);
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeDefined();
+			await waitForValueToChange( () => !!result.current.editor );
 			const windw = window as any;
 			expect( Object.keys( windw.CKEDITOR.instances ).length ).toEqual( 1 );
 			unmount();
@@ -86,21 +77,18 @@ function init() {
 		 * Ensures that editor statuses are returned in correct order.
 		 */
 		it( 'gets correct status', async () => {
-			const ref = createDivRef();
-			const { result, waitForNextUpdate } = renderHook( () =>
-				useCKEditor( { element: ref.current } )
-			);
+			const element = createDivElement();
+			const { result } = renderHook( () => useCKEditor( { element } ) );
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeDefined();
+			await waitForValueToChange( () => !!result.current.editor );
 			expect( result.current.status ).toEqual( 'unloaded' );
 			expect( result.current.loading ).toBeFalse();
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeDefined();
+			await waitForValueToChange(
+				() => result.current.status === 'loaded'
+			);
 			expect( result.current.status ).toEqual( 'loaded' );
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeDefined();
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( result.current.status ).toEqual( 'ready' );
 		} );
 
@@ -110,7 +98,7 @@ function init() {
 		it( 'sets `error` status on error', async () => {
 			// Purposefully create malformed ref.
 			const ref = {};
-			const { result, waitForNextUpdate } = renderHook( () =>
+			const { result } = renderHook( () =>
 				useCKEditor( {
 					// @ts-ignore
 					element: ref
@@ -118,8 +106,7 @@ function init() {
 			);
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForNextUpdate( { timeout: 5000 } );
-			expect( result.current.editor ).toBeUndefined();
+			await waitForValueToChange( () => !!result.current.error );
 			expect( result.current.error ).toBeTrue();
 		} );
 
@@ -127,19 +114,15 @@ function init() {
 		 * Ensures that hook memoizes initial `debug` value.
 		 */
 		it( 'does not re-initialize editor on `debug` value change', async () => {
-			const ref = createDivRef();
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						debug: false,
-						...props
-					} )
+			const element = createDivElement();
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					debug: false,
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			rerender( {
 				debug: true
 			} );
@@ -151,21 +134,17 @@ function init() {
 		 * Ensures that hook memoizes initial `dispatchEvent` value.
 		 */
 		it( 'does not re-initialize editor on `dispatchEvent` value change', async () => {
-			const ref = createDivRef();
+			const element = createDivElement();
 			const dispatchEvent = jasmine.createSpy( 'dispatchEvent' );
 			const dispatchEvent2 = jasmine.createSpy( 'dispatchEvent2' );
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						dispatchEvent,
-						...props
-					} )
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					dispatchEvent,
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			rerender( {
 				dispatchEvent: dispatchEvent2
 			} );
@@ -177,19 +156,15 @@ function init() {
 		 * Ensures that hook memoizes initial `subscribeTo` value.
 		 */
 		it( 'does not re-initialize editor on `subscribeTo` value change', async () => {
-			const ref = createDivRef();
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						subscribeTo: [ 'instanceReady' ],
-						...props
-					} )
+			const element = createDivElement();
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					subscribeTo: [ 'instanceReady' ],
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			rerender( {
 				subscribeTo: [ 'loaded' ]
 			} );
@@ -201,18 +176,14 @@ function init() {
 		 * Ensures that hook memoizes initial url.
 		 */
 		it( 'does not re-initialize editor on url change', async () => {
-			const ref = createDivRef();
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						...props
-					} )
+			const element = createDivElement();
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			rerender( {
 				editorUrl:
 					'https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js'
@@ -225,18 +196,14 @@ function init() {
 		 * Ensures that editor instance is not re-created on editor type change.
 		 */
 		it( 'does not re-initialize editor on type change', async () => {
-			const ref = createDivRef();
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						...props
-					} )
+			const element = createDivElement();
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			rerender( {
 				type: 'inline'
 			} );
@@ -248,18 +215,14 @@ function init() {
 		 * Ensures that editor instance is not re-created on config change.
 		 */
 		it( 'does not re-initialize editor on config change', async () => {
-			const ref = createDivRef();
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						...props
-					} )
+			const element = createDivElement();
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			rerender( {
 				config: { skin: 'myskin' }
 			} );
@@ -271,28 +234,21 @@ function init() {
 		 * Ensures that editor instance is re-created on element change.
 		 */
 		it( 're-initializes editor on element change', async () => {
-			const ref = createDivRef();
-			const { result, rerender, waitForValueToChange } = renderHook(
-				( props: any ) =>
-					useCKEditor( {
-						element: ref.current,
-						...props
-					} )
+			const element = createDivElement();
+			const { result, rerender } = renderHook( ( props: any ) =>
+				useCKEditor( {
+					element,
+					...props
+				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
-			const nextRef = createDivRef();
+			await waitForValueToChange( () => result.current.status === 'ready' );
+			const elementNext = createDivElement();
 			rerender( {
-				element: nextRef.current
+				element: elementNext
 			} );
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 		} );
 
 		/**
@@ -300,10 +256,10 @@ function init() {
 		 */
 		it( 'dispatches `beforeLoad` event', async () => {
 			const onBeforeLoad = jasmine.createSpy( 'onBeforeLoad' );
-			const ref = createDivRef();
-			const { result, waitForValueToChange } = renderHook( () =>
+			const element = createDivElement();
+			const { result } = renderHook( () =>
 				useCKEditor( {
-					element: ref.current,
+					element,
 					dispatchEvent: ( { type, payload } ) => {
 						if ( type === CKEditorEventAction.beforeLoad ) {
 							onBeforeLoad( payload );
@@ -312,14 +268,10 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'unloaded',
-				{ timeout: 5000 }
+				() => result.current.status === 'unloaded'
 			);
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
 		} );
 
@@ -330,10 +282,10 @@ function init() {
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
 			const onLoaded = jasmine.createSpy( 'onLoaded' );
 			const onDestroy = jasmine.createSpy( 'onDestroy' );
-			const ref = createDivRef();
-			const { result, unmount, waitForValueToChange } = renderHook( () =>
+			const element = createDivElement();
+			const { result, unmount } = renderHook( () =>
 				useCKEditor( {
-					element: ref.current,
+					element,
 					dispatchEvent: ( { type, payload } ) => {
 						if ( type === CKEditorEventAction.instanceReady ) {
 							onInstanceReady( payload );
@@ -346,14 +298,10 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded',
-				{ timeout: 5000 }
+				() => result.current.status === 'loaded'
 			);
 			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
 			unmount();
 			expect( queryClassicEditor() ).toBeNull();
@@ -366,10 +314,10 @@ function init() {
 		it( 'dispatches limited number of editor events', async () => {
 			const onLoaded = jasmine.createSpy( 'onLoaded' );
 			const onOtherEvent = jasmine.createSpy( 'onOtherEvent' );
-			const ref = createDivRef();
-			const { result, waitForValueToChange } = renderHook( () =>
+			const element = createDivElement();
+			const { result } = renderHook( () =>
 				useCKEditor( {
-					element: ref.current,
+					element,
 					dispatchEvent: ( { type, payload } ) => {
 						if ( type === CKEditorEventAction.loaded ) {
 							onLoaded( payload );
@@ -381,14 +329,10 @@ function init() {
 				} )
 			);
 			await waitForValueToChange(
-				() => result.current.status === 'loaded',
-				{ timeout: 5000 }
+				() => result.current.status === 'loaded'
 			);
 			expect( onLoaded ).toHaveBeenCalledTimes( 1 );
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onOtherEvent ).toHaveBeenCalledTimes( 0 );
 		} );
 
@@ -398,10 +342,10 @@ function init() {
 		it( 'dispatches custom `editor` events', async () => {
 			const onCustomEvent = jasmine.createSpy( 'onCustomEvent' );
 			const onOtherEvent = jasmine.createSpy( 'onOtherEvent' );
-			const ref = createDivRef();
-			const { result, waitForValueToChange } = renderHook( () =>
+			const element = createDivElement();
+			const { result } = renderHook( () =>
 				useCKEditor<'customEvent'>( {
-					element: ref.current,
+					element,
 					dispatchEvent: ( { type, payload } ) => {
 						if ( type === '__CKE__customEvent' ) {
 							onCustomEvent( payload );
@@ -412,14 +356,9 @@ function init() {
 					subscribeTo: [ 'customEvent' ]
 				} )
 			);
-			await waitForValueToChange( () => !!result.current.editor, {
-				timeout: 5000
-			} );
+			await waitForValueToChange( () => !!result.current.editor );
 			result.current.editor?.fire( 'customEvent' );
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onCustomEvent ).toHaveBeenCalledTimes( 1 );
 			expect( onOtherEvent ).toHaveBeenCalledTimes( 0 );
 		} );
@@ -428,17 +367,14 @@ function init() {
 		 * Ensures that initial content is set.
 		 */
 		it( 'sets initial content', async () => {
-			const ref = createDivRef();
-			const { result, waitForValueToChange } = renderHook( () =>
+			const element = createDivElement();
+			const { result } = renderHook( () =>
 				useCKEditor( {
-					element: ref.current,
+					element,
 					initContent: '<p>Initial content</p>'
 				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'ready',
-				{ timeout: 5000 }
-			);
+			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect(
 				await findByClassicEditorContent( 'Initial content' )
 			).toBeVisible();
