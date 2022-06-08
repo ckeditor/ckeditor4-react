@@ -17,7 +17,6 @@
 		"postversion": "git rm -r --cached dist/ && git commit -m \"Clean after release [ci skip]\" && git push origin && git push origin --tags",
 		"preversion": "npm test",
 		"start": "rollup -c -w",
-		"jest": "jest ./tests/unit/useCKEditor.test.tsx",
 		"test:e2e:all": "npm run test:e2e -- --react all",
 		"test:e2e": "node ./scripts/e2e-runner.js",
 		"test:units:all": "npm run test:units -- --react all",
