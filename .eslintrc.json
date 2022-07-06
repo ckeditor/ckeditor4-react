@@ -21,6 +21,8 @@
 				"functions": false
 			}
 		],
+		"@typescript-eslint/consistent-type-imports": "off",
+		"@typescript-eslint/no-invalid-void-type": "off",
 		"@typescript-eslint/ban-ts-comment": "off",
 		"@typescript-eslint/no-var-requires": "off"
 	},
