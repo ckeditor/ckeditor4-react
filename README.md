@@ -17,9 +17,9 @@ We are looking forward to your feedback! You can report any issues, ideas or fea
 ## Usage
 
 ```jsx
-import { CKEditor } from 'ckeditor4-react';
+import { CKEditor } from "ckeditor4-react";
 
-<CKEditor initData={<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>} />
+<CKEditor initData="<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>" />;
 ```
 
 ## Documentation and examples
@@ -55,8 +55,8 @@ Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
 Licensed under the terms of any of the following licenses at your
 choice:
 
-* [GNU General Public License Version 2 or later](http://www.gnu.org/licenses/gpl.html),
-* [GNU Lesser General Public License Version 2.1 or later](http://www.gnu.org/licenses/lgpl.html),
-* [Mozilla Public License Version 1.1 or later (the "MPL")](http://www.mozilla.org/MPL/MPL-1.1.html).
+-   [GNU General Public License Version 2 or later](http://www.gnu.org/licenses/gpl.html),
+-   [GNU Lesser General Public License Version 2.1 or later](http://www.gnu.org/licenses/lgpl.html),
+-   [Mozilla Public License Version 1.1 or later (the "MPL")](http://www.mozilla.org/MPL/MPL-1.1.html).
 
 For full details about the license, please check the `LICENSE.md` file.
