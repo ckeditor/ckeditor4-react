@@ -37,7 +37,7 @@ For even more examples, check out ready-to-fork samples inside [samples](samples
 
 ## React support
 
-The CKEditor 4 React integration was tested with React 18+.
+The CKEditor 4 React integration was tested with React 18.
 
 ## TypeScript support
 
