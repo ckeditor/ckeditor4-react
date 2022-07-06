@@ -17,14 +17,19 @@ We are looking forward to your feedback! You can report any issues, ideas or fea
 ## Usage
 
 ```jsx
-import { CKEditor } from "ckeditor4-react";
+import React from 'react';
+import { CKEditor } from 'ckeditor4-react';
 
-<CKEditor initData="<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>" />;
+function App() {
+	return <CKEditor initData="<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>" />;
+}
+
+export default App;
 ```
 
 ## Documentation and examples
 
-See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react_v2.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
+See the [CKEditor 4 WYSIWYG Editor React Integration](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react_latest.html) article in the [CKEditor 4 documentation](https://ckeditor.com/docs/ckeditor4/latest).
 
 You can also check out [CKEditor 4 WYSIWYG Editor React Integration example](https://ckeditor.com/docs/ckeditor4/latest/examples/react.html) in [CKEditor 4 Examples](https://ckeditor.com/docs/ckeditor4/latest/examples/).
 
@@ -55,8 +60,8 @@ Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
 Licensed under the terms of any of the following licenses at your
 choice:
 
--   [GNU General Public License Version 2 or later](http://www.gnu.org/licenses/gpl.html),
--   [GNU Lesser General Public License Version 2.1 or later](http://www.gnu.org/licenses/lgpl.html),
--   [Mozilla Public License Version 1.1 or later (the "MPL")](http://www.mozilla.org/MPL/MPL-1.1.html).
+* [GNU General Public License Version 2 or later](http://www.gnu.org/licenses/gpl.html),
+* [GNU Lesser General Public License Version 2.1 or later](http://www.gnu.org/licenses/lgpl.html),
+* [Mozilla Public License Version 1.1 or later (the "MPL")](http://www.mozilla.org/MPL/MPL-1.1.html).
 
 For full details about the license, please check the `LICENSE.md` file.
