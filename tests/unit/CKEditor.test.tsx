@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOMServer from 'react-dom/server';
 import { render } from '@testing-library/react';
 import {
 	findByEditorName,
@@ -9,7 +8,8 @@ import {
 	findByInlineEditorEditable,
 	findClassicEditor,
 	findInlineEditor,
-	queryClassicEditor
+	queryClassicEditor,
+	waitForValueToChange
 } from './utils';
 import { CKEditor, CKEditorEventHandler } from '../../src';
 
@@ -56,6 +56,7 @@ function init() {
 		 */
 		it( 'initializes inline editor with initial data', async () => {
 			render( <CKEditor type="inline" initData="Hello world!" /> );
+			await findByInlineEditorEditable( true );
 			expect(
 				await findByInlineEditorContent( 'Hello world!' )
 			).toBeVisible();
@@ -66,6 +67,7 @@ function init() {
 		 */
 		it( 'initializes inline editor with initial data as JSX', async () => {
 			render( <CKEditor type="inline" initData={<p>Hello world!</p>} /> );
+			await findByInlineEditorEditable( true );
 			expect(
 				await findByInlineEditorContent( 'Hello world!' )
 			).toBeVisible();
@@ -113,6 +115,7 @@ function init() {
 			const style = { border: '1px solid red' };
 			render( <CKEditor style={style} /> );
 			const el = await findClassicEditor();
+			await waitForValueToChange( () => el.style.border === style.border );
 			expect( el.style.border ).toEqual( style.border );
 		} );
 
@@ -123,6 +126,7 @@ function init() {
 			const style = { border: '1px solid red' };
 			render( <CKEditor style={style} type="inline" /> );
 			const el = await findInlineEditor();
+			await waitForValueToChange( () => el.style.border === style.border );
 			expect( el.style.border ).toEqual( style.border );
 		} );
 
@@ -145,10 +149,16 @@ function init() {
 			const style1 = { border: '1px solid red' };
 			const { rerender } = render( <CKEditor style={style1} /> );
 			const el1 = await findClassicEditor();
+			await waitForValueToChange(
+				() => el1.style.border === style1.border
+			);
 			expect( el1.style.border ).toEqual( style1.border );
 			const style2 = { border: '1px solid green' };
 			rerender( <CKEditor style={style2} /> );
 			const el2 = await findClassicEditor();
+			await waitForValueToChange(
+				() => el2.style.border === style2.border
+			);
 			expect( el2.style.border ).toEqual( style2.border );
 		} );
 
@@ -289,18 +299,8 @@ function init() {
 			);
 			expect( await findClassicEditor() ).toBeVisible();
 			windw.CKEDITOR.instances.test.fire( 'customEvent' );
-			// expect( await findClassicEditor() ).toBeVisible();
+			await waitForValueToChange( () => onCustomEvent.calls.count() === 1 );
 			expect( onCustomEvent ).toHaveBeenCalledTimes( 1 );
-		} );
-
-		/**
-		 * Renders correctly to string.
-		 */
-		it( 'renders as string', async () => {
-			const result = ReactDOMServer.renderToString( <CKEditor /> );
-			expect( result ).toEqual(
-				'<div style="display:none;visibility:hidden" data-reactroot=""></div>'
-			);
 		} );
 	} );
 }

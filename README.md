@@ -17,9 +17,14 @@ We are looking forward to your feedback! You can report any issues, ideas or fea
 ## Usage
 
 ```jsx
+import React from 'react';
 import { CKEditor } from 'ckeditor4-react';
 
-<CKEditor initData={<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>} />
+function App() {
+	return <CKEditor initData="<p>This is an example CKEditor 4 WYSIWYG editor instance.</p>" />;
+}
+
+export default App;
 ```
 
 ## Documentation and examples
@@ -32,7 +37,7 @@ For even more examples, check out ready-to-fork samples inside [samples](samples
 
 ## React support
 
-The CKEditor 4 React component was tested with React starting from 16.9 version including 17+ versions.
+The CKEditor 4 React integration was tested with React 18.
 
 ## TypeScript support
 
@@ -40,7 +45,9 @@ TypeScript 3.5+ is supported.
 
 ## Browser support
 
-The CKEditor 4 React component works with all the [supported browsers](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_browsers.html#officially-supported-browsers) except for Internet Explorer 8-10. For Internet Explorer 11 the component requires additional polyfill for `Promise`.
+The CKEditor 4 React integration works with all the [supported browsers](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_browsers.html#officially-supported-browsers) except for Internet Explorer.
+
+Previous versions of `ckeditor4-react` also support Internet Explorer 11 (requires additional polyfill for `Promise`).
 
 ## Contributing
 

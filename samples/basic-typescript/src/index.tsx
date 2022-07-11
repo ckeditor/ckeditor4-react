@@ -1,13 +1,15 @@
-// IE11 polyfills
-import 'core-js/stable/promise';
-
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
-ReactDOM.render(
+const element = document.getElementById( 'root' );
+
+if ( !element ) {
+	throw new Error( 'Missing root element' );
+}
+
+createRoot( element ).render(
 	<React.StrictMode>
 		<App />
-	</React.StrictMode>,
-	document.getElementById( 'root' )
+	</React.StrictMode>
 );

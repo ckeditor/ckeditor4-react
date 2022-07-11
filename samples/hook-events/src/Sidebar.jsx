@@ -14,8 +14,8 @@ function Sidebar( { events, start } ) {
 					</tr>
 				</thead>
 				<tbody>
-					{[ ...events ].reverse().map( ( { evtName, editor, date } ) => (
-						<tr key={date.getTime()}>
+					{[ ...events ].reverse().map( ( { evtName, editor, date }, i ) => (
+						<tr key={i}>
 							<td className="text-left">{evtName}</td>
 							<td className="text-right">{editor}</td>
 							<td className="text-right">{date.getTime() - start.getTime()}</td>
