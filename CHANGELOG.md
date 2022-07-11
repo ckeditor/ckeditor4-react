@@ -1,5 +1,11 @@
 # CKEditor 4 WYSIWYG Editor React Integration Changelog
 
+## ckeditor4-react 4.0.0
+
+BREAKING CHANGES:
+
+* [#284](https://github.com/ckeditor/ckeditor4-react/issues/284): Add support for React 18 and remove support for older versions of React.
+
 ## ckeditor4-react 3.1.0
 
 * Updated default CDN CKEditor 4 dependency to [4.19.0](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-4190).
