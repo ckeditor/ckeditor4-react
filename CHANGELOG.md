@@ -2,6 +2,16 @@
 
 ## ckeditor4-react 4.0.0
 
+**Highlights**
+
+The release v4 introduces support for React v18. You can read more about changes in the [React v18 release notes](https://github.com/facebook/react/blob/main/CHANGELOG.md#1800-march-29-2022).
+
+Due to significant changes in the React v18, the integration with CKEditor 4 is no longer compatible with the previous versions of React. Please note that this version of React also drops support for Internet Explorer 11.
+
+If you don’t want to loose support for IE11 or you didn't move to React v18 yet, make sure to use React integration in [version 3](#ckeditor4-react-310).
+
+See [browser compatibility table](https://ckeditor.com/docs/ckeditor4/latest/guide/dev_react_current.html#ckeditor-4-react-compatibility) to learn more about supported browser and React versions.
+
 BREAKING CHANGES:
 
 * [#284](https://github.com/ckeditor/ckeditor4-react/issues/284): Add support for React 18 and remove support for older versions of React.
