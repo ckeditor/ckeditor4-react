@@ -82,7 +82,6 @@ function init() {
 			expect( result.current.editor ).toBeUndefined();
 			expect( result.current.loading ).toBeTrue();
 			await waitForValueToChange( () => !!result.current.editor );
-			expect( result.current.status ).toEqual( 'unloaded' );
 			expect( result.current.loading ).toBeFalse();
 			await waitForValueToChange(
 				() => result.current.status === 'loaded'
@@ -267,9 +266,7 @@ function init() {
 					}
 				} )
 			);
-			await waitForValueToChange(
-				() => result.current.status === 'unloaded'
-			);
+			await waitForValueToChange( () => result.current.status === 'loaded' );
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
 			await waitForValueToChange( () => result.current.status === 'ready' );
 			expect( onBeforeLoad ).toHaveBeenCalledTimes( 1 );
