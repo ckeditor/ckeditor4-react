@@ -2,6 +2,8 @@ import { registerEditorEventHandler } from '../../src';
 
 function init() {
 	describe( 'registerEditorEventHandler', () => {
+		const windw = window as any;
+		const log = windw.console.log;
 		const spyOnEventOn = jasmine.createSpy( 'editor.on' );
 		const spyOnRemoveListener = jasmine.createSpy( 'editor.removeListener' );
 		const createEditor = () => ( { on: spyOnEventOn, removeListener: spyOnRemoveListener } );
@@ -9,6 +11,7 @@ function init() {
 		afterEach( () => {
 			spyOnEventOn.calls.reset();
 			spyOnRemoveListener.calls.reset();
+			windw.console.log = log;
 		} );
 
 		it( 'registers / unregisters event handler', async () => {
@@ -26,8 +29,6 @@ function init() {
 		} );
 
 		it( 'turns on `debug` mode', async () => {
-			const windw = window as any;
-			const log = window.console.log;
 			windw.console.log = jasmine.createSpy( 'window.console.log' );
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
 			registerEditorEventHandler( {
@@ -39,7 +40,6 @@ function init() {
 			expect( spyOnEventOn ).toHaveBeenCalledTimes( 1 );
 			expect( spyOnEventOn ).toHaveBeenCalledWith( 'instanceReady', jasmine.any( Function ), null, undefined, undefined );
 			expect( windw.console.log ).toHaveBeenCalled();
-			window.console.log = log;
 		} );
 
 		it( 'uses listener data', async () => {
