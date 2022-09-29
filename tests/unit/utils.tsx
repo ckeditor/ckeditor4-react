@@ -1,4 +1,5 @@
-import { getByText, waitFor } from '@testing-library/react';
+import * as React from 'react';
+import { getByText, render, waitFor } from '@testing-library/react';
 
 /**
  * Creates dummy element.
@@ -6,9 +7,9 @@ import { getByText, waitFor } from '@testing-library/react';
  * @returns element
  */
 export function createDivElement() {
-	const el = document.createElement( 'div' );
-	document.body.appendChild( el );
-	return el;
+	const ref = React.createRef<HTMLDivElement>();
+	render( <div ref={ref} /> );
+	return ref.current;
 }
 
 /**
@@ -20,7 +21,7 @@ export function createDivElement() {
  * @param fn predicate
  * @returns resolved promise if predicate evaluates to true
  */
-export async function waitForValueToChange( fn: () => boolean ) {
+export function waitForValueToChange( fn: () => boolean ) {
 	return waitFor( () => {
 		if ( !fn() ) {
 			throw new Error();
@@ -34,7 +35,7 @@ export async function waitForValueToChange( fn: () => boolean ) {
  * @param text editor content to find
  * @returns found html element wrapped in promise
  */
-export async function findByClassicEditorContent( text: string ) {
+export function findByClassicEditorContent( text: string ) {
 	return waitFor( () => {
 		const iframe = queryClassicEditorFrame();
 		if ( !iframe?.contentWindow?.document.body ) {
@@ -50,7 +51,7 @@ export async function findByClassicEditorContent( text: string ) {
  * @param editable indicates if editor is editable
  * @returns found html element wrapped in promise
  */
-export async function findByClassicEditorEditable( editable: boolean ) {
+export function findByClassicEditorEditable( editable: boolean ) {
 	return waitFor( () => {
 		const iframe = queryClassicEditorFrame();
 		const editableEl = iframe?.contentWindow?.document.querySelector(
@@ -69,7 +70,7 @@ export async function findByClassicEditorEditable( editable: boolean ) {
  * @param text editor root element to find
  * @returns found html element wrapped in promise
  */
-export async function findByEditorName( name: string ) {
+export function findByEditorName( name: string ) {
 	return waitFor( () => {
 		const contentEl: HTMLElement | null = document.getElementById(
 			`cke_${ name }`
@@ -87,7 +88,7 @@ export async function findByEditorName( name: string ) {
  * @param editable indicates if editor is editable
  * @returns found html element wrapped in promise
  */
-export async function findByInlineEditorEditable( editable: boolean ) {
+export function findByInlineEditorEditable( editable: boolean ) {
 	return waitFor( () => {
 		const editableEl = document.querySelector(
 			`[contenteditable=${ editable }]`
@@ -105,7 +106,7 @@ export async function findByInlineEditorEditable( editable: boolean ) {
  * @param text editor content to find
  * @returns found html element wrapped in promise
  */
-export async function findByInlineEditorContent( text: string ) {
+export function findByInlineEditorContent( text: string ) {
 	return waitFor( () => {
 		const contentEl = queryInlineEditor();
 		if ( !contentEl ) {

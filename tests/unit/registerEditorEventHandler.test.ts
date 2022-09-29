@@ -1,115 +1,69 @@
-import { renderHook } from '@testing-library/react';
-import { createDivElement, waitForValueToChange } from './utils';
-import { registerEditorEventHandler, useCKEditor } from '../../src';
+import { registerEditorEventHandler } from '../../src';
 
 function init() {
 	describe( 'registerEditorEventHandler', () => {
-		/**
-		 * Registers an event handler within editor.
-		 */
+		const windw = window as any;
+		const log = windw.console.log;
+		const spyOnEventOn = jasmine.createSpy( 'editor.on' );
+		const spyOnRemoveListener = jasmine.createSpy( 'editor.removeListener' );
+		const createEditor = () => ( { on: spyOnEventOn, removeListener: spyOnRemoveListener } );
+
+		afterEach( () => {
+			spyOnEventOn.calls.reset();
+			spyOnRemoveListener.calls.reset();
+			windw.console.log = log;
+		} );
+
 		it( 'registers / unregisters event handler', async () => {
-			const element = createDivElement();
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
-			const { result } = renderHook( () =>
-				useCKEditor( {
-					element
-				} )
-			);
-			await waitForValueToChange( () => !!result.current.editor );
 			const unregister = registerEditorEventHandler( {
-				editor: result.current.editor,
+				editor: createEditor(),
 				evtName: 'instanceReady',
 				handler: onInstanceReady
 			} );
-			expect(
-				result.current.editor.hasListeners( 'instanceReady' )
-			).toBeTrue();
-			await waitForValueToChange( () => result.current.status === 'ready' );
-			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnEventOn ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnEventOn ).toHaveBeenCalledWith( 'instanceReady', onInstanceReady, null, undefined, undefined );
 			unregister();
-			expect(
-				result.current.editor.hasListeners( 'instanceReady' )
-			).toBeUndefined();
+			expect( spyOnRemoveListener ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnRemoveListener ).toHaveBeenCalledWith( 'instanceReady', onInstanceReady );
 		} );
 
-		/**
-		 * With debugging enabled, events are logged to console.
-		 */
 		it( 'turns on `debug` mode', async () => {
-			const windw = window as any;
-			windw.console.log = jasmine.createSpy( 'windw.console.log' );
-			const element = createDivElement();
+			windw.console.log = jasmine.createSpy( 'window.console.log' );
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
-			const { result } = renderHook( () =>
-				useCKEditor( {
-					element
-				} )
-			);
-			await waitForValueToChange( () => !!result.current.editor );
 			registerEditorEventHandler( {
-				editor: result.current.editor,
+				editor: createEditor(),
 				evtName: 'instanceReady',
 				handler: onInstanceReady,
 				debug: true
 			} );
-			await waitForValueToChange( () => result.current.status === 'ready' );
-			expect( onInstanceReady ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnEventOn ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnEventOn ).toHaveBeenCalledWith( 'instanceReady', jasmine.any( Function ), null, undefined, undefined );
 			expect( windw.console.log ).toHaveBeenCalled();
 		} );
 
-		/**
-		 * Accepts and passes custom listener data.
-		 */
 		it( 'uses listener data', async () => {
-			const element = createDivElement();
 			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
-			const { result } = renderHook( () =>
-				useCKEditor( {
-					element
-				} )
-			);
-			await waitForValueToChange( () => !!result.current.editor );
 			registerEditorEventHandler( {
-				editor: result.current.editor,
+				editor: createEditor(),
 				evtName: 'instanceReady',
 				handler: onInstanceReady,
-				listenerData: { hello: 'hello' }
+				listenerData: { foo: 'bar' }
 			} );
-			await waitForValueToChange( () => result.current.status === 'ready' );
-			expect( onInstanceReady ).toHaveBeenCalledWith(
-				jasmine.objectContaining( {
-					listenerData: { hello: 'hello' }
-				} )
-			);
+			expect( spyOnEventOn ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnEventOn ).toHaveBeenCalledWith( 'instanceReady', onInstanceReady, null, { foo: 'bar' }, undefined );
 		} );
 
-		/**
-		 * Sets priority in which handlers are invoked.
-		 */
 		it( 'accepts priority', async () => {
-			const element = createDivElement();
-			const onInstanceReady1 = jasmine.createSpy( 'onInstanceReady1' );
-			const onInstanceReady2 = jasmine.createSpy( 'onInstanceReady2' );
-			const { result } = renderHook( () =>
-				useCKEditor( {
-					element
-				} )
-			);
-			await waitForValueToChange( () => !!result.current.editor );
+			const onInstanceReady = jasmine.createSpy( 'onInstanceReady' );
 			registerEditorEventHandler( {
-				editor: result.current.editor,
+				editor: createEditor(),
 				evtName: 'instanceReady',
-				handler: onInstanceReady1,
-				priority: 1
-			} );
-			registerEditorEventHandler( {
-				editor: result.current.editor,
-				evtName: 'instanceReady',
-				handler: onInstanceReady2,
+				handler: onInstanceReady,
 				priority: 0
 			} );
-			await waitForValueToChange( () => result.current.status === 'ready' );
-			expect( onInstanceReady2 ).toHaveBeenCalledBefore( onInstanceReady1 );
+			expect( spyOnEventOn ).toHaveBeenCalledTimes( 1 );
+			expect( spyOnEventOn ).toHaveBeenCalledWith( 'instanceReady', onInstanceReady, null, undefined, 0 );
 		} );
 	} );
 }
