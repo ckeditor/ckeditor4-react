@@ -2,6 +2,8 @@
 
 ## ckeditor4-react 4.1.0
 
+Other Changes:
+
 * Updated default CDN CKEditor 4 dependency to [4.20](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-420).
 
 ## ckeditor4-react 4.0.0
