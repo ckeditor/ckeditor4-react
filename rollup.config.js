@@ -11,7 +11,7 @@ import pkg from './package.json';
 const input = 'src/index.ts';
 const external = Object.keys( pkg.peerDependencies || {} );
 const banner = `/**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md.
  */`;
 
@@ -117,7 +117,7 @@ function cleanupPlugin() {
 		extensions: [ 'ts', 'tsx', 'js' ],
 		comments: [
 			/Copyright (c) Microsoft Corporation./,
-			/@license Copyright (c) 2003-2022, CKSource Holding sp. z o.o./
+			/@license Copyright (c) 2003-2023, CKSource Holding sp. z o.o./
 		]
 	} );
 }
