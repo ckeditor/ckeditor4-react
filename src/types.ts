@@ -126,7 +126,7 @@ export interface CKEditorHookProps<EventName extends string> {
 	/**
 	 * List of editor events that will be dispatched. Omit if all events are to be dispatched.
 	 */
-	subscribeTo?: readonly EventName[];
+	subscribeTo?: ReadonlyArray<EventName>;
 
 	/**
 	 * Url with editor's source code. Uses https://cdn.ckeditor.com domain by default.
