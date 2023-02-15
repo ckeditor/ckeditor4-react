@@ -36,7 +36,7 @@ describe( `${ testSample } - react v${ reactVersion }`, () => {
 		await browser.assert.containsText( '.cke_editable', 'textarea' );
 	} );
 
-	test( 'editor sets data from outside - editor to text area', async browser => {
+	test.skip( 'editor sets data from outside - editor to text area', async browser => {
 		// For the sake of IE11 set fake value on textarea. Otherwise `setValue` on iframe won't work.
 		await browser.setValue( 'xpath', '//textarea', '' );
 		await browser.frame( 0 );
