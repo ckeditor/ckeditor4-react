@@ -4,7 +4,7 @@
 
 Other Changes:
 
-* Updated default CDN CKEditor 4 dependency to [4.21](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-421).
+* Updated default CDN CKEditor 4 dependency to [4.21.0](https://github.com/ckeditor/ckeditor4/blob/master/CHANGES.md#ckeditor-4210).
 
 ## ckeditor4-react 4.1.2
 
