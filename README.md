@@ -8,6 +8,16 @@
 [![Join newsletter](https://img.shields.io/badge/join-newsletter-00cc99.svg)](http://eepurl.com/c3zRPr)
 [![Follow Twitter](https://img.shields.io/badge/follow-twitter-00cc99.svg)](https://twitter.com/ckeditor)
 
+## ⚠️ CKEditor 4: End of Life and Extended Support Model until Dec 2026
+
+CKEditor 4 was launched in 2012 and reached its End of Life (EOL) on June 30, 2023.
+
+A special edition, **[CKEditor 4 LTS](https://ckeditor.com/ckeditor-4-support/)** ("Long Term Support"), is available under commercial terms (["Extended Support Model"](https://ckeditor.com/ckeditor-4-support/)) for anyone looking to **extend the coverage of security updates and critical bug fixes**.
+
+With CKEditor 4 LTS, security updates and critical bug fixes are guaranteed until December 2026.
+
+## About this package
+
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component for React.
 
 We are looking forward to your feedback! You can report any issues, ideas or feature requests on the [integration issues page](https://github.com/ckeditor/ckeditor4-react/issues/new).
