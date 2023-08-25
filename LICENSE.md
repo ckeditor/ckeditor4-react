@@ -1,6 +1,15 @@
 Software License Agreement
 ==========================
 
+## Software License Agreement for CKEditor 4 LTS React component (5.0 and above)
+
+**CKEditor 4 WYSIWYG editor component for React** – https://github.com/ckeditor/ckeditor4-react <br>
+Copyright (c) 2003-2023, [CKSource](http://cksource.com) Holding sp. z o.o. All rights reserved.
+
+CKEditor 4 LTS ("Long Term Support") is available under exclusive terms of the [Extended Support Model](https://ckeditor.com/ckeditor-4-support/). [Contact us](https://ckeditor.com/contact/) to obtain a commercial license.
+
+## Software License Agreement for CKEditor 4 React component 4.3.0 and below
+
 **CKEditor 4 WYSIWYG editor component for React** – https://github.com/ckeditor/ckeditor4-react <br>
 Copyright (c) 2003-2023, [CKSource](http://cksource.com) Holding sp. z o.o. All rights reserved.
 

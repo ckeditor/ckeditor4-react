@@ -22,7 +22,10 @@ module.exports = function( config ) {
 		client: {
 			jasmine: {
 				random: false
-			}
+			},
+			args: [
+				process.env.CKEDITOR_LICENSE_KEY
+			]
 		},
 
 		preprocessors: {

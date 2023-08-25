@@ -29,6 +29,8 @@ function App() {
 			<section className="container">
 				<Sidebar events={events} start={start.current} />
 				<div className="paper flex-grow-3">
+					{ /* Remember to add the license key to the CKEditor 4 configuration:
+					https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey */ }
 					<CKEditor
 						key={uniqueName}
 						uniqueName={uniqueName}

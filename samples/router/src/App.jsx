@@ -8,10 +8,14 @@ function App() {
 			<div>
 				<Routes>
 					<Route path="/" element={<h1>{'Home page'}</h1>} />
-					<Route path="/editor" element={<CKEditor
-						debug={true}
-						initData="<p>Hello <strong>world</strong>!</p>"
-					/>} />
+					<Route path="/editor" element={
+
+						/* Remember to add the license key to the CKEditor 4 configuration:
+						https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey */
+						<CKEditor
+							debug={true}
+							initData="<p>Hello <strong>world</strong>!</p>"
+						/>} />
 				</Routes>
 				<div>
 					<div>
