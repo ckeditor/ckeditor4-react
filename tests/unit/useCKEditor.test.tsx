@@ -7,6 +7,13 @@ import {
 } from './utils';
 import { useCKEditor, CKEditorEventAction } from '../../src';
 
+declare let CKEDITOR: any;
+declare let __karma__: {
+	config: {
+		args: [ string ];
+	}
+};
+
 function init() {
 	describe( 'useCKEditor', () => {
 		/**
@@ -23,6 +30,7 @@ function init() {
 			const dispatchEvent = ( { type, payload } ) => {
 				if ( type === CKEditorEventAction.namespaceLoaded ) {
 					onNamespaceLoaded( payload );
+					CKEDITOR.config.licenseKey = __karma__.config.args[ 0 ];
 				}
 			};
 			const { result, unmount } = renderHook( () =>
