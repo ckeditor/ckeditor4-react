@@ -16,6 +16,20 @@ A special edition, **[CKEditor 4 LTS](https://ckeditor.com/ckeditor-4-support/)*
 
 With CKEditor 4 LTS, security updates and critical bug fixes are guaranteed until December 2026.
 
+## About this repository
+
+### Master branch = CKEditor 4 LTS React Component
+
+After June 30, 2023 the `master` version of the [LICENSE.md](https://github.com/ckeditor/ckeditor4/blob/master/LICENSE.md) file changed to reflect the license of CKEditor 4 LTS available under the Extended Support Model.
+
+This repository now contains the source code of CKEditor 4 LTS React Component that is protected by copyright law.
+
+### Getting CKEditor 4 (Open Source)
+
+You may continue using CKEditor React Component 4.3.0 and below under the open source license terms. Please note, however, that the open source version no longer comes with any security updates, so your application will be at risk.
+
+In order to download the open source version of CKEditor 4 React Component, use ****tags 4.3.0 and below****. CKEditor React Component 4.3.0 was the last version available under the open source license terms.
+
 ## About this package
 
 Official [CKEditor 4](https://ckeditor.com/ckeditor-4/) WYSIWYG editor component for React.
@@ -67,6 +81,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
 
+For full details about the license, please check the `LICENSE.md` file.
+
+### CKEditor 4 React Component 4.3.0 and below for CKEditor 4 Open Source
+
 Licensed under the terms of any of the following licenses at your
 choice:
 
@@ -74,4 +92,6 @@ choice:
 * [GNU Lesser General Public License Version 2.1 or later](http://www.gnu.org/licenses/lgpl.html),
 * [Mozilla Public License Version 1.1 or later (the "MPL")](http://www.mozilla.org/MPL/MPL-1.1.html).
 
-For full details about the license, please check the `LICENSE.md` file.
+### CKEditor 4 React Component 5.0 and above for CKEditor 4 LTS ("Long Term Support")
+
+CKEditor 4 LTS React Component (starting from version 5.0) is available under a commercial license only.
