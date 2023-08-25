@@ -47,6 +47,8 @@ jobs:
             # Run tests with the help of Xvfb, since there is no screen output available (required for locally installed browsers).
             - name: Run tests
               uses: GabrielBB/xvfb-action@v1
+              env:
+                  CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE_KEY }}
               with:
                   run: npm run test:units -- react ${{ env.REACT_VERSION }}
 
