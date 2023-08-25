@@ -43,18 +43,22 @@ function CKEditorCmp( { pushEvent, uniqueName } ) {
 	};
 
 	return (
-		<CKEditor
-			debug={true}
-			name={uniqueName}
-			onBeforeLoad={handleBeforeLoad}
-			onDestroy={handleDestroyed}
-			onInstanceReady={handleInstanceReady}
-			onNamespaceLoaded={handleNamespaceLoaded}
-			onLoaded={handleLoaded}
-			onFocus={handleFocus}
-			onBlur={handleBlur}
-			onMyCustomEvent={handleCustomEvent}
-		/>
+		<div>
+			{ /* Remember to add the license key to the CKEditor 4 configuration:
+			https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey*/}
+			<CKEditor
+				debug={true}
+				name={uniqueName}
+				onBeforeLoad={handleBeforeLoad}
+				onDestroy={handleDestroyed}
+				onInstanceReady={handleInstanceReady}
+				onNamespaceLoaded={handleNamespaceLoaded}
+				onLoaded={handleLoaded}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
+				onMyCustomEvent={handleCustomEvent}
+			/>
+		</div>
 	);
 }
 
