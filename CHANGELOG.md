@@ -4,7 +4,7 @@
 
 If you would like to keep access to future CKEditor 4 security patches, check the [Extended Support Model](https://ckeditor.com/ckeditor-4-support/), which guarantees **security updates and critical bug fixes until December 2026**. Alternatively, [upgrade to CKEditor 5](https://ckeditor.com/docs/ckeditor5/latest/updating/ckeditor4/migration-from-ckeditor-4.html).
 
-## ckeditor4-vue 5.0.0
+## ckeditor4-react 5.0.0
 
 This release introduces a support for the LTS (”Long Term Support”) version of the editor, available under commercial terms (["Extended Support Model"](https://ckeditor.com/ckeditor-4-support/)).
 
