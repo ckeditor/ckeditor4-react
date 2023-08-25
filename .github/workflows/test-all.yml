@@ -86,6 +86,6 @@ jobs:
                   BROWSER_STACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
                   BROWSER_STACK_BUILD_NAME: ${{ env.BUILD_SLUG }}
                   BROWSER_STACK_BROWSER: ${{ matrix.browser }}
-				  LICENSE_KEY: ${{ secrets.LICENSE_KEY }}
+                  CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE_KEY }}
               with:
                   run: npm run test:e2e -- --react ${{ env.REACT_VERSION }}
