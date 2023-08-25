@@ -34,7 +34,7 @@ function App() {
 							{order.map( value => (
 								<div key={value}>
 									{ /* Remember to add the license key to the CKEditor 4 configuration:
-									https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey*/}
+									https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey */ }
 									<CKEditor
 										name={value}
 										initData={value}

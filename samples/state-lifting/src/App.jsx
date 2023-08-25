@@ -19,7 +19,7 @@ function App() {
 				</div>
 				<div className="paper flex-grow-2">
 					{ /* Remember to add the license key to the CKEditor 4 configuration:
-					https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey*/}
+					https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html#cfg-licenseKey */ }
 					<CKEditor dispatch={dispatch} state={state} />
 				</div>
 			</section>
