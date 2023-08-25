@@ -29,8 +29,8 @@ shell.exec( `npm install ckeditor4@${ version } --save-dev` );
 
 function updateCdnLink( path ) {
 	const file = fs.readFileSync( path, 'utf8' );
-	const cdnLinkRegex = /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+/g;
+	const cdnLinkRegex = /https:\/\/cdn\.ckeditor\.com\/\d\.\d+\.\d+(-lts)?/g;
 
 	fs.writeFileSync( path,
-		file.replace( cdnLinkRegex, `https://cdn.ckeditor.com/${ version }` ), 'utf8' );
+		file.replace( cdnLinkRegex, `https://cdn.ckeditor.com/${ version }-lts` ), 'utf8' );
 }
