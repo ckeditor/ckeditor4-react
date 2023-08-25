@@ -11,7 +11,7 @@ declare let CKEDITOR: any;
 declare let __karma__: {
 	config: {
 		args: [ string ];
-	}
+	};
 };
 
 function init() {
