@@ -21,15 +21,15 @@ jobs:
         name: Run unit tests
         steps:
             - name: Checkout code
-              uses: actions/checkout@v2
+              uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 #v2
 
             - name: Setup node
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 #v2
               with:
                   node-version: 14
 
             - name: Setup Chrome
-              uses: browser-actions/setup-chrome@latest
+              uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded #latest
               with:
                   chrome-version: stable
 
@@ -46,7 +46,7 @@ jobs:
 
             # Run tests with the help of Xvfb, since there is no screen output available (required for locally installed browsers).
             - name: Run tests
-              uses: GabrielBB/xvfb-action@v1
+              uses: GabrielBB/xvfb-action@86d97bde4a65fe9b290c0b3fb92c2c4ed0e5302d #v1
               env:
                   CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE_KEY }}
               with:
